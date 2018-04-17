@@ -3,3 +3,4 @@ dist
 models/index.js
 migrations
 coverage
+public
