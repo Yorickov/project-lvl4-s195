@@ -12,12 +12,15 @@ import bodyParser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 
 import addRoutes from './routes';
+import errorHandler from './middlwares/error-handler';
 
 // import db-var from .env
 import container from './container'; // eslint-disable-line
 
 export default () => {
   const app = new Koa();
+
+  app.use(errorHandler());
 
   app.use(koaLogger());
 
