@@ -6,6 +6,4 @@
 
 ## Heroku
 
-```
 https://task-director.herokuapp.com/
-```
