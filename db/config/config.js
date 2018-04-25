@@ -16,7 +16,6 @@ module.exports = {
     operatorsAliases: false,
   },
   // production: {
-  //   use_env_variable: process.env.DATABASE_URL,
   //   username: 'yorickov',
   //   password: null,
   //   database: 'task_manager',
