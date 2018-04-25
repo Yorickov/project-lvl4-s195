@@ -1,0 +1,13 @@
+extends /layouts/app.pug
+
+block content
+  table.table.table-stripped.table-hover
+    thead
+      tr
+        th Full Name
+        th Email
+    tbody
+      each user in users
+        tr
+          td= user.fullName
+          td= user.email

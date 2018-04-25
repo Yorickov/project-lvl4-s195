@@ -1,10 +1,10 @@
 {
   "name": "task-manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "task manager on Koa and PostgreSQL",
   "main": "dist/index.js",
   "bin": {
-    "server": "dist/bin/server.js"
+    "server": "dist/bin/index.js"
   },
   "engines": {
     "node": "9"
@@ -15,22 +15,25 @@
   "scripts": {
     "gulp": "gulp",
     "sequelize": "sequelize",
-    "nodemon": "nodemon",
-    "test": "jest",
+    "nodemon": "NODE_ENV=development nodemon",
+    "test": "NODE_ENV=test jest",
     "babel-node": "babel-node",
     "flow": "flow",
     "flow-typed": "flow-typed",
-    "start": "gulp server",
+    "start": "NODE_ENV=production gulp server",
     "eslint": "eslint",
     "webpack": "webpack",
     "build": "npm run webpack -- -p --env production",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "migrate": "npm run sequelize db:migrate",
+    "pretest": "NODE_ENV=test npm run migrate"
   },
   "jest": {
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/__tests__/__fixtures__/"
+      "<rootDir>/__tests__/__fixtures__/",
+      "<rootDir>/__tests__/utils/"
     ],
     "verbose": true,
     "coverageReporters": [
@@ -58,10 +61,13 @@
     "babel-preset-env": "*",
     "babel-preset-flow": "*",
     "babel-preset-stage-0": "*",
-    "bootstrap": "4.0.0-beta",
+    "bootstrap": "^4.1.0",
     "css-loader": "*",
+    "cssnano": "^3.10.0",
     "debug": "*",
     "dotenv": "*",
+    "faker": "^4.1.0",
+    "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "jquery": "*",
     "jquery-ujs": "*",
@@ -69,18 +75,20 @@
     "koa-bodyparser": "*",
     "koa-flash-simple": "*",
     "koa-generic-session": "*",
+    "koa-generic-session-sequelize": "^1.0.9",
     "koa-logger": "*",
     "koa-methodoverride": "*",
     "koa-pug": "3.0.0-2",
-    "koa-router": "next",
+    "koa-router": "^7.4.0",
     "koa-static": "*",
     "koa-webpack": "*",
     "lodash": "*",
     "pg": "*",
+    "pg-hstore": "^2.3.2",
     "popper.js": "*",
     "postcss-loader": "^2.1.4",
     "rollbar": "^2.3.9",
-    "sequelize": "*",
+    "sequelize": "^4.37.6",
     "sequelize-cli": "*",
     "sqlite3": "*",
     "style-loader": "*",

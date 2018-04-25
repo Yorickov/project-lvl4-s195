@@ -1,5 +1,7 @@
-
 ---
+
+# plugins: [flowtype]
+
 plugins:
   - jest
 
@@ -15,4 +17,7 @@ extends:
     - 'plugin:jest/recommended'
 
 rules:
-    no-console: 0
+    global-require: 0
+    no-unused-vars: 0
+
+

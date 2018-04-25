@@ -1,6 +1,6 @@
 node_modules
 dist
-models/index.js
-migrations
 coverage
 public
+db/models/index.js
+db/migrations

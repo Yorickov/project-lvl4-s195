@@ -1,0 +1,21 @@
+extends /layouts/app.pug
+
+block content
+  .row.pt-5
+    .col-sm-5.mx-auto
+      h4.text-center.pb-3 Registration form
+      +formFor(formElement, { url: urlFor('users'), method: 'post' })
+        .row.form-group
+          .col-sm
+            +input(formElement, 'email')
+        .row.form-group
+          .col-sm
+            +input(formElement, 'firstName')
+        .row.form-group
+          .col-sm
+            +input(formElement, 'lastName')
+        .row.form-group
+          .col-sm
+            +input(formElement, 'password', { as: 'password' })
+        .form-group
+            +button-btn(formElement, 'primary', 'Sign Up')

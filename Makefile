@@ -2,17 +2,17 @@ install:
 	npm install
 
 build:
-	rm -rf public
+	rm -rf dist
 	npm run build
 
+dev:
+	DEBUG=sequelize* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
+
 start:
-	DEBUG=app:* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
+	npm run start
 
 test:
-	npm test
-
-test-debug:
-	DEBUG=app:* npm test
+	DEBUG=sequelize* npm test
 
 test-watch:
 	npm test -- --watchAll

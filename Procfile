@@ -1,1 +1,1 @@
-web: npm run gulp server
+web: npm start
