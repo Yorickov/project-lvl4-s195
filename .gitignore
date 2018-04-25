@@ -5,6 +5,6 @@ dist
 .tern-port
 flow-typed
 *.sqlite
-public
 coverage
 trash
+.env
