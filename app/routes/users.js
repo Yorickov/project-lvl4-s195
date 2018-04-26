@@ -8,7 +8,7 @@ export default (router) => {
       ctx.render('users', { users });
     })
     .get('newUser', '/users/new', (ctx) => {
-      const user = User.build(); // const user = {};
+      const user = User.build();
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
     .post('users', '/users', async (ctx) => {

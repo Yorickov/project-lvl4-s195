@@ -6,19 +6,16 @@ build:
 	npm run build
 
 dev:
-	DEBUG=sequelize* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
+	DEBUG=app* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
 
-start:
-	npm run start
+prod:
+	DEBUG=sequelize* npm start
 
 test:
-	DEBUG=sequelize* npm test
+	DEBUG=app* npm test
 
-test-watch:
+test-w:
 	npm test -- --watchAll
-
-test-coverage:
-	npm test -- --coverage
 
 lint:
 	npm run eslint .

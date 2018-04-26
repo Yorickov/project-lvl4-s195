@@ -1,17 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
-// require('postcss-import')({ root: loader.resourcePath }),
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: ['./src'],
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
-    // filename: '[name].bundle.js',
+    filename: '[name].js',
     publicPath: '/assets/',
   },
-  // devtool: 'sourse-map',
+  devtool: 'sourse-map',
   module: {
     rules: [
       {
@@ -19,19 +18,44 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     {
+      //       loader: 'style-loader',
+      //     },
+      //     {
+      //       loader: 'css-loader',
+      //       options: { importLoaders: 1 },
+      //     },
+      //     {
+      //       loader: 'postcss-loader',
+      //       options: {
+      //         plugins: () => [require('autoprefixer')],
+      //       },
+      //     },
+      //   ],
+      // },
       {
-        test: /\.css$/,
+        test: /\.(scss)$/,
         use: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+          },
           {
             loader: 'css-loader',
-            options: { importLoaders: 1 },
           },
           {
             loader: 'postcss-loader',
             options: {
-              plugins: () => [require('autoprefixer')],
+              plugins: () => [
+                require('precss'),
+                require('autoprefixer'),
+              ],
             },
+          },
+          {
+            loader: 'sass-loader',
           },
         ],
       },
@@ -42,6 +66,8 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name].[ext]',
+              publicPath: '/assets/images/',
+              outputPath: 'images/',
               context: 'src/images',
             },
           },
@@ -54,13 +80,16 @@ module.exports = {
     ],
   },
   plugins: [
-    // new CleanWebpackPlugin(['dist']),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
       Popper: ['popper.js', 'default'],
     }),
+    // new webpack.SourceMapDevToolPlugin({
+    //   filename: '[name].js.map',
+    //   exclude: ['popper.js'],
+    // }),
   ],
   optimization: {
     splitChunks: {
@@ -74,3 +103,4 @@ module.exports = {
     },
   },
 };
+

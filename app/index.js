@@ -29,9 +29,13 @@ export default () => {
   app.use(errorHandler());
 
   app.keys = ['some secret hurr'];
-  app.use(session({
-    store: new SequelizeStore(sequelize, { timestamps: true }),
-  }));
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(session({
+      store: new SequelizeStore(sequelize, { timestamps: true }),
+    }));
+  }
+
   app.use(session(app));
   app.use(flash());
   app.use(async (ctx, next) => {
@@ -63,8 +67,8 @@ export default () => {
 
   const router = new Router();
   addRoutes(router, container);
-  app.use(router.allowedMethods());
   app.use(router.routes());
+  app.use(router.allowedMethods());
 
   const pug = new Pug({
     viewPath: path.join(__dirname, 'views'),

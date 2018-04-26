@@ -2,13 +2,32 @@ import { encrypt } from '../../app/lib/secure';
 
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
+    firstName: {
+      type: DataTypes.STRING,
+      validate: {
+        len: {
+          args: [2, 20],
+          msg: 'Must be from 2 to 20 symbols',
+        },
+      },
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      validate: {
+        len: {
+          args: [2, 20],
+          msg: 'Must be from 2 to 20 symbols',
+        },
+      },
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: {
+          args: true,
+          msg: 'Must have valid format',
+        },
       },
     },
     passwordDigest: {
@@ -25,7 +44,10 @@ export default (sequelize, DataTypes) => {
         return value;
       },
       validate: {
-        len: [1, +Infinity],
+        len: {
+          args: [2, 20],
+          msg: 'Must be from 2 to 20 symbols',
+        },
       },
     },
   }, {
