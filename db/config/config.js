@@ -5,7 +5,7 @@ module.exports = {
     operatorsAliases: false,
   },
   test: {
-    storage: ':memory:',
+    storage: 'db.testing.sqlite',
     dialect: 'sqlite',
     operatorsAliases: false,
   },

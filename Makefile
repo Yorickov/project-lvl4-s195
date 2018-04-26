@@ -14,8 +14,11 @@ prod:
 test:
 	DEBUG=sequelize* npm test
 
-test-w:
+test-watch:
 	npm test -- --watchAll
+
+test-coverage:
+	npm test -- --coverage
 
 lint:
 	npm run eslint .
