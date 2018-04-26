@@ -1,7 +1,7 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
-import { logger } from '../app/container';
+import container from '../app/container';
 import app from '../app';
 import initFaker from './utils';
 import User from '../db/models';
@@ -19,6 +19,9 @@ describe('requests', () => {
   //       return done(agent);
   //     });
   // };
+
+  const { logger } = container;
+  logger.test(createTestObject());
 
   beforeAll(() => {
     jasmine.addMatchers(matchers);

@@ -1,6 +1,8 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { User } from '../../db/models';
 
+import logger from '../lib/logger';
+
 export default (router) => {
   router
     .get('users', '/users', async (ctx) => {
@@ -14,6 +16,7 @@ export default (router) => {
     .post('users', '/users', async (ctx) => {
       const { form } = ctx.request.body;
       const user = User.build(form);
+      logger.user(user);
       try {
         await user.save();
         ctx.flash.set('User has been created');

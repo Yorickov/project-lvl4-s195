@@ -1,7 +1,7 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { User } from '../../db/models';
 import { encrypt } from '../lib/secure';
-import { logger } from '../container';
+import logger from '../lib/logger';
 
 export default (router) => {
   router
@@ -11,6 +11,7 @@ export default (router) => {
     })
     .patch('editSettings', '/settings/edit', async (ctx) => {
       const { form } = ctx.request.body;
+      logger.sett(form);
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);

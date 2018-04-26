@@ -2,6 +2,8 @@ import buildFormObj from '../lib/formObjectBuilder';
 import { encrypt } from '../lib/secure';
 import { User } from '../../db/models';
 
+import logger from '../lib/logger';
+
 export default (router) => {
   router
     .get('newSession', '/session/new', async (ctx) => {
@@ -17,6 +19,7 @@ export default (router) => {
       });
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
+        logger.sess(ctx.session.userId);
         ctx.redirect(router.url('root'));
         return;
       }

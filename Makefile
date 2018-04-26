@@ -6,13 +6,13 @@ build:
 	npm run build
 
 dev:
-	DEBUG=app* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
+	DEBUG=sequelize* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- server
 
 prod:
 	DEBUG=sequelize* npm start
 
 test:
-	DEBUG=app* npm test
+	DEBUG=sequelize* npm test
 
 test-w:
 	npm test -- --watchAll

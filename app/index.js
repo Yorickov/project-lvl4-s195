@@ -21,10 +21,10 @@ import container from './container';
 import errorHandler from './middlwares';
 import { sequelize } from '../db/models';
 
+const { logger } = container;
+
 export default () => {
   const app = new Koa();
-
-  const { logger: log } = container;
 
   app.use(errorHandler());
 
@@ -43,6 +43,7 @@ export default () => {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
     };
+    logger.flow(ctx.session.userId);
     await next();
   });
 
