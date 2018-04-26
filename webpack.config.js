@@ -1,13 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: ['./src'],
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: '/assets/',
   },
   devtool: 'sourse-map',
