@@ -2,16 +2,18 @@ import buildFormObj from '../lib/formObjectBuilder';
 import { User } from '../../db/models';
 import { encrypt } from '../lib/secure';
 import logger from '../lib/logger';
+import { reqAuth } from '../middlwares';
 
 export default (router) => {
   router
-    .get('settings', '/settings', async (ctx) => {
+    .get('settings', '/settings', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
       ctx.render('settings', { formElement: buildFormObj(user) });
     })
-    .patch('editSettings', '/settings/edit', async (ctx) => {
+    .patch('editSettings', '/settings/edit', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      logger.sett(form);
+      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
+
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
@@ -22,9 +24,11 @@ export default (router) => {
         ctx.render('settings', { formElement: buildFormObj(form, e) });
       }
     })
-    .patch('editPassword', '/settings/password', async (ctx) => {
+    .patch('editPassword', '/settings/password', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
       const { oldPassword, password } = form;
+      logger.sett(`${ctx.request.url}: oldPassword: ${oldPassword}, password: ${password}`);
+
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(oldPassword)) {
         ctx.flash.set('Wrong password');
@@ -39,8 +43,10 @@ export default (router) => {
         ctx.render('settings', { formElement: buildFormObj(form, e) });
       }
     })
-    .delete('settings', '/settings', async (ctx) => {
+    .delete('settings', '/settings', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
+      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
+
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(form.password)) {
         ctx.flash.set('Wrong password');

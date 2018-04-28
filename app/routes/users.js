@@ -7,6 +7,7 @@ export default (router) => {
   router
     .get('users', '/users', async (ctx) => {
       const users = await User.findAll();
+      logger.user(`users id: ${Object.keys(users)}`);
       ctx.render('users', { users });
     })
     .get('newUser', '/users/new', (ctx) => {
@@ -14,11 +15,9 @@ export default (router) => {
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
     .post('users', '/users', async (ctx) => {
-      console.log('gggg');
       const { form } = ctx.request.body;
-      console.log(form);
       const user = User.build(form);
-      logger.user(user.email);
+      // logger.user(`add user: ${user.email}/${user.password}`);
       try {
         await user.save();
         ctx.flash.set('User has been created');

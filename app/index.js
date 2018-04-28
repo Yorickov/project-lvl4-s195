@@ -18,7 +18,7 @@ import SequelizeStore from 'koa-generic-session-sequelize';
 import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
 import container from './container';
-import errorHandler from './middlwares';
+import { errorHandler } from './middlwares';
 import { sequelize } from '../db/models';
 
 const { logger } = container;
@@ -43,7 +43,7 @@ export default () => {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
     };
-    logger.flow(`session object: ${ctx.session}`);
+    logger.flow(`session object: ${ctx.request.url}/${ctx.session.userId}`);
     await next();
   });
 

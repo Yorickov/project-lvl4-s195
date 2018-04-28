@@ -17,9 +17,12 @@ export default (router) => {
           email,
         },
       });
+      logger.sett(`${ctx.request.url}: email: ${email}, password: ${password}`);
+
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
-        logger.sess(ctx.session.userId);
+        logger.sess(`${ctx.request.url}: ${ctx.session.userId}`);
+
         ctx.redirect(router.url('root'));
         return;
       }
