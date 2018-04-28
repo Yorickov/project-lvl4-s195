@@ -1,0 +1,16 @@
+extends /layouts/app.pug
+
+block content
+  .container
+    .row
+      .col-12
+        - const msg = flash.get()
+        if msg
+          .alert.alert-info.alert-dismissible.fade.show.m-3(role="alert")= msg
+            button.close(type="button" data-dismiss="alert" aria-label="Close")
+              span(aria-hidden="true") &times;
+    .row
+      .col-12
+        .picture.user-bg
+  block content
+  

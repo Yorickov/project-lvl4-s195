@@ -31,17 +31,17 @@ html(lang="en")
               a.nav-link(href=urlFor('newSession')) Sign In
             li.nav-item
               a.nav-link(href=urlFor('newUser')) Sign Up
-              
     .container
       - const msg = flash.get()
       if msg
         .alert.alert-info.alert-dismissible.fade.show.m-3(role="alert")= msg
           button.close(type="button" data-dismiss="alert" aria-label="Close")
             span(aria-hidden="true") &times;
-      block content
+
+    block content
 
     nav.navbar.fixed-bottom.navbar-dark.bg-dark.bg-faded.justify-content-center
-      a.navbar-brand(href="#") Sticky footer
+      a.navbar-brand(href="#") Hexlet project: Javascript BE
 
 //- +formFor(formElement, { url: urlFor('session'), method: 'DELETE' })
 //-   +button(formElement, 'submit', 'Sign Out')
