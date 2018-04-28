@@ -14,7 +14,9 @@ export default (router) => {
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
     .post('users', '/users', async (ctx) => {
+      console.log('gggg');
       const { form } = ctx.request.body;
+      console.log(form);
       const user = User.build(form);
       logger.user(user.email);
       try {

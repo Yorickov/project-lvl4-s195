@@ -9,29 +9,39 @@ html(lang="en")
     link(rel='shortcut icon' href='/assets/images/favicon.ico')
     link(rel='icon' href='/assets/images/favicon.ico' type='image/x-icon')
   body
-    nav.navbar.navbar-expand-lg.navbar-light.bg-faded
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.bg-faded
       a.navbar-brand(href="/") Task Manager
-      button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
+      button.navbar-toggler(data-toggle="collapse" type="button" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
         span.navbar-toggler-icon
-      .collapse.navbar-collapse
+
+      .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
           li.nav-item.active
             a.nav-link(href=urlFor('users')) Users
         ul.navbar-nav
           if isSignedIn()
-            li.nav-item
-              +formFor(formElement, { url: urlFor('session'), method: 'DELETE' })
-                +button(formElement, 'submit', 'Sign Out')
-              a.nav-link(href=urlFor('settings')) Settings
+            li.nav-item.dropdown
+              a.nav-link.dropdown-toggle(aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#") Account
+              .dropdown-menu.dropdown-menu-right
+                a.dropdown-item.ml-0(href=urlFor('settings')) Settings
+                .dropdown-divider
+                a.dropdown-item.ml-0(href=urlFor('endSession') data-method='delete' rel='nofollow') Sign Out
           else
             li.nav-item
               a.nav-link(href=urlFor('newSession')) Sign In
             li.nav-item
               a.nav-link(href=urlFor('newUser')) Sign Up
+              
     .container
       - const msg = flash.get()
       if msg
-        .alert.alert-info.m-3= msg
+        .alert.alert-info.alert-dismissible.fade.show.m-3(role="alert")= msg
+          button.close(type="button" data-dismiss="alert" aria-label="Close")
+            span(aria-hidden="true") &times;
       block content
 
-//- a.nav-link(href=urlFor('session') data-method='delete' rel='nofollow') Sign Out
+    nav.navbar.fixed-bottom.navbar-dark.bg-dark.bg-faded.justify-content-center
+      a.navbar-brand(href="#") Sticky footer
+
+//- +formFor(formElement, { url: urlFor('session'), method: 'DELETE' })
+//-   +button(formElement, 'submit', 'Sign Out')

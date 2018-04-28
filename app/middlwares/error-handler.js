@@ -1,6 +1,14 @@
 import Rollbar from 'rollbar';
 
-const rollbar = new Rollbar('a33e39b6ff16414987a4534781b869da');
+const rollbarConfig = {
+  accessToken: 'a33e39b6ff16414987a4534781b869da',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  payload: { environment: 'production' },
+  verbose: true,
+};
+
+const rollbar = new Rollbar(rollbarConfig);
 
 export default () =>
   async (ctx, next) => {

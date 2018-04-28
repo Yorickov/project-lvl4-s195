@@ -1,14 +1,13 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
-import container from '../app/container';
 import app from '../app';
 import initFaker from './utils';
-import User from '../db/models';
+import { User } from '../db/models';
 
 describe('requests', () => {
   let server;
-  const createTestObject = initFaker();
+  let createTestObject;
   // const loginUser = (login, done) => {
   //   const agent = request.agent(server);
   //   agent
@@ -20,66 +19,67 @@ describe('requests', () => {
   //     });
   // };
 
-  const { logger } = container;
-  logger.test(createTestObject());
-
-  beforeAll(() => {
+  beforeAll(async () => {
     jasmine.addMatchers(matchers);
+    createTestObject = initFaker();
+    await User.sync({ force: true });
+  });
+
+  beforeEach(() => {
     server = app().listen();
   });
 
-  it('root: / - GET 200', async () => {
+  it('GET root', async () => {
     const res = await request.agent(server)
       .get('/');
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('wrong path - GET 404', async () => {
+  it('GET 404 / = wwrong path', async () => {
     const res = await request.agent(server)
       .get('/wrong-path');
     expect(res).toHaveHTTPStatus(404);
   });
 
-  it('sign-up form: /users/new - GET 200', async () => {
+  it('GET /users/new - show sign-up form', async () => {
     const res = await request.agent(server)
       .get('/users/new');
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('sign-up: /users - POST 302', async () => {
+  it('POST 422 /session - wrong password sign in', async () => {
     const res = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: createTestObject({ email: 'wrong email' }) });
+    expect(res).toHaveHTTPStatus(422);
+  });
+
+  it('POST /users, POST /session - sign-up and sign-in', async () => {
+    const query = request.agent(server);
+    const res1 = await query
       .post('/users')
       .type('form')
       .send({ form: createTestObject() });
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(302);
+
+    const res2 = await query
+      .post('/session')
+      .type('form')
+      .send({ form: createTestObject({ firstName: false, lastName: false }) });
+    expect(res2).toHaveHTTPStatus(302);
   });
 
-  // it('all users: /users - GET 200', async () => {
-  //   const res = await request.agent(server)
-  //     .get('/users');
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
-
-  it('sign-in form: /session/new - GET 200', async () => {
+  it('GET 200 /users - show users', async () => {
     const res = await request.agent(server)
-      .get('/session/new');
+      .get('/users');
     expect(res).toHaveHTTPStatus(200);
   });
 
-  // it('wrong password sign in: /session - POST 422', async () => {
+  // it('sign-in form: /session/new - GET 200', async () => {
   //   const res = await request.agent(server)
-  //     .post('/session')
-  //     .type('form')
-  //     .send({ form: createTestObject({ email: 'wrong email' }) });
-  //   expect(res).toHaveHTTPStatus(422);
-  // });
-
-  // it('sign in: /session - POST 302', async () => {
-  //   const res = await request.agent(server)
-  //     .post('/session')
-  //     .type('form')
-  //     .send({ form: createTestObject({ firstName: false, lastName: false }) });
-  //   expect(res).toHaveHTTPStatus(302);
+  //     .get('/session/new');
+  //   expect(res).toHaveHTTPStatus(200);
   // });
 
   // it('settings: /settings - GET 302', async () => {
@@ -88,13 +88,13 @@ describe('requests', () => {
   //   expect(res).toHaveHTTPStatus(302);
   // });
 
-  it('sign out: /session - DELETE 302', async () => {
-    const res = await request.agent(server)
-      .delete('/session');
-    expect(res).toHaveHTTPStatus(302);
-  });
+  // it('sign out: /session - DELETE 302', async () => {
+  //   const res = await request.agent(server)
+  //     .get('/session/end');
+  //   expect(res).toHaveHTTPStatus(302);
+  // });
 
-  afterAll(async () => {
-    server.close();
+  afterEach(async () => {
+    await server.close();
   });
 });

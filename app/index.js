@@ -43,7 +43,7 @@ export default () => {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
     };
-    logger.flow(ctx.session.userId);
+    logger.flow(`session object: ${ctx.session}`);
     await next();
   });
 

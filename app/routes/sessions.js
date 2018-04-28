@@ -27,7 +27,7 @@ export default (router) => {
       const err = { errors: [{ path: 'password', message: 'Wrong email or password' }] };
       ctx.render('sessions/new', { formElement: buildFormObj({ email }, err) });
     })
-    .delete('session', '/session', (ctx) => {
+    .get('endSession', '/session/end', (ctx) => {
       ctx.session = {};
       ctx.flash.set('Buy');
       ctx.redirect(router.url('root'));
