@@ -18,7 +18,7 @@ import SequelizeStore from 'koa-generic-session-sequelize';
 import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
 import container from './container';
-// import { errorHandler } from './middlwares';
+import { errorHandler } from './middlwares';
 import { sequelize } from '../db/models';
 
 const { logger } = container;
@@ -26,7 +26,7 @@ const { logger } = container;
 export default () => {
   const app = new Koa();
 
-  // app.use(errorHandler());
+  app.use(errorHandler());
 
   app.keys = ['some secret hurr'];
 
