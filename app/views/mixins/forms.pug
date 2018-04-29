@@ -9,17 +9,24 @@ mixin formFor(formElement, options = {})
       input(name='_method' type='hidden' value= method)
     block
 
-mixin input(formElement, property, options = { as: 'text' })
+mixin input(formElement, property, label, message = '', options = { as: 'text' })
   - const value = formElement.object[property] === undefined ? '' : formElement.object[property]
-  .form-group(class=(formElement.errors[property] && 'has-danger'))
-    input(name=getInputName(formElement, property) placeholder=`${property}` class='form-control' type=options['as'] value=`${value}`)
+  - const inputId = `input${property}_${value}`;
+  //- - const lowTextId = `text${property}_${value}`;
+  .form-group
+    label(for= inputId) #{label}
+    input(name=getInputName(formElement, property) id= inputId placeholder= label class='form-control' type=options['as'] value= value)
+    //- small(id=`${lowTextId}` class="text-muted") #{message}
     if formElement.errors[property]
       .form-control-feedback= formElement.errors[property].map(({ message }) => message).join('. ')
 
-mixin button(formElement, type = 'submit', value = 'Save')
+mixin button(color, message, type = 'submit')
   .form-group
-    input(class='btn' type=`${type}` value=`${value}`)
+    button(class=`btn btn-${color} btn-block` type= type value='Save') #{message}
 
-mixin button-btn(formElement, color, message, type = 'submit')
-  .form-group
-    button(class=`btn btn-${color} btn-block` type=`${type}`, value='Save') #{message}
+//- mixin input-btn(type = 'submit', value = 'Save')
+//-   .form-group
+//-     input(class='btn' type=`${type}` value=`${value}`)
+
+//- ???
+//- class=(formElement.errors[property] && 'has-danger')

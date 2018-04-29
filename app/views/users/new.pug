@@ -7,15 +7,15 @@ block content
       +formFor(formElement, { url: urlFor('users'), method: 'post' })
         .row.form-group
           .col-sm
-            +input(formElement, 'email')
+            +input(formElement, 'email', 'Email address')
         .row.form-group
           .col-sm
-            +input(formElement, 'firstName')
+            +input(formElement, 'firstName', 'First Name')
         .row.form-group
           .col-sm
-            +input(formElement, 'lastName')
+            +input(formElement, 'lastName', 'Last Name')
         .row.form-group
           .col-sm
-            +input(formElement, 'password', { as: 'password' })
+            +input(formElement, 'password', 'Password', { as: 'password' })
         .form-group
-            +button-btn(formElement, 'primary', 'Sign Up')
+            +button('primary', 'Sign Up')

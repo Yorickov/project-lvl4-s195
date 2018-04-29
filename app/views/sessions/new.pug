@@ -7,9 +7,9 @@ block content
       +formFor(formElement, { url: urlFor('session'), method: 'post' })
         .row.form-group
           .col-sm
-            +input(formElement, 'email')
+            +input(formElement, 'email', 'Email address')
         .row.form-group
           .col-sm
-            +input(formElement, 'password', { as: 'password' })
+            +input(formElement, 'password', 'Password', { as: 'password' })
         .form-group
-            +button-btn(formElement, 'primary', 'Log In')
+            +button('primary', 'Log In')

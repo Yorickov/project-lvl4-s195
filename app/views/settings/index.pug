@@ -5,20 +5,20 @@ block content
     .col-lg-8.mx-auto
       h5.text-center.pb-3 Edit Account
       +formFor(formElement, { url: urlFor('editSettings'), method: 'PATCH' })
-        +input(formElement, 'firstName')
-        +input(formElement, 'lastName')
-        +input(formElement, 'email')
-        +button-btn(formElement, 'success', 'Save Profile changes')
+        +input(formElement, 'firstName', 'First Name')
+        +input(formElement, 'lastName', 'Last Name')
+        +input(formElement, 'email', 'Email address')
+        +button('success', 'Save Profile changes')
   .row.pt-4
     .col-lg-8.mx-auto
       h5.text-center.pb-3 Edit password
       +formFor(formElement, { url: urlFor('editPassword'), method: 'PATCH' })
-        +input(formElement, 'oldPassword')
-        +input(formElement, 'password')
-        +button-btn(formElement, 'success', 'Submit new password') 
+        +input(formElement, 'oldPassword', 'Password')
+        +input(formElement, 'password', 'New password')
+        +button('success', 'Submit new password') 
   .row.pt-4
     .col-lg-8.mx-auto
       h5.text-center.pb-3 Delete account
       +formFor(formElement, { url: urlFor('settings'), method: 'DELETE' })
-        +input(formElement, 'password')
-        +button-btn(formElement, 'danger', 'Delete')
+        +input(formElement, 'password', 'Password')
+        +button('danger', 'Delete')
