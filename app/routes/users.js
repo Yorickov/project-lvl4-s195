@@ -16,14 +16,24 @@ export default (router) => {
     })
     .post('users', '/users', async (ctx) => {
       const { form } = ctx.request.body;
+      if (form.confirmedPassword !== form.password) {
+        const err = { errors: [{ path: 'password', message: 'Passwords are not equal, try again' }] };
+        ctx.status = 422;
+        ctx.render('users/new', { formElement: buildFormObj(form, err) });
+        return;
+      }
       const user = User.build(form);
       // logger.user(`add user: ${user.email}/${user.password}`);
       try {
         await user.save();
         ctx.flash.set('User has been created');
         ctx.redirect(router.url('root'));
+        return;
       } catch (e) {
+        ctx.status = 422;
         ctx.render('users/new', { formElement: buildFormObj(user, e) });
       }
     });
 };
+
+const err = { errors: [{ path: 'password', message: 'Wrong email or password' }] };

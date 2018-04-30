@@ -1,24 +1,35 @@
 extends /layouts/app.pug
 
 block content
-  .row.pt-4
-    .col-lg-8.mx-auto
-      h5.text-center.pb-3 Edit Account
-      +formFor(formElement, { url: urlFor('editSettings'), method: 'PATCH' })
-        +input(formElement, 'firstName', 'First Name')
-        +input(formElement, 'lastName', 'Last Name')
-        +input(formElement, 'email', 'Email address')
-        +button('success', 'Save Profile changes')
-  .row.pt-4
-    .col-lg-8.mx-auto
-      h5.text-center.pb-3 Edit password
-      +formFor(formElement, { url: urlFor('editPassword'), method: 'PATCH' })
-        +input(formElement, 'oldPassword', 'Password')
-        +input(formElement, 'password', 'New password')
-        +button('success', 'Submit new password') 
-  .row.pt-4
-    .col-lg-8.mx-auto
-      h5.text-center.pb-3 Delete account
-      +formFor(formElement, { url: urlFor('settings'), method: 'DELETE' })
-        +input(formElement, 'password', 'Password')
-        +button('danger', 'Delete')
+  .container
+    .row.pt-5.justify-content-center
+      .col-lg-5.bg-light.rounded-left
+        h5.text-center.py-3 Additional information
+        .form
+          +input-unchangable(formElement, 'createdAt', 'Registration date')
+      .col-lg-5.bg-light.rounded-right
+        h5.text-center.py-3 Profile
+        +formFor(formElement, { url: urlFor('editProfile'), method: 'PATCH' })
+          +input(formElement, 'firstName', 'First Name')
+          +input(formElement, 'lastName', 'Last Name')
+          +button('secondary', 'Change profile')        
+        +formFor(formElement, { url: urlFor('editEmail'), method: 'PATCH' })
+          +input(formElement, 'email', 'Email address')
+          +button('secondary', 'Change email')
+          .d-flex.justify-content-around.align-items-center
+            a(href=urlFor('editPassword')) Edit password
+            a(href=urlFor('deleteAccount') class="text-danger") Delete account
+
+    //- .row.pt-4
+    //-   .col-lg-12.mx-auto
+    //-     h5.text-center.pb-3 Edit password
+    //-     +formFor(formElement, { url: urlFor('editPassword'), method: 'PATCH' })
+    //-       +input(formElement, 'oldPassword', 'Password')
+    //-       +input(formElement, 'password', 'New password')
+    //-       +button('success', 'Submit new password') 
+    //- .row.pt-4
+    //-   .col-lg-12.mx-auto
+    //-     h5.text-center.pb-3 Delete account
+    //-     +formFor(formElement, { url: urlFor('settings'), method: 'DELETE' })
+    //-       +input(formElement, 'password', 'Password')
+    //-       +button('danger', 'Delete')

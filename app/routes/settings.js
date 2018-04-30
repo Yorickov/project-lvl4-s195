@@ -10,7 +10,15 @@ export default (router) => {
       const user = await User.findById(ctx.session.userId);
       ctx.render('settings', { formElement: buildFormObj(user) });
     })
-    .patch('editSettings', '/settings/edit', reqAuth(router), async (ctx) => {
+    .get('editPassword', '/settings/password', reqAuth(router), async (ctx) => {
+      const user = await User.findById(ctx.session.userId);
+      ctx.render('settings/password', { formElement: buildFormObj(user) });
+    })
+    .get('deleteAccount', '/settings/account', reqAuth(router), async (ctx) => {
+      const user = await User.findById(ctx.session.userId);
+      ctx.render('settings/account', { formElement: buildFormObj(user) });
+    })
+    .patch('editProfile', '/settings/profile', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
       logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
 
@@ -24,15 +32,34 @@ export default (router) => {
         ctx.render('settings', { formElement: buildFormObj(form, e) });
       }
     })
+    .patch('editEmail', '/settings/email', reqAuth(router), async (ctx) => {
+      const { form } = ctx.request.body;
+      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
+
+      const user = await User.findById(ctx.session.userId);
+      try {
+        await user.update(form);
+        ctx.flash.set('Email has been changed');
+        ctx.redirect(router.url('settings'));
+        return;
+      } catch (e) {
+        ctx.render('settings', { formElement: buildFormObj(form, e) });
+      }
+    })
     .patch('editPassword', '/settings/password', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      const { oldPassword, password } = form;
-      logger.sett(`${ctx.request.url}: oldPassword: ${oldPassword}, password: ${password}`);
+      const { oldPassword, password, confirmedPassword } = form;
+      if (confirmedPassword !== password) {
+        ctx.flash.set('Passwords are not equal, try again');
+        ctx.redirect(router.url('editPassword'));
+        return;
+      }
+      logger.sett(`${ctx.request.url}: oldPassword: ${oldPassword}, password: ${password}, confirmedPassword: ${confirmedPassword}`);
 
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(oldPassword)) {
         ctx.flash.set('Wrong password');
-        ctx.redirect(router.url('settings'));
+        ctx.redirect(router.url('editPassword'));
         return;
       }
       try {
@@ -50,7 +77,7 @@ export default (router) => {
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(form.password)) {
         ctx.flash.set('Wrong password');
-        ctx.redirect(router.url('settings'));
+        ctx.redirect(router.url('deleteAccount'));
         return;
       }
       try {

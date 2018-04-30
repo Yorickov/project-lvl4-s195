@@ -9,7 +9,7 @@ mixin formFor(formElement, options = {})
       input(name='_method' type='hidden' value= method)
     block
 
-mixin input(formElement, property, label, message = '', options = { as: 'text' })
+mixin input(formElement, property, label, options = { as: 'text' })
   - const value = formElement.object[property] === undefined ? '' : formElement.object[property]
   - const inputId = `input${property}_${value}`;
   //- - const lowTextId = `text${property}_${value}`;
@@ -22,11 +22,20 @@ mixin input(formElement, property, label, message = '', options = { as: 'text' }
 
 mixin button(color, message, type = 'submit')
   .form-group
-    button(class=`btn btn-${color} btn-block` type= type value='Save') #{message}
+    button(class=`btn btn-${color} btn-block` type= `${type}` value='Save') #{message}
 
-//- mixin input-btn(type = 'submit', value = 'Save')
+mixin input-unchangable(formElement, property, label)
+  - const value = formElement.object[property] === undefined ? '' : formElement.object[property]
+  - const inputId = `${property}_${value}`;
+  .form-group.row
+    label(for= inputId class="col-sm-4 col-form-label") #{label}
+    .col-sm-8
+      input(name=getInputName(formElement, property) id= inputId readonly class="form-control-plaintext" type="text" value= value)
+
+//- mixin button-link(type = 'submit', value = 'Save')
 //-   .form-group
 //-     input(class='btn' type=`${type}` value=`${value}`)
 
 //- ???
 //- class=(formElement.errors[property] && 'has-danger')
+createdAt

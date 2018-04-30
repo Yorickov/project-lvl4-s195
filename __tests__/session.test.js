@@ -49,7 +49,7 @@ describe('requests', () => {
     const res2 = await query
       .post('/session')
       .type('form')
-      .send({ form: createTestObject1({ firstName: false, lastName: false }) });
+      .send({ form: createTestObject1() });
     expect(res2).toHaveHTTPStatus(302);
 
     const res3 = await request.agent(server)
@@ -72,13 +72,13 @@ describe('requests', () => {
     const res2 = await query
       .post('/session')
       .type('form')
-      .send({ form: createTestObject2({ firstName: false, lastName: false }) });
+      .send({ form: createTestObject2() });
     expect(res2).toHaveHTTPStatus(302);
 
     const res3 = await request.agent(server)
-      .patch('/settings/edit')
+      .patch('/settings/profile')
       .type('form')
-      .send({ form: createTestObject2({ firstName: false, lastName: false }) });
+      .send({ form: createTestObject2() });
     expect(res3).toHaveHTTPStatus(302);
 
     const res4 = await request.agent(server)

@@ -1,21 +1,20 @@
 extends /layouts/app.pug
 
 block content
-  .row.pt-5
-    .col-sm-5.mx-auto
-      h4.text-center.pb-3 Registration form
-      +formFor(formElement, { url: urlFor('users'), method: 'post' })
-        .row.form-group
-          .col-sm
-            +input(formElement, 'email', 'Email address')
-        .row.form-group
-          .col-sm
-            +input(formElement, 'firstName', 'First Name')
-        .row.form-group
-          .col-sm
-            +input(formElement, 'lastName', 'Last Name')
-        .row.form-group
-          .col-sm
-            +input(formElement, 'password', 'Password', { as: 'password' })
-        .form-group
-            +button('primary', 'Sign Up')
+  .container-fluid
+    .form-row.pt-5
+      .col-sm-6.mx-auto.px-4.bg-light.rounded
+        h3.text-center.mb-4.pt-4 Registration form
+        +formFor(formElement, { url: urlFor('users'), method: 'POST' })
+          .form-group.mb-4
+              +input(formElement, 'email', 'Email address')
+          .form-group.mb-4
+              +input(formElement, 'firstName', 'First Name')
+          .form-group.mb-4
+              +input(formElement, 'lastName', 'Last Name')
+          .form-group.mb-4
+              +input(formElement, 'password', 'Password', { as: 'password' })
+          .form-group.mb-4
+              +input(formElement, 'confirmedPassword', 'Confirm password', { as: 'password' })
+          .form-group.pt-2
+              +button('secondary', 'Confirm')
