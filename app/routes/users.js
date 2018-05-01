@@ -21,7 +21,6 @@ export default (router) => {
         ctx.redirect(router.url('root'));
         return;
       }
-      logger.sett(`GET /settings: email: ${user.email}`);
       ctx.render('settings/profile', { formElement: buildFormObj(user) });
     })
     .post('users', '/users', async (ctx) => {
@@ -32,7 +31,7 @@ export default (router) => {
         return;
       }
       const user = User.build(form);
-      // logger.user(`add user: ${user.email}/${user.password}`);
+      logger.user(`add user: ${user.email}/${user.password}`);
       try {
         await user.save();
         ctx.flash.set('User has been created');

@@ -45,7 +45,7 @@ export default () => {
       getUserId: () => ctx.session.userId,
       getUserProfileName: () => ctx.session.userProfileName,
     };
-    logger.flow(`session object: ${ctx.request.url}/${ctx.session.userId}`);
+    logger.flow(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
     await next();
   });
 

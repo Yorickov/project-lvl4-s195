@@ -17,12 +17,10 @@ export default (router) => {
           email,
         },
       });
-      logger.sett(`${ctx.request.url}: email: ${email}, password: ${password}`);
-
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
         ctx.session.userProfileName = user.fullName;
-        logger.sess(`${ctx.request.url}: ${ctx.session.userId}`);
+        logger.sess(`user sign-in: ${user.id}: ${user.fullName}`);
 
         ctx.redirect(router.url('root'));
         return;
@@ -32,7 +30,7 @@ export default (router) => {
       ctx.render('sessions/new', { formElement: buildFormObj({ email }, err) });
     })
     .get('endSession', '/session/end', (ctx) => {
-      logger.sett(`${ctx.request.url}, userId: ${ctx.request.userId}`);
+      logger.sett(`user ${ctx.request.userId} sign-out`);
       ctx.session = {};
       ctx.flash.set('Buy');
       ctx.redirect(router.url('root'));

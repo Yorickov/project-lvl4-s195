@@ -8,12 +8,10 @@ export default (router) => {
   router
     .get('settings', '/settings', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
-      logger.sett(`GET /settings: email: ${user.email}, ${user.id}`);
       ctx.render('settings', { formElement: buildFormObj(user) });
     })
     .get('editPassword', '/settings/password', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
-      logger.sett(`GET /settings/password :email: ${user.email}`);
       ctx.render('settings/password', { formElement: buildFormObj(user) });
     })
     .get('deleteAccount', '/settings/account', reqAuth(router), async (ctx) => {
@@ -22,11 +20,10 @@ export default (router) => {
     })
     .patch('editProfile', '/settings/profile', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
-
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
+        logger.sett(`user ${user.userId} edit email to ${form.firstName}`);
         ctx.flash.set('Profile has been changed');
         ctx.redirect(router.url('settings'));
         return;
@@ -36,11 +33,10 @@ export default (router) => {
     })
     .patch('editEmail', '/settings/email', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
-
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
+        logger.sett(`user ${user.userId} edit email to ${form.email}`);
         ctx.flash.set('Email has been changed');
         ctx.redirect(router.url('settings'));
         return;
@@ -56,7 +52,6 @@ export default (router) => {
         ctx.redirect(router.url('editPassword'));
         return;
       }
-      logger.sett(`${ctx.request.url}: oldPassword: ${oldPassword}, password: ${password}, confirmedPassword: ${confirmedPassword}`);
 
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(oldPassword)) {
@@ -66,6 +61,7 @@ export default (router) => {
       }
       try {
         await user.update({ password });
+        logger.sett(`user ${user.userId} update password from ${oldPassword} to ${password}`);
         ctx.flash.set('Password has been changed');
         ctx.redirect(router.url('settings'));
       } catch (e) {
@@ -74,8 +70,6 @@ export default (router) => {
     })
     .delete('settings', '/settings', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      logger.sett(`uri: ${ctx.request.url}, email: ${form.email}`);
-
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(form.password)) {
         ctx.flash.set('Wrong password');
