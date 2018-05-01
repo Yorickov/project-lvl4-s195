@@ -27,9 +27,9 @@ export default (router) => {
     .post('users', '/users', async (ctx) => {
       const { form } = ctx.request.body;
       if (form.confirmedPassword !== form.password) {
-        const err = { errors: [{ path: 'password', message: 'Passwords are not equal, try again' }] };
-        ctx.status = 422;
-        ctx.render('users/new', { formElement: buildFormObj(form, err) });
+        ctx.flash.set('Passwords are not equal, try again');
+        ctx.redirect(router.url('newUser'));
+        return;
       }
       const user = User.build(form);
       // logger.user(`add user: ${user.email}/${user.password}`);

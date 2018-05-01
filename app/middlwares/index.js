@@ -1,10 +1,9 @@
 import Rollbar from 'rollbar';
 
 const rollbarConfig = {
-  accessToken: 'a33e39b6ff16414987a4534781b869da',
+  accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
   captureUncaught: true,
   captureUnhandledRejections: true,
-  payload: { environment: 'production' },
   verbose: true,
 };
 

@@ -15,17 +15,3 @@ block content
           .d-flex.justify-content-around.align-items-center
             a(href=urlFor('editPassword')) Edit password
             a(href=urlFor('deleteAccount') class="text-danger") Delete account
-
-    //- .row.pt-4
-    //-   .col-lg-12.mx-auto
-    //-     h5.text-center.pb-3 Edit password
-    //-     +formFor(formElement, { url: urlFor('editPassword'), method: 'PATCH' })
-    //-       +input(formElement, 'oldPassword', 'Password')
-    //-       +input(formElement, 'password', 'New password')
-    //-       +button('success', 'Submit new password') 
-    //- .row.pt-4
-    //-   .col-lg-12.mx-auto
-    //-     h5.text-center.pb-3 Delete account
-    //-     +formFor(formElement, { url: urlFor('settings'), method: 'DELETE' })
-    //-       +input(formElement, 'password', 'Password')
-    //-       +button('danger', 'Delete')

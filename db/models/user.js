@@ -45,7 +45,7 @@ export default (sequelize, DataTypes) => {
       },
       validate: {
         len: {
-          args: [2, 50],
+          args: [2, 20],
           msg: 'Must be from 2 to 20 symbols',
         },
       },
