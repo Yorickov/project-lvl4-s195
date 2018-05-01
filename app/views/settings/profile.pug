@@ -1,0 +1,13 @@
+extends /layouts/app.pug
+
+block content
+  .container
+    .row.pt-5.justify-content-center
+      .col-lg-5.mx-auto.bg-light.rounded-left
+        h5.text-center.py-3 Profile
+        .form
+          +input-unchangable(formElement, 'firstName', 'First Name')
+          +input-unchangable(formElement, 'lastName', 'Last Name')
+          +input-unchangable(formElement, 'email', 'Email address')
+          +input-unchangable(formElement, 'createdAt', 'Registration date')
+          +input-unchangable(formElement, 'updatedAt', 'Last visited date')

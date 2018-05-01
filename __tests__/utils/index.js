@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-export default () => {
+export const initFaker = () => {
   const userInit = {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
@@ -9,6 +9,11 @@ export default () => {
   };
 
   const user = { ...userInit, confirmedPassword: userInit.password };
-
   return (options = {}) => ({ ...user, ...options });
 };
+
+export const getCookieRequest = res =>
+  res.headers['set-cookie'][0]
+    .split(',')
+    .map(item => item.split(';')[0])
+    .join(';');

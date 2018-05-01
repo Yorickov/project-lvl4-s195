@@ -2,12 +2,17 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
-import initFaker from './utils';
+import { initFaker, getCookieRequest } from './utils';
 import { User } from '../db/models';
 
 describe('requests', () => {
   let server;
-  let createTestObject;
+  let userDb;
+  let newUserDb;
+  let cookie;
+  let userDbProfile;
+  let userDbEmail;
+  let userDbPassword;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
@@ -15,32 +20,86 @@ describe('requests', () => {
 
   beforeEach(async () => {
     server = app().listen();
-    createTestObject = initFaker();
+    userDb = initFaker()();
+    newUserDb = initFaker()();
+    userDbProfile = { ...userDb, firstName: newUserDb.firstName, lastName: newUserDb.lastName };
+    userDbEmail = { ...userDb, email: newUserDb.email };
+    userDbPassword = {
+      ...userDb,
+      oldPassword: userDb.password,
+      password: newUserDb.password,
+      confirmedPassword: newUserDb.confirmedPassword,
+    };
     await User.sync({ force: true });
+    await User.create(userDb);
+
+    const res = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: userDb });
+    cookie = getCookieRequest(res);
+    expect(res).toHaveHTTPStatus(302);
   });
 
-  it('GET root', async () => {
-    const res = await request.agent(server)
-      .get('/');
-    expect(res).toHaveHTTPStatus(200);
+  it('POST /settings - delete user', async () => {
+    const res2 = await request.agent(server)
+      .delete('/settings')
+      .set('cookie', cookie)
+      .send({ form: { password: userDb.password } });
+    expect(res2).toHaveHTTPStatus(302);
+    const isUser = await User.findOne({
+      where: { email: userDb.email },
+    });
+    expect(isUser).toBeNull();
   });
 
-  it('GET 404 / = wwrong path', async () => {
+  it('POST /settings - failed delete user', async () => {
     const res = await request.agent(server)
-      .get('/wrong-path');
-    expect(res).toHaveHTTPStatus(404);
+      .delete('/settings')
+      .set('cookie', cookie)
+      .send({ form: { password: 'wrongPass' } });
+    expect(res).toHaveHTTPStatus(302);
+    const isUser = await User.findOne({
+      where: { email: userDb.email },
+    });
+    expect(isUser).not.toBeNull();
   });
 
-  it('GET /users/new - show sign-up form', async () => {
+  it('PATCH /settings/profile - update profile', async () => {
     const res = await request.agent(server)
-      .get('/users/new');
-    expect(res).toHaveHTTPStatus(200);
+      .patch('/settings/profile')
+      .set('cookie', cookie)
+      .send({ form: userDbProfile });
+    expect(res).toHaveHTTPStatus(302);
+    const isUser = await User.findOne({
+      where: { email: userDb.email },
+    });
+    expect(isUser.firstName).toMatch(userDbProfile.firstName);
+    expect(isUser.lastName).toMatch(userDbProfile.lastName);
   });
 
-  it('GET 200 /users - show users', async () => {
+  it('PATCH /settings/email - update email', async () => {
     const res = await request.agent(server)
-      .get('/users');
-    expect(res).toHaveHTTPStatus(200);
+      .patch('/settings/email')
+      .set('cookie', cookie)
+      .send({ form: userDbEmail });
+    expect(res).toHaveHTTPStatus(302);
+    const isUser = await User.findOne({
+      where: { firstName: userDb.firstName },
+    });
+    expect(isUser.email).toMatch(userDbEmail.email);
+  });
+
+  it('PATCH /settings/password - update password', async () => {
+    const res = await request.agent(server)
+      .patch('/settings/password')
+      .set('cookie', cookie)
+      .send({ form: userDbPassword });
+    expect(res).toHaveHTTPStatus(302);
+    // const isUser = await User.findOne({
+    //   where: { email: userDb.email },
+    // });
+    // expect(isUser.password).toMatch(userDbPassword.password);
   });
 
   afterEach(async () => {

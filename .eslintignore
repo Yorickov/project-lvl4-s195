@@ -4,3 +4,4 @@ coverage
 public
 db/models/index.js
 db/migrations
+__tests__/utils/

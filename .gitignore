@@ -6,5 +6,4 @@ dist
 flow-typed
 *.sqlite
 coverage
-trash
 .env

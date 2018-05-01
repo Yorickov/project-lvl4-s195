@@ -21,6 +21,7 @@ export default (router) => {
 
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
+        ctx.session.userProfileName = user.fullName;
         logger.sess(`${ctx.request.url}: ${ctx.session.userId}`);
 
         ctx.redirect(router.url('root'));
@@ -31,6 +32,7 @@ export default (router) => {
       ctx.render('sessions/new', { formElement: buildFormObj({ email }, err) });
     })
     .get('endSession', '/session/end', (ctx) => {
+      logger.sett(`${ctx.request.url}, userId: ${ctx.request.userId}`);
       ctx.session = {};
       ctx.flash.set('Buy');
       ctx.redirect(router.url('root'));

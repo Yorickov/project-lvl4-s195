@@ -3,12 +3,8 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5.justify-content-center
-      .col-lg-5.bg-light.rounded-left
-        h5.text-center.py-3 Additional information
-        .form
-          +input-unchangable(formElement, 'createdAt', 'Registration date')
-      .col-lg-5.bg-light.rounded-right
-        h5.text-center.py-3 Profile
+      .col-lg-5.mx-auto.bg-light.rounded-right
+        h5.text-center.py-3 Account
         +formFor(formElement, { url: urlFor('editProfile'), method: 'PATCH' })
           +input(formElement, 'firstName', 'First Name')
           +input(formElement, 'lastName', 'Last Name')

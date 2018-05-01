@@ -42,6 +42,8 @@ export default () => {
     ctx.state = {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
+      getUserId: () => ctx.session.userId,
+      getUserProfileName: () => ctx.session.userProfileName,
     };
     logger.flow(`session object: ${ctx.request.url}/${ctx.session.userId}`);
     await next();

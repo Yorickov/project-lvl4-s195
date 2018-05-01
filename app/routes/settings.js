@@ -8,10 +8,12 @@ export default (router) => {
   router
     .get('settings', '/settings', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
+      logger.sett(`GET /settings: email: ${user.email}, ${user.id}`);
       ctx.render('settings', { formElement: buildFormObj(user) });
     })
     .get('editPassword', '/settings/password', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
+      logger.sett(`GET /settings/password :email: ${user.email}`);
       ctx.render('settings/password', { formElement: buildFormObj(user) });
     })
     .get('deleteAccount', '/settings/account', reqAuth(router), async (ctx) => {

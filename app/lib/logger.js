@@ -5,6 +5,7 @@ const flow = debug('sequelize:flow');
 const sess = debug('sequelize:session');
 const user = debug('sequelize:users');
 const sett = debug('sequelize:settings');
+const midd = debug('sequelize:middlware');
 
 export default {
   test,
@@ -12,4 +13,5 @@ export default {
   sess,
   user,
   sett,
+  midd,
 };
