@@ -25,7 +25,7 @@
     "webpack": "webpack",
     "build": "npm run webpack -- -p --env production",
     "postinstall": "npm run build",
-    "migrate": "NODE_ENV=test npm run sequelize db:migrate"
+    "migrate": "NODE_ENV=development npm run sequelize db:migrate"
   },
   "jest": {
     "testEnvironment": "node",

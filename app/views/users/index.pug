@@ -1,15 +1,21 @@
 extends /layouts/app.pug
 
 block content
-  .row.pt-5
-    .col-lg-8.mx-auto
-      table.table.table-stripped.table-hover.text-center.table-bordered.bg-dark.text-white
-        thead
-          tr
-            th.thead-light.thead-dark Full Name
-            th Email
-        tbody.table-striped
-          each user in users
+  .container
+    .row.pt-4
+      .col-12.mx-auto
+        table.table.table-striped.table-hover.table-bordered
+          caption users list
+          thead.bg-secondary.text-white
             tr
-              td= user.fullName
-              td= user.email
+              th #
+              th Full Name
+              th Email
+              th Created at
+          tbody
+            each user in users
+              tr
+                td= user.id
+                td= user.fullName
+                td= user.email
+                td= user.createdAt

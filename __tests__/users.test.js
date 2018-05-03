@@ -53,7 +53,7 @@ describe('requests', () => {
     expect(isUser).toBeNull();
   });
 
-  it('POST /settings - failed delete user', async () => {
+  it('DELETE /settings - failed delete user', async () => {
     const res = await request.agent(server)
       .delete('/settings')
       .set('cookie', cookie)
