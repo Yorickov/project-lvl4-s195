@@ -1,0 +1,27 @@
+extends /layouts/app.pug
+
+block content
+  .container.border
+    .row.pt-5
+      .col-sm-12.mx-auto.border.bg-secondary.p-3
+        .row.py-2
+          .col-sm-12
+            span id: 1234
+        .row.py-2
+          .col-sm-6
+            span= task.id
+          .col-sm-6
+            span= task.content
+        .row.py-2
+          .col-sm-6
+            span creator: Me
+          .col-sm-6
+            span assign To: Billy
+        .row.py-2
+          .col-sm-12
+            span Description
+        .row.py-2
+          .col-sm-6
+            span created at:
+          .col-sm-6
+            span tag: Willy, Hank

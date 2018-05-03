@@ -1,0 +1,34 @@
+extends /layouts/app.pug
+
+block content
+  .container
+    .row.pt-4
+      .col-12.mx-auto
+        table.table.table-striped.table-hover.table-bordered
+          caption tasks list
+          thead.bg-secondary.text-white
+            tr
+              th #
+              th Name
+              th Description
+              th Status
+              th Creator
+              th Assign To
+              th Tags
+              th Created at
+              th Updated at
+          tbody
+            for task in tasks         
+              tr
+                td
+                  a(href=urlFor('unoTask', 1))= task.title
+                td= task.content
+                td gfg
+                td gf
+                td fgf
+                td fgf
+                td gfg
+                td gg
+                td gf
+
+//- each user in users

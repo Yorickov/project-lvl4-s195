@@ -13,11 +13,17 @@ html(lang="en")
       a.navbar-brand(href="/") Task Manager
       button.navbar-toggler(data-toggle="collapse" type="button" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
         span.navbar-toggler-icon
-
       .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
           li.nav-item.active
             a.nav-link(href=urlFor('users')) Users
+          li.nav-item
+            a.nav-link(href=urlFor('tasks')) Tasks
+            if isSignedIn()
+              li.nav-item
+                a.nav-link(href=urlFor('myTasks')) My Tasks
+              li.nav-item
+                a.nav-link(href=urlFor('newTask')) New task
         ul.navbar-nav
           if isSignedIn()
             li.nav-item.dropdown
@@ -40,6 +46,9 @@ html(lang="en")
             span(aria-hidden="true") &times;
 
     block content
+
+    //- nav.navbar.fixed-bottom.navbar-dark.bg-dark.bg-faded.justify-content-center
+    //-   a.navbar-brand(href="#") Hexlet project: Javascript BE
 
 //- +formFor(formElement, { url: urlFor('session'), method: 'DELETE' })
 //-   +button(formElement, 'submit', 'Sign Out')

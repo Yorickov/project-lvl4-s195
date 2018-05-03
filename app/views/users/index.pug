@@ -5,17 +5,17 @@ block content
     .row.pt-4
       .col-12.mx-auto
         table.table.table-striped.table-hover.table-bordered
-          caption users list
           thead.bg-secondary.text-white
             tr
-              th #
               th Full Name
               th Email
               th Created at
+              th User profile
           tbody
             each user in users
               tr
-                td= user.id
                 td= user.fullName
                 td= user.email
                 td= user.createdAt
+                td
+                  a(href=urlFor('profile', user.id)) Show profile

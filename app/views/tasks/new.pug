@@ -1,0 +1,49 @@
+extends /layouts/app.pug
+
+block content
+  .container
+    .row.pt-5
+      .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
+        .form.pt-2
+          .form-row.text-center
+            h4 New Task
+          .form-row
+            .form-group.col-md-6
+              label(for="inputName") Name
+              input(type="text" class="form-control" id="inputName" placeholder="Name")
+            .form-group.col-md-6
+              label(for="inputEmail") Assign to
+              input(type="email" class="form-control" id="inputEmail" placeholder="Email")
+          .form-row
+            .form-group.col-md-12
+              label(for="inputDescription") Descrition
+              textarea(type="text" class="form-control" id="inputDescription")
+          .form-row
+            .form-group.col-md-6
+              label(for="inputStatus") Status
+              select(id="inputState" class="form-control")
+                option(selected) Choose1
+                option Choose2
+            .form-group.col-md-6
+              label(for="inputTag") Tags
+              select(id="inputTag" multiple size="3" class="form-control")
+                option(selected) Choose1
+                option Choose2
+          .form-row
+            button.pt-2(type="submit" class="btn btn-primary") Complete task creation
+            //- a(href=urlFor('newTag')) Add new tag
+
+          //- h3.text-center.mb-4.pt-4 Registration form
+          //- +formFor(formElement, { url: urlFor('users'), method: 'POST' })
+          //-   .form-group.mb-4
+          //-       +input(formElement, 'email', 'Email address')
+          //-   .form-group.mb-4
+          //-       +input(formElement, 'firstName', 'First Name')
+          //-   .form-group.mb-4
+          //-       +input(formElement, 'lastName', 'Last Name')
+          //-   .form-group.mb-4
+          //-       +input(formElement, 'password', 'Password', { as: 'password' })
+          //-   .form-group.mb-4
+          //-       +input(formElement, 'confirmedPassword', 'Confirm password', { as: 'password' })
+          //-   .form-group.pt-2
+          //-       +button('secondary', 'Confirm')
