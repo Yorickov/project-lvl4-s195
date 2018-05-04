@@ -3,7 +3,7 @@ import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
 import { initFaker, getCookieRequest } from './utils';
-import { User } from '../db/models';
+import { User } from '../app/models';
 
 describe('requests', () => {
   let server;
@@ -57,7 +57,7 @@ describe('requests', () => {
 
   it('DELETE /sesssion - sign-out', async () => {
     const res = await request(server)
-      .get('/session/end')
+      .delete('/session')
       .set('cookie', cookie);
     expect(res).toHaveHTTPStatus(302);
   });

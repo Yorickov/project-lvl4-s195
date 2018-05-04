@@ -1,5 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { User } from '../../db/models';
+import { User } from '../models';
 
 export default (router) => {
   router.get('root', '/', (ctx) => {

@@ -1,5 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { User } from '../../db/models';
+import { User } from '../models';
 import { encrypt } from '../lib/secure';
 import logger from '../lib/logger';
 import { reqAuth } from '../middlwares';

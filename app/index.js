@@ -19,7 +19,7 @@ import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
 import container from './container';
 import { errorHandler } from './middlwares';
-import { sequelize } from '../db/models';
+import { sequelize } from './models';
 
 const { logger } = container;
 

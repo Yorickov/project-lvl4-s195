@@ -3,7 +3,7 @@ import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
 import { initFaker } from './utils';
-import { User } from '../db/models';
+import { User } from '../app/models';
 
 describe('requests', () => {
   let server;

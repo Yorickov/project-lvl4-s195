@@ -1,7 +1,6 @@
 node_modules
 dist
 coverage
-public
-db/models/index.js
-db/migrations
+app/models/index.js
+app/migrations
 __tests__/utils/

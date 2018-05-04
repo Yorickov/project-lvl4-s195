@@ -2,7 +2,7 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
-import { User } from '../db/models';
+import { User } from '../app/models';
 import { initFaker } from './utils';
 
 describe('requests', () => {

@@ -1,6 +1,6 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { encrypt } from '../lib/secure';
-import { User } from '../../db/models';
+import { User } from '../models';
 
 import logger from '../lib/logger';
 
@@ -29,8 +29,7 @@ export default (router) => {
       const err = { errors: [{ path: 'password', message: 'Wrong email or password' }] };
       ctx.render('sessions/new', { formElement: buildFormObj({ email }, err) });
     })
-    .get('endSession', '/session/end', (ctx) => {
-      logger.sett(`user ${ctx.request.userId} sign-out`);
+    .delete('endSession', '/session', (ctx) => {
       ctx.session = {};
       ctx.flash.set('Buy');
       ctx.redirect(router.url('root'));

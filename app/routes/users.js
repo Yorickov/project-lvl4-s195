@@ -1,5 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { User } from '../../db/models';
+import { User } from '../models';
 
 import logger from '../lib/logger';
 
@@ -36,7 +36,6 @@ export default (router) => {
         await user.save();
         ctx.flash.set('User has been created');
         ctx.redirect(router.url('root'));
-        return;
       } catch (e) {
         ctx.status = 422;
         ctx.render('users/new', { formElement: buildFormObj(user, e) });
