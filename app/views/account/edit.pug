@@ -5,13 +5,13 @@ block content
     .row.pt-5.justify-content-center
       .col-lg-5.mx-auto.bg-light.rounded-right
         h5.text-center.py-3 Account
-        +formFor(formElement, { url: urlFor('editProfile'), method: 'PATCH' })
+        +formFor(formElement, { url: urlFor('account/profile#update'), method: 'PATCH' })
           +input(formElement, 'firstName', 'First Name')
           +input(formElement, 'lastName', 'Last Name')
           +button('secondary', 'Change profile')        
-        +formFor(formElement, { url: urlFor('editEmail'), method: 'PATCH' })
+        +formFor(formElement, { url: urlFor('account/email#update'), method: 'PATCH' })
           +input(formElement, 'email', 'Email address')
           +button('secondary', 'Change email')
           .d-flex.justify-content-around.align-items-center
-            a(href=urlFor('editPassword')) Edit password
-            a(href=urlFor('deleteAccount') class="text-danger") Delete account
+            a(href=urlFor('account/password#edit')) Edit password
+            a(href=urlFor('account/destroy#form') class="text-danger") Delete account

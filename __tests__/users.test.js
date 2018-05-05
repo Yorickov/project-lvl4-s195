@@ -41,9 +41,9 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('POST /settings - delete user', async () => {
+  it('POST /account - delete user', async () => {
     const res2 = await request.agent(server)
-      .delete('/settings')
+      .delete('/account')
       .set('cookie', cookie)
       .send({ form: { password: userDb.password } });
     expect(res2).toHaveHTTPStatus(302);
@@ -53,9 +53,9 @@ describe('requests', () => {
     expect(isUser).toBeNull();
   });
 
-  it('DELETE /settings - failed delete user', async () => {
+  it('DELETE /account - failed delete user', async () => {
     const res = await request.agent(server)
-      .delete('/settings')
+      .delete('/account')
       .set('cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
     expect(res).toHaveHTTPStatus(302);
@@ -65,9 +65,9 @@ describe('requests', () => {
     expect(isUser).not.toBeNull();
   });
 
-  it('PATCH /settings/profile - update profile', async () => {
+  it('PATCH /account/profile - update profile', async () => {
     const res = await request.agent(server)
-      .patch('/settings/profile')
+      .patch('/account/profile')
       .set('cookie', cookie)
       .send({ form: userDbProfile });
     expect(res).toHaveHTTPStatus(302);
@@ -78,9 +78,9 @@ describe('requests', () => {
     expect(isUser.lastName).toMatch(userDbProfile.lastName);
   });
 
-  it('PATCH /settings/email - update email', async () => {
+  it('PATCH /account/email - update email', async () => {
     const res = await request.agent(server)
-      .patch('/settings/email')
+      .patch('/account/email')
       .set('cookie', cookie)
       .send({ form: userDbEmail });
     expect(res).toHaveHTTPStatus(302);
@@ -90,9 +90,9 @@ describe('requests', () => {
     expect(isUser.email).toMatch(userDbEmail.email);
   });
 
-  it('PATCH /settings/password - update password', async () => {
+  it('PATCH /account/password - update password', async () => {
     const res = await request.agent(server)
-      .patch('/settings/password')
+      .patch('/account/password')
       .set('cookie', cookie)
       .send({ form: userDbPassword });
     expect(res).toHaveHTTPStatus(302);

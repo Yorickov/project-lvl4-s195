@@ -57,5 +57,13 @@ export default (sequelize, DataTypes) => {
       },
     },
   });
+  // User.associate = (models) => {
+  //   User.hasMany(models.Task, {
+  //     foreignKey: 'creator',
+  //   });
+  //   User.hasMany(models.Task, {
+  //     foreignKey: 'assignTo',
+  //   });
+  // };
   return User;
 };

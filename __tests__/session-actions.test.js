@@ -27,9 +27,9 @@ describe('requests', () => {
     cookie = getCookieRequest(res);
   });
 
-  it('GET /settings - show settings', async () => {
+  it('GET /account/edit - show account', async () => {
     const res = await request(server)
-      .get('/settings')
+      .get('/account/edit')
       .set('cookie', cookie);
     expect(res).toHaveHTTPStatus(200);
   });
@@ -41,16 +41,16 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('GET /access - show account', async () => {
+  it('GET /account/destroy - show account_destroy form', async () => {
     const res = await request(server)
-      .get('/settings/account')
+      .get('/account/destroy')
       .set('cookie', cookie);
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('GET /access - show password', async () => {
+  it('GET /account/password_edit - show password_edit form', async () => {
     const res = await request(server)
-      .get('/settings/password')
+      .get('/account/password_edit')
       .set('cookie', cookie);
     expect(res).toHaveHTTPStatus(200);
   });

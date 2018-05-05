@@ -16,7 +16,7 @@ html(lang="en")
       .collapse.navbar-collapse#navbarSupportedContent
         ul.navbar-nav.mr-auto
           li.nav-item.active
-            a.nav-link(href=urlFor('users')) Users
+            a.nav-link(href=urlFor('users#index')) Users
           li.nav-item
             a.nav-link(href=urlFor('tasks')) Tasks
             if isSignedIn()
@@ -29,15 +29,15 @@ html(lang="en")
             li.nav-item.dropdown
               a.nav-link.dropdown-toggle(aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#") #{getUserProfileName()}
               .dropdown-menu.dropdown-menu-right
-                a.dropdown-item.ml-0(href=urlFor('profile', getUserId())) Profile
-                a.dropdown-item.ml-0(href=urlFor('settings')) Settings
+                a.dropdown-item.ml-0(href=urlFor('users#show', getUserId())) Profile
+                a.dropdown-item.ml-0(href=urlFor('account#edit')) Settings
                 .dropdown-divider
-                a.dropdown-item.ml-0(href=urlFor('endSession') data-method='delete' rel='nofollow') Sign Out
+                a.dropdown-item.ml-0(href=urlFor('session#destroy') data-method='delete' rel='nofollow') Sign Out
           else
             li.nav-item
-              a.nav-link(href=urlFor('newSession')) Sign In
+              a.nav-link(href=urlFor('session#new')) Sign In
             li.nav-item
-              a.nav-link(href=urlFor('newUser')) Sign Up
+              a.nav-link(href=urlFor('users#new')) Sign Up
     .container
       - const msg = flash.get()
       if msg

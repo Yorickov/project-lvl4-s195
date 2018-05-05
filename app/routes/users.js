@@ -5,29 +5,29 @@ import logger from '../lib/logger';
 
 export default (router) => {
   router
-    .get('users', '/users', async (ctx) => {
+    .get('users#index', '/users', async (ctx) => {
       const users = await User.findAll();
       logger.user(`users id: ${Object.keys(users)}`);
       ctx.render('users', { users });
     })
-    .get('newUser', '/users/new', (ctx) => {
+    .get('users#new', '/users/new', (ctx) => {
       const user = User.build();
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
-    .get('profile', '/users/:id', async (ctx) => {
+    .get('users#show', '/users/:id', async (ctx) => {
       const user = await User.findById(ctx.params.id);
       if (!user) {
         ctx.flash.set('Not such a user');
         ctx.redirect(router.url('root'));
         return;
       }
-      ctx.render('settings/profile', { formElement: buildFormObj(user) });
+      ctx.render('users/show', { formElement: buildFormObj(user) });
     })
-    .post('users', '/users', async (ctx) => {
+    .post('users#create', '/users', async (ctx) => {
       const { form } = ctx.request.body;
       if (form.confirmedPassword !== form.password) {
         ctx.flash.set('Passwords are not equal, try again');
-        ctx.redirect(router.url('newUser'));
+        ctx.redirect(router.url('users#new'));
         return;
       }
       const user = User.build(form);
