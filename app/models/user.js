@@ -56,14 +56,19 @@ export default (sequelize, DataTypes) => {
         return `${this.firstName} ${this.lastName}`;
       },
     },
+    freezeTableName: true,
   });
-  // User.associate = (models) => {
-  //   User.hasMany(models.Task, {
-  //     foreignKey: 'creator',
-  //   });
-  //   User.hasMany(models.Task, {
-  //     foreignKey: 'assignTo',
-  //   });
-  // };
+
+  User.associate = (models) => {
+    User.hasMany(models.Task, {
+      foreignKey: 'assignedToId',
+      as: 'assignedTo',
+    });
+    User.hasMany(models.Task, {
+      foreignKey: 'creatorId',
+      as: 'creator',
+    });
+  };
+
   return User;
 };

@@ -1,11 +1,10 @@
 extends /layouts/app.pug
 
 block content
-  .container
+  .container-fluid
     .row.pt-4
-      .col-12.mx-auto
+      .col-10.mx-auto
         table.table.table-striped.table-hover.table-bordered
-          caption tasks list
           thead.bg-secondary.text-white
             tr
               th #
@@ -14,21 +13,24 @@ block content
               th Status
               th Creator
               th Assign To
-              th Tags
               th Created at
               th Updated at
+              th Tags
           tbody
-            for task in tasks         
+            each task in tasks         
               tr
+                td= task.id
+                  //- +formFor(task, { url: urlFor('tasks#show', task.id), method: 'get' })
+                td= task.name
+                td= task.description
+                td= task.status.name
+                td= task.creator.fullName
+                td= task.assignedTo.fullName
+                td= task.createdAt
+                td= task.updatedAt
                 td
-                  a(href=urlFor('unoTask', 1))= task.title
-                td= task.content
-                td gfg
-                td gf
-                td fgf
-                td fgf
-                td gfg
-                td gg
-                td gf
-
-//- each user in users
+                  row
+                    each tag in tags
+                      each item in tag.Tasks
+                        if item.id === task.id
+                          span= tag.name

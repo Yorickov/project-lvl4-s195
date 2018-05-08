@@ -10,8 +10,8 @@ mixin formFor(formElement, options = {})
     block
 
 mixin input(formElement, property, label, options = { as: 'text' })
-  - const value = formElement.object[property] === undefined ? '' : formElement.object[property]
-  - const inputId = `input${property}_${value}`;
+  - const value = formElement.object[property] === undefined ? '' : formElement.object[property];
+  - const inputId = `input_${property}`;
   //- - const lowTextId = `text${property}_${value}`;
   .form-group
     label(for= inputId) #{label}
@@ -25,16 +25,38 @@ mixin button(color, message, type = 'submit')
     button(class=`btn btn-${color} btn-block` type= `${type}` value='Save') #{message}
 
 mixin input-unchangable(formElement, property, label)
-  - const value = formElement.object[property] === undefined ? '' : formElement.object[property]
-  - const inputId = `${property}_${value}`;
+  - const value = formElement.object[property] === undefined ? '' : formElement.object[property];
+  - const inputId = `inputUn_${property}`;
   .form-group.row
     label(for= inputId class="col-sm-4 col-form-label") #{label}
     .col-sm-8
       input(name=getInputName(formElement, property) id= inputId readonly class="form-control-plaintext" type="text" value= value)
 
-//- mixin button-link(type = 'submit', value = 'Save')
-//-   .form-group
-//-     input(class='btn' type=`${type}` value=`${value}`)
+mixin selectAssignId(formElement, property, label, items)
+  - const selectId = `select_${property}`;
+  .form-group
+    label(for= selectId) #{label}
+    select.form-control(name=getInputName(formElement, property) id= selectId)
+      each item in items
+        if item.id === getUserId()
+          option(value= item.id selected='selected') #{item.fullName}
+        else
+          option(value= item.id) #{item.fullName}
 
-//- ???
-//- class=(formElement.errors[property] && 'has-danger')
+mixin selectTagId(formElement, property, label, items)
+  - const selectId = `selectT_${property}`;
+  - const url = _.get(options, 'url');
+  .form-group
+    label(for= selectId) #{label}
+    select.form-control(name= `${getInputName(formElement, property)}[]` id= selectId multiple)
+      each item in items
+        option(value= item.id) #{item.name}
+
+mixin textarea(formElement, property, label, options = { as: 'text' })
+  - const value = formElement.object[property] === undefined ? '' : formElement.object[property];
+  - const textareaId = `textaria_${property}`;
+  .form-group
+    label(for= textareaId) #{label}
+    textarea(name=getInputName(formElement, property) id= textariaId placeholder= label class='form-control' type=options['as']) #{value}
+    if formElement.errors[property]
+      .form-control-feedback= formElement.errors[property].map(({ message }) => message).join('. ')

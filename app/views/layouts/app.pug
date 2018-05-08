@@ -18,12 +18,12 @@ html(lang="en")
           li.nav-item.active
             a.nav-link(href=urlFor('users#index')) Users
           li.nav-item
-            a.nav-link(href=urlFor('tasks')) Tasks
+            a.nav-link(href=urlFor('tasks#index')) Tasks
             if isSignedIn()
+              //- li.nav-item
+              //-   a.nav-link(href=urlFor('myTasks')) My Tasks
               li.nav-item
-                a.nav-link(href=urlFor('myTasks')) My Tasks
-              li.nav-item
-                a.nav-link(href=urlFor('newTask')) New task
+                a.nav-link(href=urlFor('tasks#new')) New task
         ul.navbar-nav
           if isSignedIn()
             li.nav-item.dropdown

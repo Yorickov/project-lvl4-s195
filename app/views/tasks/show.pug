@@ -6,22 +6,23 @@ block content
       .col-sm-12.mx-auto.border.bg-secondary.p-3
         .row.py-2
           .col-sm-12
-            span id: 1234
+            span dfdfd
         .row.py-2
           .col-sm-6
             span= task.id
           .col-sm-6
-            span= task.content
+            span= status
         .row.py-2
           .col-sm-6
-            span creator: Me
+            span= task.creator
           .col-sm-6
-            span assign To: Billy
+            span= task.assignedTo
         .row.py-2
           .col-sm-12
-            span Description
+            span= task.description
         .row.py-2
           .col-sm-6
-            span created at:
+            span= task.createdAt
           .col-sm-6
-            span tag: Willy, Hank
+            span= task.updatedAt
+            

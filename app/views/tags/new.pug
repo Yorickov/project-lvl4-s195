@@ -1,0 +1,13 @@
+extends /layouts/app.pug
+
+block content
+    .container
+        .form-row.pt-5
+            .col.border
+                ul
+                    each tag in tags
+                        li= tag.name
+            .col
+                +formFor(formElement, { url: urlFor('tags#create'), method: 'POST' })
+                    +input(formElement, 'name', 'Tag name')
+                    +button('secondary', 'Complete tag creation')

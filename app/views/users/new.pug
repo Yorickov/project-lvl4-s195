@@ -1,20 +1,14 @@
 extends /layouts/app.pug
 
 block content
-  .container
-    .form-row.pt-5
-      .col-sm-6.mx-auto.px-4.bg-light.rounded
-        h3.text-center.mb-4.pt-4 Registration form
-        +formFor(formElement, { url: urlFor('users#create'), method: 'POST' })
-          .form-group.mb-4
-              +input(formElement, 'email', 'Email address')
-          .form-group.mb-4
-              +input(formElement, 'firstName', 'First Name')
-          .form-group.mb-4
-              +input(formElement, 'lastName', 'Last Name')
-          .form-group.mb-4
-              +input(formElement, 'password', 'Password', { as: 'password' })
-          .form-group.mb-4
-              +input(formElement, 'confirmedPassword', 'Confirm password', { as: 'password' })
-          .form-group.pt-2
-              +button('secondary', 'Confirm')
+    .container
+        .form-row.pt-5
+            .col-sm-8.mx-auto.px-4.bg-light.rounded
+                h3.text-center.mb-4.pt-4 Registration form
+                +formFor(formElement, { url: urlFor('users#create'), method: 'POST' })
+                    +input(formElement, 'email', 'Email address')
+                    +input(formElement, 'firstName', 'First Name')
+                    +input(formElement, 'lastName', 'Last Name')
+                    +input(formElement, 'password', 'Password', { as: 'password' })
+                    +input(formElement, 'confirmedPassword', 'Confirm password', { as: 'password' })
+                    +button('secondary', 'Confirm')

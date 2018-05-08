@@ -20,7 +20,7 @@
     "babel-node": "babel-node",
     "flow": "flow",
     "flow-typed": "flow-typed",
-    "start": "NODE_ENV=production gulp server",
+    "start": "NODE_ENV=production gulp production",
     "eslint": "eslint",
     "webpack": "webpack",
     "build": "npm run webpack -- -p --env production",
