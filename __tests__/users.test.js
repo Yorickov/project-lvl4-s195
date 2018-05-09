@@ -9,7 +9,6 @@ import { initFaker, getCookieRequest } from '../app/lib/testLib';
 describe('requests', () => {
   let server;
   let user;
-  let cookie;
   let newUserDb;
   let userDbProfile;
   let userDbEmail;
@@ -57,7 +56,7 @@ describe('requests', () => {
       .post('/session')
       .type('form')
       .send({ form: user });
-    cookie = getCookieRequest(res);
+    const cookie = getCookieRequest(res);
 
     const res1 = await request(server)
       .get('/account/edit')
@@ -80,7 +79,7 @@ describe('requests', () => {
       .post('/session')
       .type('form')
       .send({ form: user });
-    cookie = getCookieRequest(res);
+    const cookie = getCookieRequest(res);
 
     const res2 = await request.agent(server)
       .patch('/account/profile')
@@ -108,7 +107,7 @@ describe('requests', () => {
       .post('/session')
       .type('form')
       .send({ form: userDbEmail });
-    cookie = getCookieRequest(res);
+    const cookie = getCookieRequest(res);
 
     const res2 = await request.agent(server)
       .delete('/account')
