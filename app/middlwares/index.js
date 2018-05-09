@@ -22,7 +22,7 @@ const reqAuth = router =>
   async (ctx, next) => {
     if (!ctx.session.userId) {
       ctx.flash.set('Session time expired, relogin please');
-      ctx.redirect(router.url('newSession'));
+      ctx.redirect(router.url('session#new'));
       return;
     }
     await next();

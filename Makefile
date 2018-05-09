@@ -12,7 +12,7 @@ prod:
 	npm start
 
 test:
-	DEBUG=sequelize* npm test
+	npm test
 
 test-watch:
 	npm test -- --watchAll
