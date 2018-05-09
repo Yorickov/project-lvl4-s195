@@ -9,7 +9,7 @@ export const initFaker = () => {
   };
 
   const user = { ...userInit, confirmedPassword: userInit.password };
-  return (options = {}) => ({ ...user, ...options });
+  return user;
 };
 
 export const initTask = () => {

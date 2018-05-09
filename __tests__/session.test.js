@@ -6,7 +6,7 @@ import { initFaker, getCookieRequest } from '../app/lib/testLib';
 import db from '../app/models';
 import createTables from '../app/createTables';
 
-const user = initFaker()();
+const user = initFaker();
 
 describe('requests', () => {
   let server;
