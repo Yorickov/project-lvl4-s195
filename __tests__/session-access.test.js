@@ -3,7 +3,8 @@ import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
 import { initFaker } from './utils';
-import { User } from '../app/models';
+import db from '../app/models';
+import createTables from '../app/createTables';
 
 describe('requests', () => {
   let server;
@@ -14,10 +15,10 @@ describe('requests', () => {
   });
 
   beforeEach(async () => {
+    await createTables();
     server = app().listen();
     user = initFaker()();
-    await User.sync({ force: true });
-    await User.create(user);
+    await db.User.create(user);
   });
 
   it('sign-in form: /session/new - GET 200', async () => {

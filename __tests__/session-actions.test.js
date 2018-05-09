@@ -2,8 +2,9 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
+import db from '../app/models';
+import createTables from '../app/createTables';
 import { initFaker, getCookieRequest } from './utils';
-import { User } from '../app/models';
 
 describe('requests', () => {
   let server;
@@ -15,10 +16,10 @@ describe('requests', () => {
   });
 
   beforeEach(async () => {
+    await createTables();
     server = app().listen();
     user = initFaker()();
-    await User.sync({ force: true });
-    await User.create(user);
+    await db.User.create(user);
 
     const res = await request.agent(server)
       .post('/session')

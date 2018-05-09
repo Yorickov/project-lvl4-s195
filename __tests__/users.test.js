@@ -2,8 +2,10 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
+import db from '../app/models';
+import createTables from '../app/createTables';
 import { initFaker, getCookieRequest } from './utils';
-import { User } from '../app/models';
+
 
 describe('requests', () => {
   let server;
@@ -19,6 +21,7 @@ describe('requests', () => {
   });
 
   beforeEach(async () => {
+    await createTables();
     server = app().listen();
     userDb = initFaker()();
     newUserDb = initFaker()();
@@ -30,8 +33,7 @@ describe('requests', () => {
       password: newUserDb.password,
       confirmedPassword: newUserDb.confirmedPassword,
     };
-    await User.sync({ force: true });
-    await User.create(userDb);
+    await db.User.create(userDb);
 
     const res = await request.agent(server)
       .post('/session')
@@ -47,7 +49,7 @@ describe('requests', () => {
       .set('cookie', cookie)
       .send({ form: { password: userDb.password } });
     expect(res2).toHaveHTTPStatus(302);
-    const isUser = await User.findOne({
+    const isUser = await db.User.findOne({
       where: { email: userDb.email },
     });
     expect(isUser).toBeNull();
@@ -59,7 +61,7 @@ describe('requests', () => {
       .set('cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
     expect(res).toHaveHTTPStatus(302);
-    const isUser = await User.findOne({
+    const isUser = await db.User.findOne({
       where: { email: userDb.email },
     });
     expect(isUser).not.toBeNull();
@@ -71,7 +73,7 @@ describe('requests', () => {
       .set('cookie', cookie)
       .send({ form: userDbProfile });
     expect(res).toHaveHTTPStatus(302);
-    const isUser = await User.findOne({
+    const isUser = await db.User.findOne({
       where: { email: userDb.email },
     });
     expect(isUser.firstName).toMatch(userDbProfile.firstName);
@@ -84,7 +86,7 @@ describe('requests', () => {
       .set('cookie', cookie)
       .send({ form: userDbEmail });
     expect(res).toHaveHTTPStatus(302);
-    const isUser = await User.findOne({
+    const isUser = await db.User.findOne({
       where: { firstName: userDb.firstName },
     });
     expect(isUser.email).toMatch(userDbEmail.email);

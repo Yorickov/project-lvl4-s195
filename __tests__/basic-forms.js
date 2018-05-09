@@ -2,21 +2,22 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
-import { User } from '../app/models';
+import db from '../app/models';
+import createTables from '../app/createTables';
 import { initFaker } from './utils';
 
 describe('requests', () => {
   let server;
   let user;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     jasmine.addMatchers(matchers);
+    await createTables();
     user = initFaker()();
   });
 
   beforeEach(async () => {
     server = app().listen();
-    await User.sync({ force: true });
   });
 
   it('GET root', async () => {
@@ -49,7 +50,7 @@ describe('requests', () => {
       .type('form')
       .send({ form: user });
     expect(res).toHaveHTTPStatus(302);
-    const userDb = await User.findOne({
+    const userDb = await db.User.findOne({
       where: { email: user.email },
     });
     expect(user.firstName).toMatch(userDb.firstName);
