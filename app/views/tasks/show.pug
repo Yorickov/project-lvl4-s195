@@ -1,28 +1,35 @@
 extends /layouts/app.pug
 
 block content
-  .container.border
+  .container-fluid
     .row.pt-5
-      .col-sm-12.mx-auto.border.bg-secondary.p-3
+      .col-sm-10.mx-auto.bg-light.rounded.p-3
         .row.py-2
           .col-sm-12
-            span dfdfd
-        .row.py-2
-          .col-sm-6
-            span= task.id
-          .col-sm-6
-            span= status
-        .row.py-2
-          .col-sm-6
-            span= task.creator
-          .col-sm-6
-            span= task.assignedTo
+            h2= task.name
+            p Added by: #{task.creator.fullName}
         .row.py-2
           .col-sm-12
-            span= task.description
+            table.table.border
+              tbody
+                tr
+                  th Status:
+                  td= task.status.name
+                  th Assign to:
+                  td= task.assignedTo.fullName
+                tr
+                  th Created at:
+                  td= task.createdAt
+                  th Updated at:
+                  td= task.updatedAt
+
         .row.py-2
-          .col-sm-6
-            span= task.createdAt
-          .col-sm-6
-            span= task.updatedAt
-            
+          .col-sm-12
+            h5 Description:
+            p= task.description
+        .row.py-2
+          .col-sm-12
+            h5.d-inline-block Tags:
+            each tag in task.Tags
+              .d-inline-block
+                span= tag.name

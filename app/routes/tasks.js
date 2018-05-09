@@ -5,7 +5,7 @@ import logger from '../lib/logger';
 
 export default (router) => {
   router
-    .get('tasks#index', '/tasks', reqAuth(router), async (ctx) => {
+    .get('tasks#index', '/tasks', async (ctx) => { // reqAuth?
       const statuses = await Status.findAll();
       const tags = await Tag.findAll({
         include: [Task],
@@ -39,21 +39,11 @@ export default (router) => {
         tags,
       });
     })
-    // .get('unoTask', '/tasks/:id', async (ctx) => {
-    //   // const users = await User.findAll();
-    //   // logger.user(`users id: ${Object.keys(users)}`);
-    //   const { id } = ctx.params;
-    //   const task = { id, title: 'a', content: 'dddddddd' };
-    //   ctx.render('tasks/task', { task });
-    // })
-    .get('tasks#show', '/tasks/:id', reqAuth(router), async (ctx) => {
-      const task = await Task.findById(ctx.params.id);
-      if (!task) {
-        ctx.flash.set('Not such a user');
-        ctx.redirect(router.url('root'));
-        return;
-      }
-      ctx.render('task/show', { formElement: buildFormObj(task) });
+    .get('tasks#show', '/tasks/:id', async (ctx) => {
+      const task = await Task.findById(ctx.params.id, {
+        include: ['assignedTo', 'creator', 'status', Tag],
+      });
+      ctx.render('tasks/show', { task });
     })
     .post('tasks#create', '/tasks', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;

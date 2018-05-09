@@ -12,6 +12,17 @@ export const initFaker = () => {
   return (options = {}) => ({ ...user, ...options });
 };
 
+export const initTask = () => {
+  const taskInit = {
+    name: 'Alex',
+    description: faker.random.word(),
+    statusId: 1,
+    assignedToId: 1,
+    tags: [''],
+  };
+  return taskInit;
+};
+
 export const getCookieRequest = res =>
   res.headers['set-cookie'][0]
     .split(',')

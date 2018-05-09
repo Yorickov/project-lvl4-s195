@@ -20,8 +20,8 @@ block content
             each task in tasks         
               tr
                 td= task.id
-                  //- +formFor(task, { url: urlFor('tasks#show', task.id), method: 'get' })
-                td= task.name
+                td
+                  a(href=urlFor('tasks#show', task.id))= task.name
                 td= task.description
                 td= task.status.name
                 td= task.creator.fullName
@@ -33,4 +33,5 @@ block content
                     each tag in tags
                       each item in tag.Tasks
                         if item.id === task.id
-                          span= tag.name // edit!
+                          .d-inline-block
+                            span= tag.name
