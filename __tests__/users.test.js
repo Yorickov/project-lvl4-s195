@@ -6,25 +6,22 @@ import db from '../app/models';
 import createTables from '../app/createTables';
 import { initFaker, getCookieRequest } from '../app/lib/testLib';
 
+const user = initFaker()();
+const newUserDb = initFaker()();
+const userDbProfile = { ...user, firstName: newUserDb.firstName, lastName: newUserDb.lastName };
+const userDbEmail = { ...user, email: newUserDb.email };
+
 describe('requests', () => {
   let server;
-  let user;
-  let newUserDb;
-  let userDbProfile;
-  let userDbEmail;
-  let userDbPassword;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
     await createTables();
-    user = initFaker()();
-    newUserDb = initFaker()();
-    userDbProfile = { ...user, firstName: newUserDb.firstName, lastName: newUserDb.lastName };
-    userDbEmail = { ...user, email: newUserDb.email };
   });
 
   beforeEach(async () => {
     server = app().listen();
+    await db.User.sync({ force: true });
   });
 
   it('POST /users - create user', async () => {
@@ -40,6 +37,7 @@ describe('requests', () => {
   });
 
   it('GET /users/:id - show profile', async () => {
+    await db.User.create(user);
     const res = await request(server)
       .get('/users/1');
     expect(res).toHaveHTTPStatus(200);
@@ -52,6 +50,7 @@ describe('requests', () => {
   });
 
   it('GET /account_ - show account forms', async () => {
+    await db.User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
@@ -60,21 +59,22 @@ describe('requests', () => {
 
     const res1 = await request(server)
       .get('/account/edit')
-      .set('cookie', cookie);
+      .set('Cookie', cookie);
     expect(res1).toHaveHTTPStatus(200);
 
     const res2 = await request(server)
       .get('/account/destroy')
-      .set('cookie', cookie);
+      .set('Cookie', cookie);
     expect(res2).toHaveHTTPStatus(200);
 
     const res3 = await request(server)
       .get('/account/password_edit')
-      .set('cookie', cookie);
+      .set('Cookie', cookie);
     expect(res3).toHaveHTTPStatus(200);
   });
 
-  it('POST/PATCH /account_ - edit account', async () => {
+  it('POST/PATCH /account/profile - edit profile', async () => {
+    await db.User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
@@ -83,49 +83,68 @@ describe('requests', () => {
 
     const res2 = await request.agent(server)
       .patch('/account/profile')
-      .set('cookie', cookie)
+      .set('Cookie', cookie)
       .send({ form: userDbProfile });
     expect(res2).toHaveHTTPStatus(302);
     const isUserNewProfile = await db.User.findOne({
       where: { email: user.email },
     });
     expect(isUserNewProfile.firstName).toMatch(userDbProfile.firstName);
+  });
 
-    const res3 = await request.agent(server)
+  it('POST/PATCH /account/email - edit email', async () => {
+    await db.User.create(user);
+    const res = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    const cookie = getCookieRequest(res);
+
+    const res2 = await request.agent(server)
       .patch('/account/email')
-      .set('cookie', cookie)
+      .set('Cookie', cookie)
       .send({ form: userDbEmail });
-    expect(res3).toHaveHTTPStatus(302);
+    expect(res2).toHaveHTTPStatus(302);
     const isUserNewEmail = await db.User.findOne({
       where: { firstName: user.firstName },
     });
     expect(isUserNewEmail.email).toMatch(userDbEmail.email);
   });
 
-  it('DELETE /account - failed/success delete user', async () => {
+  it('DELETE /account - failed delete user', async () => {
+    await db.User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
-      .send({ form: userDbEmail });
+      .send({ form: user });
     const cookie = getCookieRequest(res);
 
     const res2 = await request.agent(server)
       .delete('/account')
-      .set('cookie', cookie)
+      .set('Cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
     expect(res2).toHaveHTTPStatus(302);
     const isUser = await db.User.findOne({
-      where: { email: userDbEmail.email },
+      where: { email: user.email },
     });
     expect(isUser).not.toBeNull();
+  });
 
-    const res3 = await request.agent(server)
+  it('DELETE /account - delete user', async () => {
+    await db.User.create(user);
+    const res = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    const cookie = getCookieRequest(res);
+
+    const res2 = await request.agent(server)
       .delete('/account')
-      .set('cookie', cookie)
-      .send({ form: { password: userDbEmail.password } });
-    expect(res3).toHaveHTTPStatus(302);
+      .set('Cookie', cookie)
+      .send({ form: { password: user.password } });
+    expect(res2).toHaveHTTPStatus(302);
     const isUserDel = await db.User.findOne({
-      where: { email: userDbEmail.email },
+      where: { email: user.email },
     });
     expect(isUserDel).toBeNull();
   });

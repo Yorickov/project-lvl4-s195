@@ -6,19 +6,19 @@ import { initFaker, getCookieRequest } from '../app/lib/testLib';
 import db from '../app/models';
 import createTables from '../app/createTables';
 
+const user = initFaker()();
+
 describe('requests', () => {
   let server;
-  let user;
-  let cookie;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
     await createTables();
-    user = initFaker()();
   });
 
   beforeEach(async () => {
     server = app().listen();
+    await db.User.sync({ force: true });
   });
 
   it('sign-in form: /session/new - GET 200', async () => {
@@ -62,19 +62,27 @@ describe('requests', () => {
   });
 
   it('POST /session - good sign-in', async () => {
+    await db.User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
       .send({ form: user });
-    cookie = getCookieRequest(res);
     expect(res).toHaveHTTPStatus(302);
   });
 
   it('DELETE /sesssion - sign-out', async () => {
-    const res = await request(server)
-      .delete('/session')
-      .set('cookie', cookie);
+    await db.User.create(user);
+    const res = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
     expect(res).toHaveHTTPStatus(302);
+    const cookie = getCookieRequest(res);
+
+    const res1 = await request(server)
+      .delete('/session')
+      .set('Cookie', cookie);
+    expect(res1).toHaveHTTPStatus(302);
   });
 
   afterEach(async () => {
