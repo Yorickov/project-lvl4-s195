@@ -38,7 +38,7 @@ describe('requests', () => {
 
   it('GET /users/:id - show profile', async () => {
     await db.User.create(user);
-    const res = await request(server)
+    const res = await request.agent(server)
       .get('/users/1');
     expect(res).toHaveHTTPStatus(200);
   });
@@ -57,7 +57,7 @@ describe('requests', () => {
       .send({ form: user });
     const cookie = getCookieRequest(res);
 
-    const res1 = await request(server)
+    const res1 = await request.agent(server)
       .get('/account/edit')
       .set('Cookie', cookie);
     expect(res1).toHaveHTTPStatus(200);
@@ -71,7 +71,7 @@ describe('requests', () => {
       .send({ form: user });
     const cookie = getCookieRequest(res);
 
-    const res2 = await request(server)
+    const res2 = await request.agent(server)
       .get('/account/destroy')
       .set('Cookie', cookie);
     expect(res2).toHaveHTTPStatus(200);
@@ -85,7 +85,7 @@ describe('requests', () => {
       .send({ form: user });
     const cookie = getCookieRequest(res);
 
-    const res3 = await request(server)
+    const res3 = await request.agent(server)
       .get('/account/password_edit')
       .set('Cookie', cookie);
     expect(res3).toHaveHTTPStatus(200);

@@ -79,7 +79,7 @@ describe('requests', () => {
     expect(res).toHaveHTTPStatus(302);
     const cookie = getCookieRequest(res);
 
-    const res1 = await request(server)
+    const res1 = await request.agent(server)
       .delete('/session')
       .set('Cookie', cookie);
     expect(res1).toHaveHTTPStatus(302);
