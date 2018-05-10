@@ -54,12 +54,11 @@ describe('task operations-2', () => {
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
     await createTables();
+    await db.User.create(user);
   });
 
   beforeEach(async () => {
-    await db.User.sync({ force: true });
     server = app().listen();
-    await db.User.create(user);
     const res = await request(server)
       .post('/session')
       .type('form')
@@ -68,26 +67,24 @@ describe('task operations-2', () => {
   });
 
   it('GET 200 /tasks/new - show form add task', async () => {
-    const res = await request(server)
+    const res1 = await request(server)
       .get('/tasks/new')
       .set('cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res1).toHaveHTTPStatus(200);
   });
 
   it('GET 200 /tasks - show task', async () => {
     const res2 = await request(server)
       .post('/tasks')
-      .type('form')
-      .send({ form: task })
-      .set('cookie', cookie);
-    expect(res2).toHaveHTTPStatus(302);
+      .set('cookie', cookie)
+      .send({ form: task });
     const res3 = await request(server)
-      .get('/tasks/1')
-      .set('cookie', cookie);
+      .get('/tasks/1');
     expect(res3).toHaveHTTPStatus(200);
   });
 
-  afterEach(async () => {
-    await server.close();
+  afterEach((done) => {
+    server.close();
+    done();
   });
 });
