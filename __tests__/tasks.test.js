@@ -47,44 +47,44 @@ describe('task operations', () => {
   });
 });
 
-describe('task operations-2', () => {
-  let server;
-  let cookie;
+// describe('task operations-2', () => {
+//   let server;
+//   let cookie;
 
-  beforeAll(async () => {
-    jasmine.addMatchers(matchers);
-    await createTables();
-    await db.User.create(user);
-  });
+//   beforeAll(async () => {
+//     jasmine.addMatchers(matchers);
+//     await createTables();
+//     await db.User.create(user);
+//   });
 
-  beforeEach(async () => {
-    server = app().listen();
-    const res = await request(server)
-      .post('/session')
-      .type('form')
-      .send({ form: user });
-    cookie = getCookieRequest(res);
-  });
+//   beforeEach(async () => {
+//     server = app().listen();
+//     const res = await request(server)
+//       .post('/session')
+//       .type('form')
+//       .send({ form: user });
+//     cookie = getCookieRequest(res);
+//   });
 
-  it('GET 200 /tasks/new - show form add task', async () => {
-    const res1 = await request(server)
-      .get('/tasks/new')
-      .set('cookie', cookie);
-    expect(res1).toHaveHTTPStatus(200);
-  });
+//   it('GET 200 /tasks/new - show form add task', async () => {
+//     const res1 = await request(server)
+//       .get('/tasks/new')
+//       .set('cookie', cookie);
+//     expect(res1).toHaveHTTPStatus(200);
+//   });
 
-  it('GET 200 /tasks - show task', async () => {
-    const res2 = await request(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
-    const res3 = await request(server)
-      .get('/tasks/1');
-    expect(res3).toHaveHTTPStatus(200);
-  });
+//   it('GET 200 /tasks - show task', async () => {
+//     const res2 = await request(server)
+//       .post('/tasks')
+//       .set('cookie', cookie)
+//       .send({ form: task });
+//     const res3 = await request(server)
+//       .get('/tasks/1');
+//     expect(res3).toHaveHTTPStatus(200);
+//   });
 
-  afterEach((done) => {
-    server.close();
-    done();
-  });
-});
+//   afterEach((done) => {
+//     server.close();
+//     done();
+//   });
+// });
