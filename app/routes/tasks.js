@@ -54,14 +54,17 @@ export default (router) => {
       try {
         await task.save();
         logger.task(`success: ${task}`);
-        await Promise.all(tagIds.map(async (tagId) => {
-          const tag = await Tag.findById(tagId);
-          const result = await task.addTag(tag);
-          return result;
-        }));
+        if (form.tags) {
+          await Promise.all(tagIds.map(async (tagId) => {
+            const tag = await Tag.findById(tagId);
+            const result = await task.addTag(tag);
+            return result;
+          }));
+        }
         ctx.flash.set(`Task ${task.name} has been created`);
         ctx.redirect(router.url('root'));
       } catch (e) {
+        logger.task(`failure on create ${task.name}, err: ${e}`);
         const users = await User.findAll();
         const tags = await Tag.findAll();
         ctx.status = 422;

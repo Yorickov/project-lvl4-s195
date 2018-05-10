@@ -31,11 +31,11 @@ export default () => {
 
   app.keys = ['some secret hurr'];
 
-  if (process.env.NODE_ENV === 'production') {
-    app.use(session({
-      store: new SequelizeStore(sequelize, { timestamps: true }),
-    }));
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   app.use(session({
+  //     store: new SequelizeStore(sequelize, { timestamps: true }),
+  //   }));
+  // }
 
   app.use(session(app));
   app.use(flash());
