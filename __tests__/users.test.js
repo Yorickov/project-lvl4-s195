@@ -62,26 +62,26 @@ describe('account manipulations', () => {
     cookie = getCookieRequest(res);
   });
 
-  it('GET /account/edit - show profile-edit form', async () => {
-    const res = await request(server)
-      .get('/account/edit')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account/edit - show profile-edit form', async () => {
+  //   const res = await request(server)
+  //     .get('/account/edit')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
-  it('GET /account - show destroy form', async () => {
-    const res = await request(server)
-      .get('/account/destroy')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account - show destroy form', async () => {
+  //   const res = await request(server)
+  //     .get('/account/destroy')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
-  it('GET /account - show pass-edit forms', async () => {
-    const res = await request(server)
-      .get('/account/password_edit')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account - show pass-edit forms', async () => {
+  //   const res = await request(server)
+  //     .get('/account/password_edit')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
   it('PATCH /account/profile - edit profile', async () => {
     const res = await request.agent(server)

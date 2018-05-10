@@ -34,6 +34,13 @@ describe('task operations', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  // it('GET 200 /tasks/new - show form add task', async () => {
+  //   const res = await request.agent(server)
+  //     .get('/tasks/new')
+  //     .set('cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
+
   it('POST 302 /tasks - add task', async () => {
     const res = await request.agent(server)
       .post('/tasks')
@@ -41,6 +48,13 @@ describe('task operations', () => {
       .send({ form: task });
     expect(res).toHaveHTTPStatus(302);
   });
+
+  // it('GET 200 /tasks - show task', async () => {
+  //   await db.Task.create(task);
+  //   const res = await request.agent(server)
+  //     .get('/tasks/1');
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
   afterEach(async () => {
     await server.close();
