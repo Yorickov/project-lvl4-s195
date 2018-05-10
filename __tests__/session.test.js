@@ -8,7 +8,7 @@ import createTables from '../app/createTables';
 
 const user = initFaker();
 
-describe('requests', () => {
+describe('session and create User', () => {
   let server;
 
   beforeAll(async () => {

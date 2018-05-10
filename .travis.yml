@@ -2,6 +2,9 @@
 
 language: node_js
 
+apt:
+    update: true
+
 env:
   global:
     - CC_TEST_REPORTER_ID=071db66e90afac8b2820bb67e1ebcd7d6f0f9d6b03d594040423b68af962e19f

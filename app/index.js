@@ -14,6 +14,7 @@ import session from 'koa-generic-session';
 import flash from 'koa-flash-simple';
 import methodOverride from 'koa-methodoverride';
 import SequelizeStore from 'koa-generic-session-sequelize';
+import format from 'date-fns/format';
 
 import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
@@ -44,6 +45,7 @@ export default () => {
       isSignedIn: () => ctx.session.userId !== undefined,
       getUserId: () => ctx.session.userId,
       getUserProfileName: () => ctx.session.userProfileName,
+      formatDate: dateString => format(dateString, 'DD.MM.YYYY, HH:mm'),
     };
     logger.flow(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
     await next();

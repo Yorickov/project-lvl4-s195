@@ -10,12 +10,14 @@ block content
               th Full Name
               th Email
               th Created at
+              th Updated at
               th User profile
           tbody
             each user in users
               tr
                 td= user.fullName
                 td= user.email
-                td= user.createdAt
+                td= formatDate(user.createdAt)
+                td= formatDate(user.updatedAt)
                 td
                   a(href=urlFor('users#show', user.id)) Show profile

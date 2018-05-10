@@ -1,4 +1,5 @@
 import Rollbar from 'rollbar';
+import { Task } from '../models';
 
 const rollbarConfig = {
   accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
@@ -28,4 +29,17 @@ const reqAuth = router =>
     await next();
   };
 
-export { errorHandler, reqAuth };
+const reqModify = (router, Model, alias) =>
+  async (ctx, next) => {
+    const task = await Model.findById(ctx.params.id, {
+      include: [alias],
+    });
+    if (task.creator.id !== ctx.session.userId) {
+      ctx.flash.set('Yoy have no authority for operation');
+      ctx.redirect(router.url('root'));
+      return;
+    }
+    await next();
+  };
+
+export { errorHandler, reqAuth, reqModify };

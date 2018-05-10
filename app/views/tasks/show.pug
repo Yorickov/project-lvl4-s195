@@ -19,9 +19,9 @@ block content
                   td= task.assignedTo.fullName
                 tr
                   th Created at:
-                  td= task.createdAt
+                  td= formatDate(task.createdAt)
                   th Updated at:
-                  td= task.updatedAt
+                  td= formatDate(task.updatedAt)
 
         .row.py-2
           .col-sm-12
@@ -33,3 +33,9 @@ block content
             each tag in task.Tags
               .d-inline-block
                 span= tag.name
+        if task.creator.id === getUserId()
+          .row.py-2
+            .col-sm-12
+              .d-inline-block
+                a.mr-2(href=urlFor('tasks#edit', task.id)) Edit task
+                a.mr-2(href=urlFor('tasks#destroy', task.id) data-method='delete' rel='nofollow') Delete task

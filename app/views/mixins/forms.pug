@@ -29,7 +29,7 @@ mixin input-unchangable(formElement, property, label)
   - const inputId = `inputUn_${property}`;
   .form-group.row
     label(for= inputId class="col-sm-4 col-form-label") #{label}
-    .col-sm-8
+    .col-sm-10
       input(name=getInputName(formElement, property) id= inputId readonly class="form-control-plaintext" type="text" value= value)
 
 mixin selectAssignId(formElement, property, label, items)
@@ -37,11 +37,11 @@ mixin selectAssignId(formElement, property, label, items)
   .form-group
     label(for= selectId) #{label}
     select.form-control(name=getInputName(formElement, property) id= selectId)
-      each item in items
-        if item.id === getUserId()
-          option(value= item.id selected='selected') #{item.fullName}
-        else
-          option(value= item.id) #{item.fullName}
+        each item in items
+          if item.id === getUserId()
+            option(value= item.id selected='selected') #{item.fullName}
+          else
+            option(value= item.id) #{item.fullName}
 
 mixin selectTagId(formElement, property, label, items)
   - const selectId = `selectT_${property}`;
@@ -49,8 +49,21 @@ mixin selectTagId(formElement, property, label, items)
   .form-group
     label(for= selectId) #{label}
     select.form-control(name= `${getInputName(formElement, property)}[]` id= selectId multiple)
-      each item in items
-        option(value= item.id) #{item.name}
+      if items
+        each item in items
+          option(value= item.id) #{item.name}
+
+mixin selectStatus(formElement, property, label, items)
+  - const selectId = `selectS_${property}`;
+  .form-group
+    label(for= selectId) #{label}
+    select.form-control(name=getInputName(formElement, property) id= selectId)
+      if items
+        each item in items
+          if item.id === task.statusId
+            option(value= item.id selected='selected') #{item.name}
+          else
+            option(value= item.id) #{item.name}
 
 mixin textarea(formElement, property, label, options = { as: 'text' })
   - const value = formElement.object[property] === undefined ? '' : formElement.object[property];

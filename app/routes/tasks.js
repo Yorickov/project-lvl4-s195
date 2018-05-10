@@ -1,6 +1,6 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { Task, User, Status, Tag } from '../models';
-import { reqAuth } from '../middlwares';
+import { reqAuth, reqModify } from '../middlwares';
 import logger from '../lib/logger';
 
 export default (router) => {
@@ -63,15 +63,72 @@ export default (router) => {
         ctx.redirect(router.url('root'));
       } catch (e) {
         const users = await User.findAll();
-        const tags2 = await Tag.findAll();
+        const tags = await Tag.findAll();
         ctx.status = 422;
         ctx.render('tasks/new', {
           formElement: buildFormObj(task, e),
           users,
           creatorId,
           creatorName,
-          tags2,
+          tags,
         });
       }
+    })
+    .get('tasks#edit', '/tasks/:id/edit', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+      const task = await Task.findById(ctx.params.id, {
+        include: ['assignedTo', 'creator', 'status', Tag],
+      });
+      const users = await User.findAll();
+      const tags = await Tag.findAll({
+        include: [Task],
+      });
+      const statuses = await Status.findAll();
+      ctx.render('tasks/edit', {
+        formElement: buildFormObj(task),
+        users,
+        statuses,
+        task,
+        tags,
+      });
+    })
+    .patch('tasks#update', '/tasks/:id', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+      const { form } = ctx.request.body;
+      const task = await Task.findById(ctx.params.id, {
+        include: ['assignedTo', 'creator', 'status', Tag],
+      });
+      const { tags: tagIds } = form;
+      try {
+        await task.update(form, { where: { id: ctx.params.id } });
+        if (tagIds.length > 0) {
+          await task.setTags([]);
+          await Promise.all(tagIds.map(async (tagId) => {
+            const tag = await Tag.findById(tagId);
+            const result = await task.addTag(tag);
+            return result;
+          }));
+        }
+        ctx.flash.set(`Task ${task.name} updated successfully`);
+        ctx.redirect(router.url('root'));
+      } catch (err) {
+        const users = await User.findAll();
+        const statuses = await Status.findAll();
+        const tags = await Tag.findAll({
+          include: [Task],
+        });
+        ctx.response.status = 422;
+        ctx.render('tasks/edit', {
+          formElement: buildFormObj({ ...form, id: ctx.params.id }, err),
+          task,
+          users,
+          statuses,
+          tags,
+        });
+      }
+    })
+    .delete('tasks#destroy', '/tasks/:id', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+      const task = await Task.findById(ctx.params.id);
+      await task.destroy();
+      ctx.flash.set(`Task ${task.name} deleted successfully`);
+      ctx.redirect(router.url('root'));
     });
 };

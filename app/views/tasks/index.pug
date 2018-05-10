@@ -26,8 +26,8 @@ block content
                 td= task.status.name
                 td= task.creator.fullName
                 td= task.assignedTo.fullName
-                td= task.createdAt
-                td= task.updatedAt
+                td= formatDate(task.createdAt)
+                td= formatDate(task.updatedAt)
                 td
                   row
                     each tag in tags
