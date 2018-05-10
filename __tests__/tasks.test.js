@@ -28,18 +28,18 @@ describe('task operations', () => {
     cookie = getCookieRequest(res);
   });
 
-  it('GET 200 /tasks - show all tasks', async () => {
-    const res = await request.agent(server)
-      .get('/tasks');
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET 200 /tasks - show all tasks', async () => {
+  //   const res = await request.agent(server)
+  //     .get('/tasks');
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
-  it('GET 200 /tasks/new - show form add task', async () => {
-    const res = await request.agent(server)
-      .get('/tasks/new')
-      .set('cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET 200 /tasks/new - show form add task', async () => {
+  //   const res = await request.agent(server)
+  //     .get('/tasks/new')
+  //     .set('cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
   it('POST 302 /tasks - add task', async () => {
     const res = await request.agent(server)

@@ -62,26 +62,26 @@ describe('account manipulations', () => {
     cookie = getCookieRequest(res);
   });
 
-  it('GET /account/edit - show profile-edit form', async () => {
-    const res = await request(server)
-      .get('/account/edit')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account/edit - show profile-edit form', async () => {
+  //   const res = await request(server)
+  //     .get('/account/edit')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
-  it('GET /account - show destroy form', async () => {
-    const res = await request(server)
-      .get('/account/destroy')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account - show destroy form', async () => {
+  //   const res = await request(server)
+  //     .get('/account/destroy')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
-  it('GET /account - show pass-edit forms', async () => {
-    const res = await request(server)
-      .get('/account/password_edit')
-      .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
+  // it('GET /account - show pass-edit forms', async () => {
+  //   const res = await request(server)
+  //     .get('/account/password_edit')
+  //     .set('Cookie', cookie);
+  //   expect(res).toHaveHTTPStatus(200);
+  // });
 
   it('PATCH /account/profile - edit profile', async () => {
     const res = await request.agent(server)
@@ -89,6 +89,10 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: userDbProfile });
     expect(res).toHaveHTTPStatus(302);
+    // const isUserNewProfile = await db.User.findOne({
+    //   where: { email: user.email },
+    // });
+    // expect(isUserNewProfile.firstName).toMatch(userDbProfile.firstName);
   });
 
   it('PATCH /account/email - edit email', async () => {
@@ -97,6 +101,10 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: userDbEmail });
     expect(res).toHaveHTTPStatus(302);
+    // const isUserNewEmail = await db.User.findOne({
+    //   where: { firstName: user.firstName },
+    // });
+    // expect(isUserNewEmail.email).toMatch(userDbEmail.email);
   });
 
   it('DELETE /account - failed delete user', async () => {
@@ -105,6 +113,10 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
     expect(res).toHaveHTTPStatus(302);
+    // const isUser = await db.User.findOne({
+    //   where: { email: user.email },
+    // });
+    // expect(isUser).not.toBeNull();
   });
 
   it('DELETE /account - delete user', async () => {
@@ -113,6 +125,10 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: { password: user.password } });
     expect(res).toHaveHTTPStatus(302);
+    // const isUserDel = await db.User.findOne({
+    //   where: { email: user.email },
+    // });
+    // expect(isUserDel).toBeNull();
   });
 
   afterEach(async () => {
