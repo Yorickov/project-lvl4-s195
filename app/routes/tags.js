@@ -29,7 +29,7 @@ export default (router) => {
         ctx.redirect(router.url('tasks#new'));
       } catch (e) {
         ctx.status = 422;
-        ctx.render('tags#create', { formElement: buildFormObj(tag, e) });
+        ctx.render('tags/create', { formElement: buildFormObj(tag, e) });
       }
     });
 };

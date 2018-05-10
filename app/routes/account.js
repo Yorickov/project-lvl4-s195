@@ -28,7 +28,7 @@ export default (router) => {
         ctx.redirect(router.url('account#edit'));
         return;
       } catch (e) {
-        ctx.render('account#edit', { formElement: buildFormObj(form, e) });
+        ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     })
     .patch('account/email#update', '/account/email', reqAuth(router), async (ctx) => {
@@ -41,7 +41,7 @@ export default (router) => {
         ctx.redirect(router.url('account#edit'));
         return;
       } catch (e) {
-        ctx.render('account#edit', { formElement: buildFormObj(form, e) });
+        ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     })
     .patch('account/password#update', '/account/password', reqAuth(router), async (ctx) => {
@@ -65,7 +65,7 @@ export default (router) => {
         ctx.flash.set('Password has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
-        ctx.render('account#edit', { formElement: buildFormObj(form, e) });
+        ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     })
     .delete('account#destroy', '/account', reqAuth(router), async (ctx) => {
@@ -82,7 +82,7 @@ export default (router) => {
         ctx.flash.set(`Buy, ${user.fullName}`);
         ctx.redirect(router.url('root'));
       } catch (e) {
-        ctx.render('account#edit', { formElement: buildFormObj(form, e) });
+        ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     });
 };

@@ -57,8 +57,8 @@ describe('task operations-2', () => {
   });
 
   beforeEach(async () => {
-    server = app().listen();
     await db.User.sync({ force: true });
+    server = app().listen();
     await db.User.create(user);
     const res = await request(server)
       .post('/session')
@@ -75,11 +75,6 @@ describe('task operations-2', () => {
   });
 
   it('GET 200 /tasks - show task', async () => {
-    const res = await request(server)
-      .post('/session')
-      .type('form')
-      .send({ form: user });
-    cookie = getCookieRequest(res);
     const res2 = await request(server)
       .post('/tasks')
       .type('form')

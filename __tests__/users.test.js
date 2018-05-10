@@ -55,7 +55,7 @@ describe('account manipulations', () => {
     server = app().listen();
     await db.User.sync({ force: true });
     await db.User.create(user);
-    const res = await request.agent(server)
+    const res = await request(server)
       .post('/session')
       .type('form')
       .send({ form: user });
@@ -101,16 +101,17 @@ describe('account manipulations', () => {
 
 describe('account manipulations-2', () => {
   let server;
-  let cookie;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
-    await createTables();
   });
 
   beforeEach(async () => {
-    server = app().listen();
     await db.User.sync({ force: true });
+    server = app().listen();
+  });
+
+  it('GET /account/edit - show profile-edit form', async () => {
     const res = await request(server)
       .post('/users')
       .type('form')
@@ -119,28 +120,43 @@ describe('account manipulations-2', () => {
       .post('/session')
       .type('form')
       .send({ form: user });
-    cookie = getCookieRequest(res1);
-  });
-
-  it('GET /account/edit - show profile-edit form', async () => {
-    const res = await request(server)
+    const cookie = getCookieRequest(res1);
+    const res2 = await request(server)
       .get('/account/edit')
       .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   it('GET /account - show destroy form', async () => {
     const res = await request(server)
+      .post('/users')
+      .type('form')
+      .send({ form: user });
+    const res1 = await request(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    const cookie = getCookieRequest(res1);
+    const res2 = await request(server)
       .get('/account/destroy')
       .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   it('GET /account - show pass-edit forms', async () => {
     const res = await request(server)
+      .post('/users')
+      .type('form')
+      .send({ form: user });
+    const res1 = await request(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    const cookie = getCookieRequest(res1);
+    const res2 = await request(server)
       .get('/account/password_edit')
       .set('Cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   afterEach(async () => {
