@@ -102,7 +102,7 @@ export default (router) => {
       const { tags: tagIds } = form;
       try {
         await task.update(form, { where: { id: ctx.params.id } });
-        if (tagIds.length > 0) {
+        if (tagIds) {
           await task.setTags([]);
           await Promise.all(tagIds.map(async (tagId) => {
             const tag = await Tag.findById(tagId);
@@ -113,6 +113,7 @@ export default (router) => {
         ctx.flash.set(`Task ${task.name} updated successfully`);
         ctx.redirect(router.url('root'));
       } catch (err) {
+        logger.task(`failure on update ${task.name}, err: ${err}`);
         const users = await User.findAll();
         const statuses = await Status.findAll();
         const tags = await Tag.findAll({

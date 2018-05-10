@@ -34,13 +34,6 @@ describe('task operations', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  // it('GET 200 /tasks/new - show form add task', async () => {
-  //   const res = await request.agent(server)
-  //     .get('/tasks/new')
-  //     .set('cookie', cookie);
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
-
   it('POST 302 /tasks - add task', async () => {
     const res = await request.agent(server)
       .post('/tasks')
@@ -49,12 +42,55 @@ describe('task operations', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
-  // it('GET 200 /tasks - show task', async () => {
-  //   await db.Task.create(task);
-  //   const res = await request.agent(server)
-  //     .get('/tasks/1');
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
+  afterEach(async () => {
+    await server.close();
+  });
+});
+
+describe('task operations-2', () => {
+  let server;
+  let cookie;
+
+  beforeAll(async () => {
+    jasmine.addMatchers(matchers);
+    await createTables();
+  });
+
+  beforeEach(async () => {
+    server = app().listen();
+    await db.User.sync({ force: true });
+    await db.User.create(user);
+    const res = await request(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    cookie = getCookieRequest(res);
+  });
+
+  it('GET 200 /tasks/new - show form add task', async () => {
+    const res = await request(server)
+      .get('/tasks/new')
+      .set('cookie', cookie);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('GET 200 /tasks - show task', async () => {
+    const res = await request(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    cookie = getCookieRequest(res);
+    const res2 = await request(server)
+      .post('/tasks')
+      .type('form')
+      .send({ form: task })
+      .set('cookie', cookie);
+    expect(res2).toHaveHTTPStatus(302);
+    const res3 = await request(server)
+      .get('/tasks/1')
+      .set('cookie', cookie);
+    expect(res3).toHaveHTTPStatus(200);
+  });
 
   afterEach(async () => {
     await server.close();

@@ -32,7 +32,7 @@ describe('unauthorized forms', () => {
   });
 
   it('GET 200 /users - show users', async () => {
-    const res = await request.agent(server)
+    const res = await request(server)
       .get('/users');
     expect(res).toHaveHTTPStatus(200);
   });
@@ -62,29 +62,8 @@ describe('account manipulations', () => {
     cookie = getCookieRequest(res);
   });
 
-  // it('GET /account/edit - show profile-edit form', async () => {
-  //   const res = await request(server)
-  //     .get('/account/edit')
-  //     .set('Cookie', cookie);
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
-
-  // it('GET /account - show destroy form', async () => {
-  //   const res = await request(server)
-  //     .get('/account/destroy')
-  //     .set('Cookie', cookie);
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
-
-  // it('GET /account - show pass-edit forms', async () => {
-  //   const res = await request(server)
-  //     .get('/account/password_edit')
-  //     .set('Cookie', cookie);
-  //   expect(res).toHaveHTTPStatus(200);
-  // });
-
   it('PATCH /account/profile - edit profile', async () => {
-    const res = await request.agent(server)
+    const res = await request(server)
       .patch('/account/profile')
       .set('Cookie', cookie)
       .send({ form: userDbProfile });
@@ -92,7 +71,7 @@ describe('account manipulations', () => {
   });
 
   it('PATCH /account/email - edit email', async () => {
-    const res = await request.agent(server)
+    const res = await request(server)
       .patch('/account/email')
       .set('Cookie', cookie)
       .send({ form: userDbEmail });
@@ -100,7 +79,7 @@ describe('account manipulations', () => {
   });
 
   it('DELETE /account - failed delete user', async () => {
-    const res = await request.agent(server)
+    const res = await request(server)
       .delete('/account')
       .set('Cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
@@ -108,11 +87,60 @@ describe('account manipulations', () => {
   });
 
   it('DELETE /account - delete user', async () => {
-    const res = await request.agent(server)
+    const res = await request(server)
       .delete('/account')
       .set('Cookie', cookie)
       .send({ form: { password: user.password } });
     expect(res).toHaveHTTPStatus(302);
+  });
+
+  afterEach(async () => {
+    await server.close();
+  });
+});
+
+describe('account manipulations-2', () => {
+  let server;
+  let cookie;
+
+  beforeAll(async () => {
+    jasmine.addMatchers(matchers);
+    await createTables();
+  });
+
+  beforeEach(async () => {
+    server = app().listen();
+    await db.User.sync({ force: true });
+    const res = await request(server)
+      .post('/users')
+      .type('form')
+      .send({ form: user });
+    const res1 = await request(server)
+      .post('/session')
+      .type('form')
+      .send({ form: user });
+    cookie = getCookieRequest(res1);
+  });
+
+  it('GET /account/edit - show profile-edit form', async () => {
+    const res = await request(server)
+      .get('/account/edit')
+      .set('Cookie', cookie);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('GET /account - show destroy form', async () => {
+    const res = await request(server)
+      .get('/account/destroy')
+      .set('Cookie', cookie);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('GET /account - show pass-edit forms', async () => {
+    const res = await request(server)
+      .get('/account/password_edit')
+      .set('Cookie', cookie);
+    expect(res).toHaveHTTPStatus(200);
   });
 
   afterEach(async () => {
