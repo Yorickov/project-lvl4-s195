@@ -14,8 +14,8 @@ export const initFaker = () => {
 
 export const initTask = () => {
   const taskInit = {
-    name: 'sometask',
-    description: 'somedescr',
+    name: faker.lorem.word(),
+    description: faker.lorem.word(),
     statusId: 1,
     assignedToId: 1,
     tags: [''],

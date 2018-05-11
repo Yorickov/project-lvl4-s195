@@ -43,6 +43,11 @@ export default (router) => {
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
       });
+      if (!task) {
+        ctx.status = 404;
+        ctx.render('errors/404');
+        return;
+      }
       ctx.render('tasks/show', { task });
     })
     .post('tasks#create', '/tasks', reqAuth(router), async (ctx) => {
@@ -81,6 +86,11 @@ export default (router) => {
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
       });
+      if (!task) {
+        ctx.status = 404;
+        ctx.render('errors/404');
+        return;
+      }
       const users = await User.findAll();
       const tags = await Tag.findAll({
         include: [Task],
