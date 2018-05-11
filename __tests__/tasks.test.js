@@ -129,17 +129,6 @@ describe('task-creation', () => {
       .expect(302);
   });
 
-  // it('POST 302 /tasks - add task', async () => {
-  //   const res = await request.agent(server) //
-  //     .get('/tasks/new')
-  //     .set('cookie', cookie)
-  //     .expect(200);
-  //   await request.agent(server)
-  //     .get('/tasks/1')
-  //     .set('cookie', cookie)
-  //     .expect(200);
-  // });
-
   // it('POST 302 /tasks - failed add task', async () => {
   //   await request.agent(server)
   //     .post('/tasks')
@@ -153,6 +142,10 @@ describe('task-creation', () => {
   // });
 
   // it('GET 200 /tasks - show task', async () => {
+  //   await request.agent(server)
+  //     .post('/tasks')
+  //     .set('cookie', cookie)
+  //     .send({ form: task });
   //   await request.agent(server)
   //     .get('/tasks/1')
   //     .set('cookie', cookie)
@@ -192,17 +185,17 @@ describe('task-creation', () => {
   //     .expect(200);
   // });
 
-  it('PATCH 302 /tasks/1 - failed update task - validation', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
-    const res = await request.agent(server)
-      .patch('/tasks/1')
-      .set('cookie', cookie)
-      .send({ form: { task, name: 'q' } })
-      .expect(422);
-  });
+  // it('PATCH 302 /tasks/1 - failed update task - validation', async () => {
+  //   await request.agent(server)
+  //     .post('/tasks')
+  //     .set('cookie', cookie)
+  //     .send({ form: task });
+  //   await request.agent(server)
+  //     .patch('/tasks/1')
+  //     .set('cookie', cookie)
+  //     .send({ form: { ...task, name: 'q' } })
+  //     .expect(422);
+  // });
 
   it('PATCH 302 /tasks/1 - update task', async () => {
     await request.agent(server)
@@ -240,4 +233,3 @@ describe('task-creation', () => {
     await server.close();
   });
 });
-
