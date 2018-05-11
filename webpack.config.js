@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -11,7 +10,6 @@ module.exports = {
     filename: '[name].bundle.js',
     publicPath: '/assets/',
   },
-  devtool: 'sourse-map',
   module: {
     rules: [
       {
@@ -19,24 +17,6 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
-      // {
-      //   test: /\.css$/,
-      //   use: [
-      //     {
-      //       loader: 'style-loader',
-      //     },
-      //     {
-      //       loader: 'css-loader',
-      //       options: { importLoaders: 1 },
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         plugins: () => [require('autoprefixer')],
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.(scss)$/,
         use: [
@@ -60,20 +40,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /\.(png|svg|jpg|gif|ico)$/,
-      //   use: [
-      //     {
-      //       loader: 'file-loader',
-      //       options: {
-      //         name: '[path][name].[ext]',
-      //         publicPath: '/assets/images/',
-      //         outputPath: 'images/',
-      //         context: 'src/images',
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],
@@ -87,14 +53,6 @@ module.exports = {
       'window.jQuery': 'jquery',
       Popper: ['popper.js', 'default'],
     }),
-    new CopyWebpackPlugin([
-      { from: 'src/images/favicon.ico', to: 'images' },
-      { from: 'src/images/', to: 'images' },
-    ]),
-    // new webpack.SourceMapDevToolPlugin({
-    //   filename: '[name].js.map',
-    //   exclude: ['popper.js'],
-    // }),
   ],
   optimization: {
     splitChunks: {

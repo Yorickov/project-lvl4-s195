@@ -13,7 +13,6 @@ import bodyParser from 'koa-bodyparser';
 import session from 'koa-generic-session';
 import flash from 'koa-flash-simple';
 import methodOverride from 'koa-methodoverride';
-import SequelizeStore from 'koa-generic-session-sequelize';
 import format from 'date-fns/format';
 
 import webpackConfig from '../webpack.config';
