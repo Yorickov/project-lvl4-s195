@@ -1,5 +1,6 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { User } from '../models';
+import { reqTask } from '../middlwares';
 
 import logger from '../lib/logger';
 
@@ -14,13 +15,8 @@ export default (router) => {
       const user = User.build();
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
-    .get('users#show', '/users/:id', async (ctx) => {
+    .get('users#show', '/users/:id', reqTask(router, User), async (ctx) => {
       const user = await User.findById(ctx.params.id);
-      if (!user) {
-        ctx.flash.set('Not such a user');
-        ctx.redirect(router.url('root'));
-        return;
-      }
       ctx.render('users/show', { formElement: buildFormObj(user) });
     })
     .post('users#create', '/users', async (ctx) => {

@@ -26,7 +26,6 @@ export default (router) => {
         logger.sett(`user ${user.userId} edit email to ${form.firstName}`);
         ctx.flash.set('Profile has been changed');
         ctx.redirect(router.url('account#edit'));
-        return;
       } catch (e) {
         ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
@@ -39,7 +38,6 @@ export default (router) => {
         logger.sett(`user ${user.userId} edit email to ${form.email}`);
         ctx.flash.set('Email has been changed');
         ctx.redirect(router.url('account#edit'));
-        return;
       } catch (e) {
         ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }

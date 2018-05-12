@@ -43,15 +43,15 @@ mixin selectAssignId(formElement, property, label, items)
           else
             option(value= item.id) #{item.fullName}
 
-mixin selectTagId(formElement, property, label, items)
-  - const selectId = `selectT_${property}`;
-  - const url = _.get(options, 'url');
-  .form-group
-    label(for= selectId) #{label}
-    select.form-control(name= `${getInputName(formElement, property)}[]` id= selectId multiple)
-      if items
-        each item in items
-          option(value= item.id) #{item.name}
+//- mixin selectTagId(formElement, property, label, items)
+//-   - const selectId = `selectT_${property}`;
+//-   - const url = _.get(options, 'url');
+//-   .form-group
+//-     label(for= selectId) #{label}
+//-     select.form-control(name= `${getInputName(formElement, property)}[]` id= selectId multiple)
+//-       if items
+//-         each item in items
+//-           option(value= item.id) #{item.name}
 
 mixin selectStatus(formElement, property, label, items)
   - const selectId = `selectS_${property}`;

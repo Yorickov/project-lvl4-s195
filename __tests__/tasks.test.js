@@ -19,7 +19,6 @@ const formAuth2 = {
   password: user2.password,
   confirmedPassword: user2.confirmedPassword,
 };
-const tag = 'ruby';
 
 const task = initTask();
 const taskUpdated = initTask();
@@ -50,7 +49,6 @@ describe('basic operations', () => {
 
   // it('GET 200 /tasks/new - show form-add-task', async () => {
   //   await db.User.create(user);
-  //   await db.Tag.create(tag);
   //   const auth = await request.agent(server)
   //     .post('/session')
   //     .type('form')
@@ -64,7 +62,6 @@ describe('basic operations', () => {
 
   // it('GET 200 /tasks:id/ - show task', async () => {
   //   await db.User.create(user);
-  //   await db.Tag.create(tag);
   //   const auth = await request.agent(server)
   //     .post('/session')
   //     .type('form')
@@ -92,7 +89,7 @@ describe('basic operations', () => {
       .send({ form: task });
     await request.agent(server)
       .get('/tasks/3')
-      .expect(404);
+      .expect(302);
   });
 
   afterEach(async () => {
@@ -113,7 +110,6 @@ describe('task-creation', () => {
     await createTables();
 
     await db.User.create(user);
-    await db.Tag.create(tag);
     const auth = await request.agent(server)
       .post('/session')
       .type('form')
@@ -217,17 +213,17 @@ describe('task-creation', () => {
   //     .expect(422);
   // }); // add mw - exist!
 
-  it('DELETE 302 /tasks/1 - delete task', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
-    await request.agent(server)
-      .delete('/tasks/1')
-      .set('cookie', cookie)
-      .send({ form: formAuth })
-      .expect(302);
-  });
+  // it('DELETE 302 /tasks/1/destroy - delete task', async () => {
+  //   await request.agent(server)
+  //     .post('/tasks')
+  //     .set('cookie', cookie)
+  //     .send({ form: task });
+  //   await request.agent(server)
+  //     .delete('tasks/1/destroy')
+  //     .set('cookie', cookie)
+  //     .send({ form: formAuth })
+  //     .expect(302);
+  // });
 
   afterEach(async () => {
     await server.close();

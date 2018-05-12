@@ -1,0 +1,9 @@
+extends /layouts/app.pug
+
+block content
+  .container
+    .row.pt-4
+      .col-4.mx-auto
+        h5.text-center.pb-3 Confirm deleting Tak
+        .d-flex.justify-content-center
+          a.text-center.btn.btn-secondary.btn-lg.active(href=urlFor('tasks#destroy', task.id) role='button' aria-pressed='true' data-method='delete' rel='nofollow') Delete task

@@ -42,4 +42,15 @@ const reqModify = (router, Model, alias) =>
     await next();
   };
 
-export { errorHandler, reqAuth, reqModify };
+const reqTask = (router, Model) =>
+  async (ctx, next) => {
+    const instanceDb = await Model.findById(ctx.params.id);
+    if (!instanceDb) {
+      ctx.flash.set('No such an entity');
+      ctx.redirect(router.url('root'));
+      return;
+    }
+    await next();
+  };
+
+export { errorHandler, reqAuth, reqModify, reqTask };

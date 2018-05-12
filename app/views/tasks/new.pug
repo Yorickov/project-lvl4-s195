@@ -9,6 +9,8 @@ block content
                     +input(formElement, 'name', 'Name')
                     +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
                     +textarea(formElement, 'description', 'Description')
-                    +selectTagId(formElement, 'tags', 'Select tags from the list', tags)
+                    +input(formElement, 'tags', 'Add tags with spaces between. Below there are existing tags, but you can add new ones')
                     +button('primary', 'Complete task creation')
-                    a(href=urlFor('tags#new')) Add new tag  
+                    p.d-inline Tags:
+                      each tag in tags
+                        .d-inline= tag.name

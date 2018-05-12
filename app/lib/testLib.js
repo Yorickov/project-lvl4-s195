@@ -18,7 +18,7 @@ export const initTask = () => {
     description: faker.lorem.word(),
     statusId: 1,
     assignedToId: 1,
-    tags: ['php'],
+    tags: '',
   };
   return taskInit;
 };

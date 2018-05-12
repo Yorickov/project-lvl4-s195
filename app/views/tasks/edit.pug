@@ -10,9 +10,9 @@ block content
           +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
           +selectStatus(formElement, 'statusId', 'Status', statuses)
           +textarea(formElement, 'description', 'Description')
-          +selectTagId(formElement, 'tags', 'If you want change tags, select all tags again', tags, task)
+          +input(formElement, 'tags', 'Put down new tags', tags, task)
+          +input(formElement, 'tagsdel', 'Put down tags to delete', tags, task)
           +button('primary', 'Update task')
           p.d-inline Tags:
             each tag in task.Tags
               .d-inline= tag.name
-          a(href=urlFor('tags#new')) Add new tag  
