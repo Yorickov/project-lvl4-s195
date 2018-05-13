@@ -93,7 +93,7 @@ describe('account manipulations', () => {
     expect(isUserNewEmail.email).toMatch(userDbEmail.email);
   });
 
-  it('PATCH /account/profile - edit profile', async () => {
+  it('PATCH /account/profile - edit firstName', async () => {
     const res = await request.agent(server)
       .patch('/account/profile')
       .set('cookie', cookie)
@@ -130,19 +130,19 @@ describe('account manipulations', () => {
   });
 
   it('GET /account/edit - no sign-in profile-edit form', async () => {
-    const res2 = await request(server)
+    const res2 = await request.agent(server)
       .get('/account/edit');
     expect(res2).toHaveHTTPStatus(302);
   });
 
   it('GET /account - no sign-in destroy form', async () => {
-    const res2 = await request(server)
+    const res2 = await request.agent(server)
       .get('/account/destroy');
     expect(res2).toHaveHTTPStatus(302);
   });
 
   it('GET /account - no sign-in pass-edit form', async () => {
-    const res2 = await request(server)
+    const res2 = await request.agent(server)
       .get('/account/password_edit');
     expect(res2).toHaveHTTPStatus(302);
   });

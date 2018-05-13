@@ -49,7 +49,7 @@ describe('session and create User', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
-  it('POST /users - create user', async () => { // Hide in session
+  it('POST /users - create user', async () => {
     const res = await request.agent(server)
       .post('/users')
       .type('form')
@@ -67,7 +67,7 @@ describe('session and create User', () => {
       .post('/session')
       .type('form')
       .send({ form: user });
-    expect(res).toHaveHTTPStatus(302);
+    expect(res.headers.location).toBe('/');
   });
 
   it('DELETE /sesssion - sign-out', async () => {
@@ -82,7 +82,7 @@ describe('session and create User', () => {
     const res1 = await request.agent(server)
       .delete('/session')
       .set('Cookie', cookie);
-    expect(res1).toHaveHTTPStatus(302);
+    expect(res1.headers.location).toBe('/');
   });
 
   afterEach(async () => {
