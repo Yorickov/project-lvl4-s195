@@ -1,12 +1,23 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { Task, User, Status, Tag } from '../models';
-import { reqAuth, reqModify, reqTask } from '../middlwares';
+import { reqAuth, reqModify } from '../lib/middlwares';
 import logger from '../lib/logger';
 
-const getArrTags = str =>
-  str
-    .split(' ').map(item => item.trim().toLowerCase())
-    .filter(item => item);
+const getArrTags = str => str
+  .split(' ')
+  .map(item => item.trim().toLowerCase())
+  .filter(item => item);
+
+const createProprtyObject = query =>
+  Object.keys(query).reduce((acc, id) => {
+    const prop = query[id] ? query[id] : '';
+    return { ...acc, [id]: prop };
+  }, {});
+
+const createFilter = (propertyObject, model, property, as) =>
+  (propertyObject[property] ?
+    { model, as, where: { id: propertyObject[property] } } :
+    { model, as });
 
 export default (router) => {
   router
@@ -16,8 +27,15 @@ export default (router) => {
         include: [Task],
       });
       const users = await User.findAll();
+      const { query } = ctx.request;
+      const propertyObject = createProprtyObject(query);
       const tasks = await Task.findAll({
-        include: ['assignedTo', 'creator', 'status', Tag], // include all
+        include: [
+          createFilter(propertyObject, User, 'assignedToId', 'assignedTo'),
+          createFilter(propertyObject, User, 'creatorId', 'creator'),
+          createFilter(propertyObject, Status, 'statusId', 'status'),
+          createFilter(propertyObject, Tag, 'tag'),
+        ],
       });
       ctx.render('tasks', {
         tasks,
@@ -44,7 +62,24 @@ export default (router) => {
         tags,
       });
     })
-    .get('tasks#show', '/tasks/:id', reqTask(router, Task), async (ctx) => {
+    .get('tasks#home', '/tasks/home', reqAuth(router), async (ctx) => {
+      const tasksCreated = await Task.findAll({
+        include: [
+          'assignedTo',
+          { model: User, as: 'creator', where: { id: ctx.session.userId } },
+          'status',
+        ],
+      });
+      const tasksAssigned = await Task.findAll({
+        include: [
+          'creator',
+          { model: User, as: 'assignedTo', where: { id: ctx.session.userId } },
+          'status',
+        ],
+      });
+      ctx.render('tasks/home', { tasksCreated, tasksAssigned });
+    })
+    .get('tasks#show', '/tasks/:id', async (ctx) => {
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
       });
@@ -69,7 +104,7 @@ export default (router) => {
           }));
         }
         ctx.flash.set(`Task ${task.name} has been created`);
-        ctx.redirect(router.url('tasks#new'));
+        ctx.redirect(router.url('tasks#index'));
       } catch (e) {
         logger.task(`failure on create ${task.name}, err: ${e}`);
         const users = await User.findAll();
@@ -121,7 +156,7 @@ export default (router) => {
           }));
         }
         ctx.flash.set(`Task ${task.name} updated successfully`);
-        ctx.redirect(router.url('root'));
+        ctx.redirect(router.url('tasks#index'));
       } catch (e) {
         logger.task(`failure on update ${task.name}, err: ${e}`);
         const users = await User.findAll();

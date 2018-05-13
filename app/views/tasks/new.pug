@@ -1,16 +1,17 @@
 extends /layouts/app.pug
 
 block content
-    .container
-        .row.pt-5
-            .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
-                h3 New Task
-                +formFor(formElement, { url: urlFor('tasks#create'), method: 'POST' })
-                    +input(formElement, 'name', 'Name')
-                    +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
-                    +textarea(formElement, 'description', 'Description')
-                    +input(formElement, 'tags', 'Add tags with spaces between. Below there are existing tags, but you can add new ones')
-                    +button('primary', 'Complete task creation')
-                    p.d-inline Tags:
-                      each tag in tags
-                        .d-inline= tag.name
+  .container
+    .row.pt-5
+      .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
+        h3.text-center New Task
+        +formFor(formElement, { url: urlFor('tasks#create'), method: 'POST' })
+          +input(formElement, 'name', 'Name')
+          +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
+          +textarea(formElement, 'description', 'Description')
+          +input(formElement, 'tags', 'Add tags with space between them')
+          p.d-inline All tags:
+            if tags
+              each tag in tags
+                .d-inline.px-1= tag.name
+          +button('primary', 'Complete task creation')

@@ -55,9 +55,9 @@ module.exports = {
       { from: 'src/images/favicon.ico', to: 'images' },
       { from: 'src/images/', to: 'images' },
     ]),
-    new HtmlWebpackPlugin({
-      title: 'Task manager',
-    }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Task manager',
+    // }),
   ],
   optimization: {
     splitChunks: {

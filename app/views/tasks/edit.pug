@@ -10,8 +10,8 @@ block content
           +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
           +selectStatus(formElement, 'statusId', 'Status', statuses)
           +textarea(formElement, 'description', 'Description')
-          +input(formElement, 'tags', 'Put down new tags', tags, task)
-          +input(formElement, 'tagsdel', 'Put down tags to delete', tags, task)
+          +input(formElement, 'tags', 'Enter new tags', tags, task)
+          +input(formElement, 'tagsdel', 'Enter tags to delete', tags, task)
           +button('primary', 'Update task')
           p.d-inline Tags:
             each tag in task.Tags

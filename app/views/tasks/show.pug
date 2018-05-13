@@ -1,13 +1,14 @@
 extends /layouts/app.pug
 
 block content
-  .container-fluid
+  .container
     .row.pt-5
-      .col-sm-10.mx-auto.bg-light.rounded.p-3
+      .col-sm-8.mx-auto.bg-light.rounded.p-3
         .row.py-2
           .col-sm-12
             h2= task.name
-            p Added by: #{task.creator.fullName}
+            p.d-inline Added by:
+              a.mx-2(href=urlFor('users#show', task.creator.id))= task.creator.fullName
         .row.py-2
           .col-sm-12
             table.table.border
@@ -16,12 +17,13 @@ block content
                   th Status:
                   td= task.status.name
                   th Assign to:
-                  td= task.assignedTo.fullName
+                  td
+                    a.mr-2(href=urlFor('users#show', task.assignedTo.id))= task.assignedTo.fullName
                 tr
                   th Created at:
-                  td= formatDate(task.createdAt)
+                  td= formatDate(task.createdAt, 'DD.MM.YYYY, HH:mm')
                   th Updated at:
-                  td= formatDate(task.updatedAt)
+                  td= formatDate(task.updatedAt, 'DD.MM.YYYY, HH:mm')
 
         .row.py-2
           .col-sm-12
@@ -33,7 +35,7 @@ block content
             each tag in task.Tags
               .d-inline-block
                 span= tag.name
-        if task.creator.id === getUserId()
+        if task.creator.id === currentUserId
           .row.py-2
             .col-sm-12
               .d-inline-block

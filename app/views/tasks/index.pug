@@ -1,10 +1,26 @@
 extends /layouts/app.pug
 
 block content
+
   .container-fluid
     .row.pt-4
       .col-10.mx-auto
-        table.table.table-striped.table-hover.table-bordered
+        form(action=urlFor('tasks#index'))
+          if isSignedIn()
+            +selectFilterUser('creatorId', 'Author', users, currentUserId, 'Me')
+          else
+            +selectFilterUser('creatorId', 'Author', users, '', 'All')
+          if isSignedIn()
+            +selectFilterUser('assignedToId', 'Assignee', users, currentUserId, 'Me')
+          else
+            +selectFilterUser('assignedToId', 'Assignee', users, '', 'All')
+          +selectFilterEntity('statusId', 'Status', statuses)
+          +selectFilterEntity('tag', 'Tag', tags)
+          +button('primary', 'Apply filter')
+    
+    .row.pt-4
+      .col-10.mx-auto
+        table.table.table-striped.table-hover.table-bordered.text-center
           thead.bg-secondary.text-white
             tr
               th #
@@ -24,10 +40,12 @@ block content
                   a(href=urlFor('tasks#show', task.id))= task.name
                 td= task.description
                 td= task.status.name
-                td= task.creator.fullName
-                td= task.assignedTo.fullName
-                td= formatDate(task.createdAt)
-                td= formatDate(task.updatedAt)
+                td
+                  a(href=urlFor('users#show', task.creator.id))= task.creator.fullName
+                td
+                  a(href=urlFor('users#show', task.assignedTo.id))= task.assignedTo.fullName
+                td= formatDate(task.createdAt, 'DD.MM.YYYY, HH:mm')
+                td= formatDate(task.updatedAt, 'DD.MM.YYYY, HH:mm')
                 td
                   row
                     each tag in tags

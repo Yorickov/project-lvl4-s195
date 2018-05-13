@@ -21,7 +21,7 @@ const errorHandler = () =>
 
 const reqAuth = router =>
   async (ctx, next) => {
-    if (!ctx.session.userId) {
+    if (!ctx.state.currentUserId) {
       ctx.flash.set('Session time expired, relogin please');
       ctx.redirect(router.url('session#new'));
       return;
@@ -31,10 +31,10 @@ const reqAuth = router =>
 
 const reqModify = (router, Model, alias) =>
   async (ctx, next) => {
-    const task = await Model.findById(ctx.params.id, {
+    const instance = await Model.findById(ctx.params.id, {
       include: [alias],
     });
-    if (task.creator.id !== ctx.session.userId) {
+    if (instance.creator.id !== ctx.state.currentUserId) {
       ctx.flash.set('Yoy have no authority for operation');
       ctx.redirect(router.url('root'));
       return;
@@ -42,15 +42,15 @@ const reqModify = (router, Model, alias) =>
     await next();
   };
 
-const reqTask = (router, Model) =>
-  async (ctx, next) => {
-    const instanceDb = await Model.findById(ctx.params.id);
-    if (!instanceDb) {
-      ctx.flash.set('No such an entity');
-      ctx.redirect(router.url('root'));
-      return;
-    }
-    await next();
-  };
+// const reqTask = (router, Model) =>
+//   async (ctx, next) => {
+//     const instanceDb = await Model.findById(ctx.params.id);
+//     if (!instanceDb) {
+//       ctx.flash.set('No such an entity');
+//       ctx.throw(404));
+//       return;
+//     }
+//     await next();
+//   };
 
-export { errorHandler, reqAuth, reqModify, reqTask };
+export { errorHandler, reqAuth, reqModify };

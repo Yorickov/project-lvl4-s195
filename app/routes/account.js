@@ -2,7 +2,7 @@ import buildFormObj from '../lib/formObjectBuilder';
 import { User } from '../models';
 import { encrypt } from '../lib/secure';
 import logger from '../lib/logger';
-import { reqAuth } from '../middlwares';
+import { reqAuth } from '../lib/middlwares';
 
 export default (router) => {
   router

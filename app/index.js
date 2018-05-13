@@ -18,7 +18,7 @@ import format from 'date-fns/format';
 import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
 import container from './container';
-import { errorHandler } from './middlwares';
+import { errorHandler } from './lib/middlwares';
 import { sequelize } from './models';
 
 const { logger } = container;
@@ -26,7 +26,9 @@ const { logger } = container;
 export default () => {
   const app = new Koa();
 
-  app.use(errorHandler());
+  if (process.env.NODE_ENV === 'production') {
+    app.use(errorHandler());
+  }
 
   app.keys = ['some secret hurr'];
 
@@ -42,9 +44,9 @@ export default () => {
     ctx.state = {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
-      getUserId: () => ctx.session.userId,
+      currentUserId: ctx.session.userId,
       getUserProfileName: () => ctx.session.userProfileName,
-      formatDate: dateString => format(dateString, 'DD.MM.YYYY, HH:mm'),
+      formatDate: (dateString, dateFormat) => format(dateString, dateFormat),
     };
     logger.flow(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
     await next();

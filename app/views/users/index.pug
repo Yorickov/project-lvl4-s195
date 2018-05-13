@@ -3,21 +3,21 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-4
-      .col-12.mx-auto
-        table.table.table-striped.table-hover.table-bordered
+      .col-10.mx-auto
+        table.table.table-striped.table-hover.table-bordered.text-center
           thead.bg-secondary.text-white
             tr
               th Full Name
               th Email
               th Created at
               th Updated at
-              th User profile
           tbody
             each user in users
               tr
-                td= user.fullName
-                td= user.email
-                td= formatDate(user.createdAt)
-                td= formatDate(user.updatedAt)
                 td
-                  a(href=urlFor('users#show', user.id)) Show profile
+                  a(href=urlFor('users#show', user.id))= user.fullName
+                td= user.email
+                td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
+                td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')
+
+                  
