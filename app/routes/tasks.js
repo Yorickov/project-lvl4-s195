@@ -29,25 +29,21 @@ export default (router) => {
       const users = await User.findAll();
       const { query } = ctx.request;
       const propertyObject = createProprtyObject(query);
+      const assignFilter = createFilter(propertyObject, User, 'assignedToId', 'assignedTo');
+      const creatorFilter = createFilter(propertyObject, User, 'creatorId', 'creator');
+      const statusFilter = createFilter(propertyObject, Status, 'statusId', 'status');
+      const tagFilter = createFilter(propertyObject, Tag, 'tag');
       const tasks = await Task.findAll({
-        include: [
-          createFilter(propertyObject, User, 'assignedToId', 'assignedTo'),
-          createFilter(propertyObject, User, 'creatorId', 'creator'),
-          createFilter(propertyObject, Status, 'statusId', 'status'),
-          createFilter(propertyObject, Tag, 'tag'),
-        ],
+        include: [assignFilter, creatorFilter, statusFilter, tagFilter],
       });
       ctx.render('tasks', {
+        propertyObject,
         tasks,
         users,
         statuses,
         tags,
       });
     })
-    // .get('myTasks', '/tasks/home', (ctx) => {
-    //   // const users = await User.findAll();
-    //   ctx.render('tasks/home');
-    // })
     .get('tasks#new', '/tasks/new', reqAuth(router), async (ctx) => {
       const task = await Task.build();
       const users = await User.findAll();

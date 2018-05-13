@@ -23,54 +23,56 @@ mixin button(color, message, type = 'submit')
   .form-group
     button(class=`btn btn-${color} btn-block` type= `${type}` value='Save')= message
 
-mixin selectAssignId(formElement, property, label, items)
-  - const selectId = `select_${property}`;
-  .form-group
-    label(for= selectId)= label
-    select.form-control(name= getInputName(formElement, property) id= selectId)
-        each item in items
-          if item.id === currentUserId
-            option(value= item.id selected)= item.fullName
-          else
-            option(value= item.id)= item.fullName
-
-mixin selectStatus(formElement, property, label, items)
-  - const selectId = `selectS_${property}`;
-  .form-group
-    label(for= selectId)= label
-    select.form-control(name= getInputName(formElement, property) id= selectId)
-      if items
-        each item in items
-          if item.id === task.statusId
-            option(value= item.id selected)= item.name
-          else
-            option(value= item.id)= item.name
-
 mixin textarea(formElement, property, label, options = { as: 'text' })
   - const value = formElement.object[property] === undefined ? '' : formElement.object[property];
   - const textareaId = `textaria_${property}`;
   .form-group
     label(for= textareaId)= label
-    textarea(name=g etInputName(formElement, property) id= textariaId placeholder= label class='form-control' type= options['as'])= value
+    textarea(name= getInputName(formElement, property) id= textariaId placeholder= label class='form-control' type= options['as'])= value
     if formElement.errors[property]
       .form-control-feedback= formElement.errors[property].map(({ message }) => message).join('. ')
 
-mixin selectFilterUser(property, label, items, value, message)
-  - const selectId = `filter_${property}`;
+mixin selectStatus(formElement, property, label, items)
+  - const selectId = `selectS_${property}`;
+  - const propValue = formElement.object[property] || '';
   .form-group
     label(for= selectId)= label
-    select.form-control(name= property id= selectId)
+    select.form-control(name= getInputName(formElement, property) id= selectId)
       if items
-        option(value= value selected)= message
         each item in items
-          option(value= item.id)= item.fullName
+          if item.id === propValue
+            option(value= item.id selected)= item.name
+          else
+            option(value= item.id)= item.name
 
-mixin selectFilterEntity(property, label, items)
+mixin selectAssignId(formElement, property, label, items)
+  - const selectId = `select_${property}`;
+  - const propValue = formElement.object[property] || '';
+  .form-group
+    label(for= selectId)= label
+    select.form-control(name= getInputName(formElement, property) id= selectId)
+      if !value
+        option(value='' selected) All
+      if items  
+        each item in items
+          if item.id === propValue
+            option(value= item.id selected)= item.fullName || item.name
+          else
+            option(value= item.id)= item.fullName || item.name
+            
+mixin selectFilter(propertyObject, property, label, items, userId, message)
   - const selectId = `filter_${property}`;
+  - const propValue = propertyObject[property] || '';
   .form-group
     label(for= selectId)= label
     select.form-control(name= property id= selectId)
-      if items
+      if !propValue
         option(value='' selected) All
+      else
+        option(value='') All
+      if items
         each item in items
-          option(value= item.id)= item.name
+          if item.id === userId
+            option(value= item.id selected)= message
+          else
+            option(value= item.id)= item.fullName || item.name

@@ -7,15 +7,15 @@ block content
       .col-10.mx-auto
         form(action=urlFor('tasks#index'))
           if isSignedIn()
-            +selectFilterUser('creatorId', 'Author', users, currentUserId, 'Me')
+            +selectFilter(propertyObject, 'creatorId', 'Author', users, currentUserId, 'By me')
           else
-            +selectFilterUser('creatorId', 'Author', users, '', 'All')
+            +selectFilter(propertyObject, 'creatorId', 'Author', users, '', 'All')
           if isSignedIn()
-            +selectFilterUser('assignedToId', 'Assignee', users, currentUserId, 'Me')
+            +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, currentUserId, 'By me')
           else
-            +selectFilterUser('assignedToId', 'Assignee', users, '', 'All')
-          +selectFilterEntity('statusId', 'Status', statuses)
-          +selectFilterEntity('tag', 'Tag', tags)
+            +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, '', 'All')
+          +selectFilter(propertyObject, 'statusId', 'Status', statuses, '', 'All')
+          +selectFilter(propertyObject, 'tag', 'Tag', tags, '', 'All')
           +button('primary', 'Apply filter')
     
     .row.pt-4
