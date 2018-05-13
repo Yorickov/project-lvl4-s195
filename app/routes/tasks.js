@@ -59,19 +59,13 @@ export default (router) => {
       });
     })
     .get('tasks#home', '/tasks/home', reqAuth(router), async (ctx) => {
+      const creatorFilter = { model: User, as: 'creator', where: { id: ctx.session.userId } };
+      const assigneeFilter = { model: User, as: 'assignedTo', where: { id: ctx.session.userId } };
       const tasksCreated = await Task.findAll({
-        include: [
-          'assignedTo',
-          { model: User, as: 'creator', where: { id: ctx.session.userId } },
-          'status',
-        ],
+        include: ['assignedTo', creatorFilter, 'status'],
       });
       const tasksAssigned = await Task.findAll({
-        include: [
-          'creator',
-          { model: User, as: 'assignedTo', where: { id: ctx.session.userId } },
-          'status',
-        ],
+        include: ['creator', assigneeFilter, 'status'],
       });
       ctx.render('tasks/home', { tasksCreated, tasksAssigned });
     })
