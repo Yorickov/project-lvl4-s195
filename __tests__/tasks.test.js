@@ -25,6 +25,7 @@ const taskUpdated = initTask();
 
 describe('basic operations', () => {
   let server;
+  let cookie;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
@@ -33,6 +34,12 @@ describe('basic operations', () => {
   beforeEach(async () => {
     server = app().listen();
     await createTables();
+    await db.User.create(user);
+    const auth = await request.agent(server)
+      .post('/session')
+      .type('form')
+      .send({ form: formAuth });
+    cookie = getCookieRequest(auth);
   });
 
   it('GET 200 /tasks - show all tasks', async () => {
@@ -47,50 +54,22 @@ describe('basic operations', () => {
       .expect(302);
   });
 
-  // it('GET 200 /tasks/new - show form-add-task', async () => {
-  //   await db.User.create(user);
-  //   const auth = await request.agent(server)
-  //     .post('/session')
-  //     .type('form')
-  //     .send({ form: formAuth });
-  //   const cookie = getCookieRequest(auth);
-  //   await request.agent(server)
-  //     .get('/tasks/new')
-  //     .set('cookie', cookie)
-  //     .expect(200);
-  // });
+  it('GET 200 /tasks/new - show form-add-task', async () => {
+    await request.agent(server)
+      .get('/tasks/new')
+      .set('cookie', cookie)
+      .expect(200);
+  });
 
-  // it('GET 200 /tasks:id/ - show task', async () => {
-  //   await db.User.create(user);
-  //   const auth = await request.agent(server)
-  //     .post('/session')
-  //     .type('form')
-  //     .send({ form: formAuth });
-  //   const cookie = getCookieRequest(auth);
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   await request.agent(server)
-  //     .get('/tasks/1')
-  //     .expect(200);
-  // });
-
-  // it('GET 200 /tasks:id/ - now such a task', async () => {
-  //   await db.User.create(user);
-  //   const auth = await request.agent(server)
-  //     .post('/session')
-  //     .type('form')
-  //     .send({ form: formAuth });
-  //   const cookie = getCookieRequest(auth);
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   await request.agent(server)
-  //     .get('/tasks/3')
-  //     .expect(404);
-  // });
+  it('GET 200 /tasks:id/ - show task', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .get('/tasks/1')
+      .expect(200);
+  });
 
   afterEach(async () => {
     await server.close();
@@ -108,7 +87,6 @@ describe('task-creation', () => {
   beforeEach(async () => {
     server = app().listen();
     await createTables();
-
     await db.User.create(user);
     const auth = await request.agent(server)
       .post('/session')
@@ -125,28 +103,28 @@ describe('task-creation', () => {
       .expect(302);
   });
 
-  // it('POST 302 /tasks - failed add task', async () => {
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   const res = await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: { ...task, name: 'q' } })
-  //     .expect(422);
-  // });
+  it('POST 302 /tasks - failed add task', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    const res = await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: { ...task, name: 'q' } })
+      .expect(422);
+  });
 
-  // it('GET 200 /tasks - show task', async () => {
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   await request.agent(server)
-  //     .get('/tasks/1')
-  //     .set('cookie', cookie)
-  //     .expect(200);
-  // });
+  it('GET 200 /tasks - show task', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .get('/tasks/1')
+      .set('cookie', cookie)
+      .expect(200);
+  });
 
   it('GET 200 /tasks/:id/edit - no sign-in: edit-task-form', async () => {
     await request.agent(server)
@@ -158,40 +136,29 @@ describe('task-creation', () => {
       .expect(302);
   });
 
-  // it('GET 200 /tasks/:id/edit - 404: edit-task-form', async () => {
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   const res = await request.agent(server)
-  //     .get('/tasks/3/edit')
-  //     .set('cookie', cookie)
-  //     .expect(404);
-  // });
+  it('GET 200 /tasks/:id/edit - show edit-form-task', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task })
+      .expect(302);
+    await request.agent(server)
+      .get('/tasks/1/edit')
+      .set('cookie', cookie)
+      .expect(200);
+  });
 
-  // it('GET 200 /tasks/:id/edit - show edit-form-task', async () => {
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task })
-  //     .expect(302);
-  //   await request.agent(server)
-  //     .get('/tasks/1/edit')
-  //     .set('cookie', cookie)
-  //     .expect(200);
-  // });
-
-  // it('PATCH 302 /tasks/1 - failed update task - validation', async () => {
-  //   await request.agent(server)
-  //     .post('/tasks')
-  //     .set('cookie', cookie)
-  //     .send({ form: task });
-  //   await request.agent(server)
-  //     .patch('/tasks/1')
-  //     .set('cookie', cookie)
-  //     .send({ form: { ...task, name: 'q' } })
-  //     .expect(422);
-  // });
+  it('PATCH 302 /tasks/1 - failed update task - validation', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .patch('/tasks/1')
+      .set('cookie', cookie)
+      .send({ form: { ...task, name: 'q' } })
+      .expect(422);
+  });
 
   it('PATCH 302 /tasks/1 - update task', async () => {
     await request.agent(server)
