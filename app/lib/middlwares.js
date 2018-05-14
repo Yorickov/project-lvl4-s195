@@ -1,5 +1,4 @@
 import Rollbar from 'rollbar';
-import { Task } from '../models';
 
 const rollbarConfig = {
   accessToken: process.env.ROLLBAR_ACCESS_TOKEN,

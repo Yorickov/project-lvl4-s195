@@ -4,9 +4,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: {
-          args: [2, 20],
-          msg: 'Must be from 2 to 20 symbols',
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
         },
       },
     },
@@ -22,7 +22,12 @@ export default (sequelize, DataTypes) => {
     },
     assignedToId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
+        },
+      },
     },
   }, {
     freezeTableName: true,

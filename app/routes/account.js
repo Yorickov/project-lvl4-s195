@@ -1,10 +1,10 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { User } from '../models';
 import { encrypt } from '../lib/secure';
 import logger from '../lib/logger';
 import { reqAuth } from '../lib/middlwares';
 
-export default (router) => {
+export default (router, container) => {
+  const { User } = container;
   router
     .get('account#edit', '/account/edit', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);

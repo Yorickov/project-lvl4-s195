@@ -5,18 +5,18 @@ export default (sequelize, DataTypes) => {
     firstName: {
       type: DataTypes.STRING,
       validate: {
-        len: {
-          args: [2, 20],
-          msg: 'Must be from 2 to 20 symbols',
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
         },
       },
     },
     lastName: {
       type: DataTypes.STRING,
       validate: {
-        len: {
-          args: [2, 20],
-          msg: 'Must be from 2 to 20 symbols',
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
         },
       },
     },

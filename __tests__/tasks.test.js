@@ -2,10 +2,11 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
-import db from '../app/models';
-import createTables from '../app/createTables';
+import container from '../app/container';
+import initModels from '../app/initModels';
 import { initFaker, initTask, getCookieRequest } from '../app/lib/testLib';
 
+const { User, Task, Tag } = container;
 const user = initFaker();
 const formAuth = {
   email: user.email,
@@ -33,8 +34,8 @@ describe('show forms', () => {
 
   beforeEach(async () => {
     server = app().listen();
-    await createTables();
-    await db.User.create(user);
+    await initModels();
+    await User.create(user);
     const auth = await request.agent(server)
       .post('/session')
       .type('form')
@@ -76,8 +77,8 @@ describe('task-creation', () => {
 
   beforeEach(async () => {
     server = app().listen();
-    await createTables();
-    await db.User.create(user);
+    await initModels();
+    await User.create(user);
     const auth = await request.agent(server)
       .post('/session')
       .type('form')
@@ -116,7 +117,7 @@ describe('task-creation', () => {
       .set('cookie', cookie)
       .send({ form: task })
       .expect(302);
-    const taskDb = await db.Task.findById(1);
+    const taskDb = await Task.findById(1);
     expect(taskDb.name).toMatch(task.name);
   });
 
@@ -126,7 +127,7 @@ describe('task-creation', () => {
       .set('cookie', cookie)
       .send({ form: { ...task, tags: 'php' } })
       .expect(302);
-    const tags = await db.Tag.findAll();
+    const tags = await Tag.findAll();
     expect(tags.length).toBe(1);  // eslint-disable-line
   });
 
@@ -148,7 +149,7 @@ describe('task-creation', () => {
     const res = await request.agent(server)
       .post('/tasks')
       .set('cookie', cookie)
-      .send({ form: { ...task, name: 'q' } })
+      .send({ form: { ...task, name: '' } })
       .expect(422);
   });
 
@@ -162,7 +163,7 @@ describe('task-creation', () => {
     await request.agent(server)
       .patch('/tasks/1')
       .set('cookie', cookie)
-      .send({ form: { ...task, name: 'q' } })
+      .send({ form: { ...task, name: '' } })
       .expect(422);
   });
 
@@ -178,7 +179,7 @@ describe('task-creation', () => {
       .patch('/tasks/1')
       .set('cookie', cookie)
       .send({ form: taskUpdated });
-    const taskDb = await db.Task.findById(1);
+    const taskDb = await Task.findById(1);
     expect(taskDb.name).toMatch(taskUpdated.name);
   });
 
@@ -187,7 +188,7 @@ describe('task-creation', () => {
       .patch('/tasks/1')
       .set('cookie', cookie)
       .send({ form: { ...task, tags: 'php js' } });
-    const tags = await db.Tag.findAll();
+    const tags = await Tag.findAll();
     expect(tags.length).toBe(2); // eslint-disable-line
   });
 
@@ -196,7 +197,7 @@ describe('task-creation', () => {
       .patch('/tasks/1')
       .set('cookie', cookie)
       .send({ form: { ...task, statusId: 2 } });
-    const taskDb = await db.Task.findById(1);
+    const taskDb = await Task.findById(1);
     expect(taskDb.statusId).toBe(2);
   });
 
@@ -204,7 +205,7 @@ describe('task-creation', () => {
     await request.agent(server)
       .delete('/tasks/1/destroy')
       .set('cookie', cookie);
-    const isUserDel = await db.Task.findById(1);
+    const isUserDel = await Task.findById(1);
     expect(isUserDel).toBeNull();
   });
 
@@ -212,7 +213,7 @@ describe('task-creation', () => {
     await request.agent(server)
       .delete('/tasks/1/destroy')
       .expect(302);
-    const isUserDel = await db.Task.findById(1);
+    const isUserDel = await Task.findById(1);
     expect(isUserDel).not.toBeNull();
   });
 

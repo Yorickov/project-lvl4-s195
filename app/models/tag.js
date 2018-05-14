@@ -4,9 +4,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true,
       validate: {
-        len: {
-          args: [2, 10],
-          msg: 'Must be from 2 to 10 symbols',
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
         },
       },
     },

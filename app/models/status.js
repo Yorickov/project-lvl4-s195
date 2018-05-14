@@ -5,9 +5,9 @@ export default (sequelize, DataTypes) => {
       unique: true,
       defaultValue: 'New',
       validate: {
-        len: {
-          args: [2, 15],
-          msg: 'Must be from 2 to 15 symbols',
+        notEmpty: {
+          args: true,
+          msg: 'cannot be empty',
         },
       },
     },

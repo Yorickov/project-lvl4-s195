@@ -1,10 +1,10 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { encrypt } from '../lib/secure';
-import { User } from '../models';
 
 import logger from '../lib/logger';
 
-export default (router) => {
+export default (router, container) => {
+  const { User } = container;
   router
     .get('session#new', '/session/new', (ctx) => {
       const data = {};

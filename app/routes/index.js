@@ -7,4 +7,4 @@ import tasks from './tasks';
 const controllers = [welcome, users, sessions, account, tasks];
 
 export default (router, container) =>
-  controllers.forEach(fn => fn(router, container));
+  controllers.forEach(controller => controller(router, container));

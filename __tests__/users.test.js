@@ -2,9 +2,11 @@ import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
-import db from '../app/models';
-import createTables from '../app/createTables';
+import container from '../app/container';
+import initModels from '../app/initModels';
 import { initFaker, getCookieRequest } from '../app/lib/testLib';
+
+const { User } = container;
 
 const user = initFaker();
 const newUserDb = initFaker();
@@ -20,8 +22,8 @@ describe('unauthorized forms', () => {
 
   beforeEach(async () => {
     server = app().listen();
-    await createTables();
-    await db.User.create(user);
+    await initModels();
+    await User.create(user);
   });
 
   it('GET /users/:id - show profile', async () => {
@@ -50,9 +52,9 @@ describe('account manipulations', () => {
   });
 
   beforeEach(async () => {
-    await createTables();
+    await initModels();
     server = app().listen();
-    await db.User.create(user);
+    await User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
@@ -87,7 +89,7 @@ describe('account manipulations', () => {
       .set('cookie', cookie)
       .send({ form: userDbEmail });
     expect(res).toHaveHTTPStatus(302);
-    const isUserNewEmail = await db.User.findOne({
+    const isUserNewEmail = await User.findOne({
       where: { firstName: user.firstName },
     });
     expect(isUserNewEmail.email).toMatch(userDbEmail.email);
@@ -99,7 +101,7 @@ describe('account manipulations', () => {
       .set('cookie', cookie)
       .send({ form: userDbProfile });
     expect(res).toHaveHTTPStatus(302);
-    const isUserNewProfile = await db.User.findOne({
+    const isUserNewProfile = await User.findOne({
       where: { email: user.email },
     });
     expect(isUserNewProfile.firstName).toMatch(userDbProfile.firstName);
@@ -111,7 +113,7 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
     expect(res).toHaveHTTPStatus(302);
-    const isUser = await db.User.findOne({
+    const isUser = await User.findOne({
       where: { email: user.email },
     });
     expect(isUser).not.toBeNull();
@@ -123,7 +125,7 @@ describe('account manipulations', () => {
       .set('Cookie', cookie)
       .send({ form: { password: user.password } });
     expect(res).toHaveHTTPStatus(302);
-    const isUserDel = await db.User.findOne({
+    const isUserDel = await User.findOne({
       where: { email: user.email },
     });
     expect(isUserDel).toBeNull();

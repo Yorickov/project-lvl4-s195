@@ -1,7 +1,7 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { User } from '../models';
 
-export default (router) => {
+export default (router, container) => {
+  const { User } = container;
   router.get('root', '/', (ctx) => {
     const user = User.build();
     ctx.render('welcome/index', { formElement: buildFormObj(user) });

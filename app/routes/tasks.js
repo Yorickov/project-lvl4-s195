@@ -1,5 +1,4 @@
 import buildFormObj from '../lib/formObjectBuilder';
-import { Task, User, Status, Tag } from '../models';
 import { reqAuth, reqModify } from '../lib/middlwares';
 import logger from '../lib/logger';
 
@@ -19,7 +18,13 @@ const createFilter = (propertyObject, model, property, as) =>
     { model, as, where: { id: propertyObject[property] } } :
     { model, as });
 
-export default (router) => {
+export default (router, container) => {
+  const {
+    User,
+    Task,
+    Status,
+    Tag,
+  } = container;
   router
     .get('tasks#index', '/tasks', async (ctx) => {
       const statuses = await Status.findAll();

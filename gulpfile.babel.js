@@ -5,7 +5,7 @@ import repl from 'repl';
 
 import container from './app/container';
 import getServer from './app';
-import createTables from './app/createTables';
+import initModels from './app/initModels';
 
 gulp.task('console', () => {
   const replServer = repl.start({
@@ -16,14 +16,14 @@ gulp.task('console', () => {
   });
 });
 
-gulp.task('createTables', () => {
-  createTables();
+gulp.task('initModels', () => {
+  initModels();
 });
 
 gulp.task('development', (cb) => {
   getServer().listen(process.env.PORT || 3000, cb);
 });
 
-gulp.task('production', ['createTables'], (cb) => {
+gulp.task('production', ['initModels'], (cb) => {
   getServer().listen(process.env.PORT || 3000, cb);
 });

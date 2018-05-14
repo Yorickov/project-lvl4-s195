@@ -3,22 +3,23 @@ import matchers from 'jest-supertest-matchers';
 
 import app from '../app';
 import { initFaker, getCookieRequest } from '../app/lib/testLib';
-import db from '../app/models';
-import createTables from '../app/createTables';
+import container from '../app/container';
+import initModels from '../app/initModels';
 
 const user = initFaker();
+const { User } = container;
 
 describe('session and create User', () => {
   let server;
 
   beforeAll(async () => {
     jasmine.addMatchers(matchers);
-    await createTables();
+    await initModels();
   });
 
   beforeEach(async () => {
     server = app().listen();
-    await db.User.sync({ force: true });
+    await User.sync({ force: true });
   });
 
   it('sign-in form: /session/new - GET 200', async () => {
@@ -55,14 +56,14 @@ describe('session and create User', () => {
       .type('form')
       .send({ form: user });
     expect(res).toHaveHTTPStatus(302);
-    const userDb = await db.User.findOne({
+    const userDb = await User.findOne({
       where: { email: user.email },
     });
     expect(user.lastName).toMatch(userDb.lastName);
   });
 
   it('POST /session - good sign-in', async () => {
-    await db.User.create(user);
+    await User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
@@ -71,7 +72,7 @@ describe('session and create User', () => {
   });
 
   it('DELETE /sesssion - sign-out', async () => {
-    await db.User.create(user);
+    await User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
