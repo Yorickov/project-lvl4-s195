@@ -19,14 +19,13 @@ import webpackConfig from '../webpack.config';
 import addRoutes from './routes';
 import container from './container';
 import { errorHandler } from './lib/middlwares';
-import { sequelize } from './models';
 
-const { logger } = container;
+const { logReq } = container;
 
 export default () => {
   const app = new Koa();
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' || 'development') {
     app.use(errorHandler());
   }
 
@@ -48,7 +47,7 @@ export default () => {
       getUserProfileName: () => ctx.session.userProfileName,
       formatDate: (dateString, dateFormat) => format(dateString, dateFormat),
     };
-    logger.flow(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
+    logReq(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
     await next();
   });
 
@@ -73,8 +72,8 @@ export default () => {
 
   const router = new Router();
   addRoutes(router, container);
-  app.use(router.routes());
   app.use(router.allowedMethods());
+  app.use(router.routes());
 
   const pug = new Pug({
     viewPath: path.join(__dirname, 'views'),

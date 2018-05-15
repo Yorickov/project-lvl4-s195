@@ -1,10 +1,8 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { encrypt } from '../lib/secure';
 
-import logger from '../lib/logger';
-
 export default (router, container) => {
-  const { User } = container;
+  const { User, logReq } = container;
   router
     .get('session#new', '/session/new', (ctx) => {
       const data = {};
@@ -21,7 +19,7 @@ export default (router, container) => {
       if (user && user.passwordDigest === encrypt(password)) {
         ctx.session.userId = user.id;
         ctx.session.userProfileName = user.fullName;
-        logger.sess(`user sign-in: ${user.id}: ${user.fullName}`);
+        logReq(`user sign-in: ${user.id}: ${user.fullName}`);
 
         ctx.redirect(router.url('root'));
         return;

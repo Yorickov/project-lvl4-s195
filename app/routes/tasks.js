@@ -1,6 +1,5 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { reqAuth, reqModify } from '../lib/middlwares';
-import logger from '../lib/logger';
 
 const getArrTags = str => str
   .split(' ')
@@ -24,6 +23,8 @@ export default (router, container) => {
     Task,
     Status,
     Tag,
+    logDb,
+    logReq,
   } = container;
   router
     .get('tasks#index', '/tasks', async (ctx) => {
@@ -54,7 +55,7 @@ export default (router, container) => {
       const users = await User.findAll();
       const tags = await Tag.findAll();
       const { userId: creatorId, userProfileName: creatorName } = ctx.session;
-      logger.task(creatorId, creatorName);
+      logReq(creatorId, creatorName);
       ctx.render('tasks/new', {
         formElement: buildFormObj(task),
         users,
@@ -101,7 +102,7 @@ export default (router, container) => {
         ctx.flash.set(`Task ${task.name} has been created`);
         ctx.redirect(router.url('tasks#index'));
       } catch (e) {
-        logger.task(`failure on create ${task.name}, err: ${e}`);
+        logDb(`failure on create ${task.name}, err: ${e}`);
         const users = await User.findAll();
         ctx.status = 422;
         ctx.render('tasks/new', {
@@ -153,7 +154,7 @@ export default (router, container) => {
         ctx.flash.set(`Task ${task.name} updated successfully`);
         ctx.redirect(router.url('tasks#index'));
       } catch (e) {
-        logger.task(`failure on update ${task.name}, err: ${e}`);
+        logDb(`failure on update ${task.name}, err: ${e}`);
         const users = await User.findAll();
         const statuses = await Status.findAll();
         ctx.status = 422;
@@ -174,7 +175,7 @@ export default (router, container) => {
       try {
         await task.destroy();
       } catch (e) {
-        logger.task(`failure on delete ${task.name}, err: ${e}`);
+        logDb(`failure on delete ${task.name}, err: ${e}`);
         ctx.flash.set(`Task ${task.name} has not deleted, try again`);
         ctx.redirect(router.url('tasks#index'));
       }

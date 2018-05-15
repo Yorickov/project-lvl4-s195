@@ -1,4 +1,4 @@
-export default (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => { // eslint-disable-line
   const TaskTag = sequelize.define('TaskTag', {
     // taskId: {
     //   type: DataTypes.INTEGER,

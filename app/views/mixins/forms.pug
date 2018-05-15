@@ -63,16 +63,18 @@ mixin selectAssignId(formElement, property, label, items)
 mixin selectFilter(propertyObject, property, label, items, userId, message)
   - const selectId = `filter_${property}`;
   - const propValue = propertyObject[property] || '';
-  .form-group
-    label(for= selectId)= label
-    select.form-control(name= property id= selectId)
-      if !propValue
-        option(value='' selected) All
-      else
-        option(value='') All
-      if items
-        each item in items
-          if item.id === userId
-            option(value= item.id selected)= message
+  .col-md
+    .form-group.row.d-flex.text-right
+      label.col-sm-3.col-form-label.col-form-label-sm.pr-0(for= selectId)= label
+      .col
+        select.custom-select.custom-select-sm(name= property id= selectId)
+          if !propValue
+            option(value='' selected) All
           else
-            option(value= item.id)= item.fullName || item.name
+            option(value='') All
+          if items
+            each item in items
+              if item.id === userId
+                option(value= item.id selected)= message
+              else
+                option(value= item.id)= item.fullName || item.name

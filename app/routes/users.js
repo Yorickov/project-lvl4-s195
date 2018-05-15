@@ -1,13 +1,11 @@
 import buildFormObj from '../lib/formObjectBuilder';
 
-import logger from '../lib/logger';
-
 export default (router, container) => {
-  const { User } = container;
+  const { User, logReq } = container;
   router
     .get('users#index', '/users', async (ctx) => {
       const users = await User.findAll();
-      logger.user(`users id: ${Object.keys(users)}`);
+      logReq(`users id: ${Object.keys(users)}`);
       ctx.render('users', { users });
     })
     .get('users#new', '/users/new', (ctx) => {
@@ -26,7 +24,7 @@ export default (router, container) => {
         return;
       }
       const user = User.build(form);
-      logger.user(`add user: ${user.email}/${user.password}`);
+      logReq(`add user: ${user.email}/${user.password}`);
       try {
         await user.save();
         ctx.flash.set('User has been created');

@@ -13,8 +13,21 @@ const errorHandler = () =>
   async (ctx, next) => {
     try {
       await next();
+      const status = ctx.status || 404;
+      if (status === 404) {
+        ctx.throw(404);
+      }
     } catch (err) {
-      rollbar.error(err, ctx.request);
+      switch (ctx.status) {
+        case 404:
+          ctx.render('errors/404');
+          break;
+        case 500:
+          ctx.render('errors/500');
+          break;
+        default:
+          rollbar.error(err, ctx.request);
+      }
     }
   };
 
@@ -40,16 +53,5 @@ const reqModify = (router, Model, alias) =>
     }
     await next();
   };
-
-// const reqTask = (router, Model) =>
-//   async (ctx, next) => {
-//     const instanceDb = await Model.findById(ctx.params.id);
-//     if (!instanceDb) {
-//       ctx.flash.set('No such an entity');
-//       ctx.throw(404));
-//       return;
-//     }
-//     await next();
-//   };
 
 export { errorHandler, reqAuth, reqModify };

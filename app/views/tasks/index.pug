@@ -3,23 +3,26 @@ extends /layouts/app.pug
 block content
 
   .container-fluid
-    .row.pt-4
-      .col-10.mx-auto
+    .row.pt-3
+      .col.mx-auto
         form(action=urlFor('tasks#index'))
-          if isSignedIn()
-            +selectFilter(propertyObject, 'creatorId', 'Author', users, currentUserId, 'By me')
-          else
-            +selectFilter(propertyObject, 'creatorId', 'Author', users, '', 'All')
-          if isSignedIn()
-            +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, currentUserId, 'By me')
-          else
-            +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, '', 'All')
-          +selectFilter(propertyObject, 'statusId', 'Status', statuses, '', 'All')
-          +selectFilter(propertyObject, 'tag', 'Tag', tags, '', 'All')
-          +button('primary', 'Apply filter')
+          .form-row
+            if isSignedIn()
+              +selectFilter(propertyObject, 'creatorId', 'Author', users, currentUserId, 'By me')
+            else
+              +selectFilter(propertyObject, 'creatorId', 'Author', users, '', 'All')
+            if isSignedIn()
+              +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, currentUserId, 'By me')
+            else
+              +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, '', 'All')
+            +selectFilter(propertyObject, 'statusId', 'Status', statuses, '', 'All')
+            +selectFilter(propertyObject, 'tag', 'Tag', tags, '', 'All')
+            .col-md-1
+              .form-group
+                button.btn.btn-sm.btn-secondary.btn-block(type= 'submit' value='Save') Apply
     
-    .row.pt-4
-      .col-10.mx-auto
+    .row.pt-2
+      .col.mx-auto
         table.table.table-striped.table-hover.table-bordered.text-center
           thead.bg-secondary.text-white
             tr

@@ -1,15 +1,6 @@
 import debug from 'debug';
 
-const flow = debug('sequelize:flow');
-const sess = debug('sequelize:session');
-const user = debug('sequelize:users');
-const sett = debug('sequelize:account');
-const task = debug('sequelize:task');
+const logDb = debug('sequelize:db');
+const logReq = debug('sequelize:http');
 
-export default {
-  flow,
-  sess,
-  user,
-  sett,
-  task,
-};
+export default { logDb, logReq };

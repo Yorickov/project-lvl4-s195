@@ -16,8 +16,3 @@ extends:
     - 'airbnb-base'
     - 'plugin:jest/recommended'
 
-rules:
-    global-require: 0
-    no-unused-vars: 0
-
-

@@ -6,7 +6,7 @@ build:
 	NODE_ENV=development npm run build
 
 dev:
-	npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- development
+	DEBUG=sequelize:* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- development
 
 prod:
 	npm start

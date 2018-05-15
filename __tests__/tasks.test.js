@@ -14,13 +14,6 @@ const formAuth = {
   confirmedPassword: user.confirmedPassword,
 };
 
-const user2 = initFaker();
-const formAuth2 = {
-  email: user2.email,
-  password: user2.password,
-  confirmedPassword: user2.confirmedPassword,
-};
-
 const task = initTask();
 const taskUpdated = initTask();
 
@@ -145,8 +138,7 @@ describe('task-creation', () => {
   });
 
   it('POST 302 /tasks - failed add task', async () => {
-    await request.agent(server);
-    const res = await request.agent(server)
+    await request.agent(server)
       .post('/tasks')
       .set('cookie', cookie)
       .send({ form: { ...task, name: '' } })
@@ -154,7 +146,7 @@ describe('task-creation', () => {
   });
 
   it('GET 200 /tasks/:id/edit - no sign-in: edit-task-form', async () => {
-    const res = await request.agent(server)
+    await request.agent(server)
       .get('/tasks/1/edit')
       .expect(302);
   });

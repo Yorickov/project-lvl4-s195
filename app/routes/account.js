@@ -1,10 +1,9 @@
 import buildFormObj from '../lib/formObjectBuilder';
 import { encrypt } from '../lib/secure';
-import logger from '../lib/logger';
 import { reqAuth } from '../lib/middlwares';
 
 export default (router, container) => {
-  const { User } = container;
+  const { User, logDb } = container;
   router
     .get('account#edit', '/account/edit', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
@@ -23,7 +22,7 @@ export default (router, container) => {
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
-        logger.sett(`user ${user.userId} edit email to ${form.firstName}`);
+        logDb(`user ${user.userId} edit email to ${form.firstName}`);
         ctx.flash.set('Profile has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
@@ -35,7 +34,7 @@ export default (router, container) => {
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
-        logger.sett(`user ${user.userId} edit email to ${form.email}`);
+        logDb(`user ${user.userId} edit email to ${form.email}`);
         ctx.flash.set('Email has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
@@ -45,7 +44,7 @@ export default (router, container) => {
     .patch('account/password#update', '/account/password', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
       const { oldPassword, password, confirmedPassword } = form;
-      if (confirmedPassword !== password) {
+      if (confirmedPassword !== password) { // null both
         ctx.flash.set('Passwords are not equal, try again');
         ctx.redirect(router.url('account/password#edit'));
         return;
@@ -59,7 +58,7 @@ export default (router, container) => {
       }
       try {
         await user.update({ password });
-        logger.sett(`user ${user.userId} update password from ${oldPassword} to ${password}`);
+        logDb(`user ${user.userId} update password from ${oldPassword} to ${password}`);
         ctx.flash.set('Password has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
@@ -71,15 +70,16 @@ export default (router, container) => {
       const user = await User.findById(ctx.session.userId);
       if (user.passwordDigest !== encrypt(form.password)) {
         ctx.flash.set('Wrong password');
-        ctx.redirect(router.url('account#destroy'));
+        ctx.redirect(router.url('account#edit'));
         return;
       }
       try {
-        await user.destroy();
+        await User.destroy({ where: { id: ctx.session.userId } });
         ctx.session = {};
         ctx.flash.set(`Buy, ${user.fullName}`);
         ctx.redirect(router.url('root'));
       } catch (e) {
+        logDb(e);
         ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     });

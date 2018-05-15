@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -30,12 +32,7 @@ module.exports = {
           },
           {
             loader: 'postcss-loader',
-            options: {
-              plugins: () => [
-                require('precss'),
-                require('autoprefixer'),
-              ],
-            },
+            options: { plugins: () => [precss, autoprefixer] },
           },
           {
             loader: 'sass-loader',

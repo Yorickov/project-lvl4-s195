@@ -4,4 +4,4 @@ import db from './models';
 
 dotenv.config();
 
-export default { logger, ...db };
+export default { ...logger, ...db };
