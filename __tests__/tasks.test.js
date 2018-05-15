@@ -179,7 +179,7 @@ describe('task-creation', () => {
     await request.agent(server)
       .patch('/tasks/1')
       .set('cookie', cookie)
-      .send({ form: { ...task, tags: 'php js' } });
+      .send({ form: { ...task, tags: 'php, js' } });
     const tags = await Tag.findAll();
     expect(tags.length).toBe(2); // eslint-disable-line
   });
@@ -207,6 +207,13 @@ describe('task-creation', () => {
       .expect(302);
     const isUserDel = await Task.findById(1);
     expect(isUserDel).not.toBeNull();
+  });
+
+  it('GET 200 /tasks/?query - filter task', async () => {
+    await request.agent(server)
+      .get('/tasks?creatorId=1')
+      .set('cookie', cookie)
+      .expect(200);
   });
 
   afterEach(async () => {

@@ -2,7 +2,7 @@ import buildFormObj from '../lib/formObjectBuilder';
 import { reqAuth, reqModify } from '../lib/middlwares';
 
 const getArrTags = str => str
-  .split(' ')
+  .split(',')
   .map(item => item.trim().toLowerCase())
   .filter(item => item);
 

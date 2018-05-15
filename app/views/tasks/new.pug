@@ -9,9 +9,10 @@ block content
           +input(formElement, 'name', 'Name')
           +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
           +textarea(formElement, 'description', 'Description')
-          +input(formElement, 'tags', 'Add tags with space between them')
+          +input(formElement, 'tags', 'Add tags separated by comma')
           p.d-inline All tags:
             if tags
               each tag in tags
-                .d-inline.px-1= tag.name
+                .d-inline.px-1
+                  span= `${tag.name}, `
           +button('primary', 'Complete task creation')

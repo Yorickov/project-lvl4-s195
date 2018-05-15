@@ -15,4 +15,5 @@ block content
           +button('primary', 'Update task')
           p.d-inline Tags:
             each tag in task.Tags
-              .d-inline= tag.name
+              .d-inline
+                span= `${tag.name}, `

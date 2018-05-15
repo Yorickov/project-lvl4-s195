@@ -34,7 +34,8 @@ block content
             h5.d-inline-block Tags:
             each tag in task.Tags
               .d-inline-block
-                span= tag.name
+                a(href=urlFor('tasks#index', { query: { 'tag': tag.id } }))= `${tag.name}, `
+                //- span= `${tag.name}, `
         if task.creator.id === currentUserId
           .row.py-2
             .col-sm-12
