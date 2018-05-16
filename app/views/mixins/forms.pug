@@ -14,7 +14,7 @@ mixin input(formElement, property, label, options = { as: 'text' })
   - const inputId = `input_${property}`;
   .form-group
     label(for= inputId)= label
-    input(name= getInputName(formElement, property) id= inputId placeholder= label class='form-control' type= options['as'] value= value)
+    input(name= getInputName(formElement, property) id= inputId placeholder= label class='form-control' type= options['as'] value= value aria-describedby= emailHelp)
     //- small(id=`${lowTextId}` class="text-muted") #{message}
     if formElement.errors[property]
       .form-control-feedback= formElement.errors[property].map(({ message }) => message).join('. ')

@@ -3,8 +3,7 @@ const webpack = require('webpack');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -49,23 +48,12 @@ module.exports = {
       Popper: ['popper.js', 'default'],
     }),
     new CopyWebpackPlugin([
-      { from: 'src/images/favicon.ico', to: 'images' },
       { from: 'src/images/', to: 'images' },
     ]),
-    // new HtmlWebpackPlugin({
-    //   title: 'Task manager',
-    // }),
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+      favicon: 'src/images/favicon.ico',
+    }),
   ],
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
-  },
 };
 

@@ -121,7 +121,7 @@ describe('task-creation', () => {
       .send({ form: { ...task, tags: 'php' } })
       .expect(302);
     const tags = await Tag.findAll();
-    expect(tags.length).toBe(1);  // eslint-disable-line
+    expect(tags).toHaveLength(1);
   });
 
 
@@ -181,7 +181,7 @@ describe('task-creation', () => {
       .set('cookie', cookie)
       .send({ form: { ...task, tags: 'php, js' } });
     const tags = await Tag.findAll();
-    expect(tags.length).toBe(2); // eslint-disable-line
+    expect(tags).toHaveLength(2);
   });
 
   it('PATCH 302 /tasks/1 - update task status', async () => {
