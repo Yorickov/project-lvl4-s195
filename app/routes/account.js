@@ -1,9 +1,11 @@
-import buildFormObj from '../lib/formObjectBuilder';
-import { encrypt } from '../lib/secure';
-import { reqAuth } from '../lib/middlwares';
-
 export default (router, container) => {
-  const { User, logDb } = container;
+  const {
+    User,
+    logDb,
+    buildFormObj,
+    encrypt,
+    reqAuth,
+  } = container;
   router
     .get('account#edit', '/account/edit', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);

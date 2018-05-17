@@ -3,8 +3,8 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5.justify-content-center
-      .col-lg-5.mx-auto.bg-light.rounded-right
-        h5.text-center.py-3 Account
+      .col-sm-6.mx-auto.bg-light.pb-3.rounded-right
+        h4.text-center.py-3 Account
         +formFor(formElement, { url: urlFor('account/profile#update'), method: 'PATCH' })
           +input(formElement, 'firstName', 'First Name')
           +input(formElement, 'lastName', 'Last Name')

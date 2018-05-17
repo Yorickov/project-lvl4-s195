@@ -3,7 +3,7 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5
-      .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
+      .col-sm-8.mx-auto.bg-secondary.py-3.text-white.rounded
         h3 Edit Task
         +formFor(formElement, { url: urlFor('tasks#update', task.id), method: 'PATCH' })
           +input(formElement, 'name', 'Name')

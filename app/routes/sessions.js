@@ -1,8 +1,10 @@
-import buildFormObj from '../lib/formObjectBuilder';
-import { encrypt } from '../lib/secure';
-
 export default (router, container) => {
-  const { User, logReq } = container;
+  const {
+    User,
+    logReq,
+    buildFormObj,
+    encrypt,
+  } = container;
   router
     .get('session#new', '/session/new', (ctx) => {
       const data = {};

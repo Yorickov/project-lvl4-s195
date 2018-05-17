@@ -1,21 +1,23 @@
-import buildFormObj from '../lib/formObjectBuilder';
-import { reqAuth, reqModify } from '../lib/middlwares';
-
 const getArrTags = str => str
   .split(',')
   .map(item => item.trim().toLowerCase())
   .filter(item => item);
 
-const createProprtyObject = query =>
-  Object.keys(query).reduce((acc, id) => {
-    const prop = query[id] ? query[id] : '';
-    return { ...acc, [id]: prop };
-  }, {});
+const createQueryMapping = models =>
+  ({
+    creatorId: { model: models.User, as: 'creator' },
+    assignedToId: { model: models.User, as: 'assignedTo' },
+    statusId: { model: models.Status, as: 'status' },
+    tag: { model: models.Tag },
+  });
 
-const createFilter = (propertyObject, model, property, as) =>
-  (propertyObject[property] ?
-    { model, as, where: { id: propertyObject[property] } } :
-    { model, as });
+const createFilters = (propertyObject, queryMapping) =>
+  Object.keys(queryMapping).map((key) => {
+    const obj = propertyObject[key] ?
+      { ...queryMapping[key], where: { id: propertyObject[key] } }
+      : { ...queryMapping[key] };
+    return obj;
+  });
 
 export default (router, container) => {
   const {
@@ -25,6 +27,9 @@ export default (router, container) => {
     Tag,
     logDb,
     logReq,
+    buildFormObj,
+    reqAuth,
+    reqModify,
   } = container;
   router
     .get('tasks#index', '/tasks', async (ctx) => {
@@ -33,14 +38,16 @@ export default (router, container) => {
         include: [Task],
       });
       const users = await User.findAll();
-      const { query } = ctx.request;
-      const propertyObject = createProprtyObject(query);
-      const assignFilter = createFilter(propertyObject, User, 'assignedToId', 'assignedTo');
-      const creatorFilter = createFilter(propertyObject, User, 'creatorId', 'creator');
-      const statusFilter = createFilter(propertyObject, Status, 'statusId', 'status');
-      const tagFilter = createFilter(propertyObject, Tag, 'tag');
+      const { query: propertyObject } = ctx.request;
+      const queryMapping = createQueryMapping({
+        User,
+        Task,
+        Status,
+        Tag,
+      });
+      const taskFilters = createFilters(propertyObject, queryMapping);
       const tasks = await Task.findAll({
-        include: [assignFilter, creatorFilter, statusFilter, tagFilter],
+        include: taskFilters,
       });
       ctx.render('tasks', {
         propertyObject,
@@ -54,13 +61,10 @@ export default (router, container) => {
       const task = await Task.build();
       const users = await User.findAll();
       const tags = await Tag.findAll();
-      const { userId: creatorId, userProfileName: creatorName } = ctx.session;
-      logReq(creatorId, creatorName);
+      logReq(`task id ${task.id} created`);
       ctx.render('tasks/new', {
         formElement: buildFormObj(task),
         users,
-        creatorId,
-        creatorName,
         tags,
       });
     })
@@ -83,7 +87,7 @@ export default (router, container) => {
     })
     .post('tasks#create', '/tasks', reqAuth(router), async (ctx) => {
       const { form } = ctx.request.body;
-      const { userId: creatorId, userProfileName: creatorName } = ctx.session;
+      const { userId: creatorId } = ctx.session;
       const buildForm = { ...form, creatorId };
       const task = Task.build(buildForm);
       try {
@@ -108,8 +112,6 @@ export default (router, container) => {
         ctx.render('tasks/new', {
           formElement: buildFormObj(task, e),
           users,
-          creatorId,
-          creatorName,
         });
       }
     })

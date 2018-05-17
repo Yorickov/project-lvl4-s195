@@ -3,7 +3,7 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5
-      .col-sm-8.mx-auto.bg-light.rounded.p-3
+      .col-sm-8.mx-auto.bg-light.rounded.p-4
         .row.py-2
           .col-sm-12
             h2= task.name
@@ -38,7 +38,7 @@ block content
                 //- span= `${tag.name}, `
         if task.creator.id === currentUserId
           .row.py-2
-            .col-sm-12
-              .d-inline-block
+            .col-sm-12.pt-2
+              .d-flex.justify-content-around
                 a.mr-2(href=urlFor('tasks#edit', task.id)) Edit task
                 a.mr-2(href=urlFor('tasks#destroy_form', task.id)) Delete task

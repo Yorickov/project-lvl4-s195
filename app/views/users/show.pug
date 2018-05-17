@@ -4,16 +4,17 @@ block content
   .container
     .row.pt-5.justify-content-center
       .col-lg-8.mx-auto.bg-light.rounded-left
-        h5.text-center.py-3 Profile
-        table.table.table-borderless
-          tbody
-            tr
-              th Full Name:
-              td= user.fullName
-              th Created at:
-              td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
-            tr
-              th Email:
-              td= user.email 
-              th Updated at:
-              td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')
+        h5.text-center.py-3.display-5 Profile
+        if user
+          table.table.table-borderless
+            tbody
+              tr
+                th Full Name:
+                td= user.fullName
+                th Created at:
+                td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
+              tr
+                th Email:
+                td= user.email 
+                th Updated at:
+                td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')

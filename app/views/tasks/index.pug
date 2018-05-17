@@ -11,10 +11,7 @@ block content
               +selectFilter(propertyObject, 'creatorId', 'Author', users, currentUserId, 'By me')
             else
               +selectFilter(propertyObject, 'creatorId', 'Author', users, '', 'All')
-            if isSignedIn()
-              +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, currentUserId, 'By me')
-            else
-              +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, '', 'All')
+            +selectFilter(propertyObject, 'assignedToId', 'Assignee', users, '', 'All')
             +selectFilter(propertyObject, 'statusId', 'Status', statuses, '', 'All')
             +selectFilter(propertyObject, 'tag', 'Tag', tags, '', 'All')
             .col-md-1

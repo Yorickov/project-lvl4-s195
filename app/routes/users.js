@@ -1,7 +1,5 @@
-import buildFormObj from '../lib/formObjectBuilder';
-
 export default (router, container) => {
-  const { User, logReq } = container;
+  const { User, logReq, buildFormObj } = container;
   router
     .get('users#index', '/users', async (ctx) => {
       const users = await User.findAll();
