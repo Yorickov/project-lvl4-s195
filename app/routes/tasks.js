@@ -30,6 +30,7 @@ export default (router, container) => {
     buildFormObj,
     reqAuth,
     reqModify,
+    reqEntityExists,
   } = container;
   router
     .get('tasks#index', '/tasks', async (ctx) => {
@@ -79,7 +80,7 @@ export default (router, container) => {
       });
       ctx.render('tasks/home', { tasksCreated, tasksAssigned });
     })
-    .get('tasks#show', '/tasks/:id', async (ctx) => {
+    .get('tasks#show', '/tasks/:id', reqEntityExists(router, Task), async (ctx) => {
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
       });
@@ -115,7 +116,7 @@ export default (router, container) => {
         });
       }
     })
-    .get('tasks#edit', '/tasks/:id/edit', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+    .get('tasks#edit', '/tasks/:id/edit', reqAuth(router), reqEntityExists(router, Task), reqModify(router, Task, 'creator'), async (ctx) => {
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
       });
@@ -128,7 +129,7 @@ export default (router, container) => {
         task,
       });
     })
-    .patch('tasks#update', '/tasks/:id', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+    .patch('tasks#update', '/tasks/:id', reqAuth(router), reqEntityExists(router, Task), reqModify(router, Task, 'creator'), async (ctx) => {
       const { form } = ctx.request.body;
       const task = await Task.findById(ctx.params.id, {
         include: ['assignedTo', 'creator', 'status', Tag],
@@ -168,11 +169,11 @@ export default (router, container) => {
         });
       }
     })
-    .get('tasks#destroy_form', '/tasks/:id/destroy_form', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+    .get('tasks#destroy_form', '/tasks/:id/destroy_form', reqAuth(router), reqEntityExists(router, Task), reqModify(router, Task, 'creator'), async (ctx) => {
       const task = await Task.findById(ctx.params.id);
       ctx.render('tasks/destroy', { formElement: buildFormObj(task), task });
     })
-    .delete('tasks#destroy', '/tasks/:id/destroy', reqAuth(router), reqModify(router, Task, 'creator'), async (ctx) => {
+    .delete('tasks#destroy', '/tasks/:id/destroy', reqAuth(router), reqEntityExists(router, Task), reqModify(router, Task, 'creator'), async (ctx) => {
       const task = await Task.findById(ctx.params.id);
       try {
         await task.destroy();

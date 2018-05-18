@@ -18,7 +18,8 @@ const errorHandler = () =>
         ctx.throw(404);
       }
     } catch (err) {
-      console.error(err); // eslint-disable-line
+      ctx.status = err.status || 500;
+      // console.error(`consttttt  ${err.status}`); // eslint-disable-line
       switch (ctx.status) {
         case 404:
           ctx.render('errors/404');
@@ -55,4 +56,13 @@ const reqModify = (router, Model, alias) =>
     await next();
   };
 
-export { errorHandler, reqAuth, reqModify };
+const reqEntityExists = (router, Model) =>
+  async (ctx, next) => {
+    const instance = await Model.findById(ctx.params.id);
+    if (!instance) {
+      ctx.throw(404);
+    }
+    await next();
+  };
+
+export { errorHandler, reqAuth, reqModify, reqEntityExists };

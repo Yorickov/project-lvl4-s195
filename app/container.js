@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import logger from './lib/logger';
 import db from './models';
-import { reqAuth, reqModify } from './lib/middlwares';
+import { reqAuth, reqModify, reqEntityExists } from './lib/middlwares';
 import buildFormObj from './lib/formObjectBuilder';
 import { encrypt } from './lib/secure';
 
@@ -14,4 +14,5 @@ export default {
   reqModify,
   buildFormObj,
   encrypt,
+  reqEntityExists,
 };

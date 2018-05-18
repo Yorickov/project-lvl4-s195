@@ -35,8 +35,7 @@ describe('unauthorized forms', () => {
   it('GET /users/:id - show wrong profile', async () => {
     const res = await request(server)
       .get('/users/3');
-    expect(res).toHaveHTTPStatus(200);
-    expect(res.headers.location).toBeUndefined();
+    expect(res).toHaveHTTPStatus(404);
   });
 
   it('GET 200 /users - show users', async () => {

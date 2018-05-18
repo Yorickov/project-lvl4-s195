@@ -3,18 +3,28 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5.justify-content-center
-      .col-lg-8.mx-auto.bg-light.rounded-left
-        h5.text-center.py-3.display-5 Profile
-        if user
-          table.table.table-borderless
-            tbody
-              tr
-                th Full Name:
-                td= user.fullName
-                th Created at:
-                td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
-              tr
-                th Email:
-                td= user.email 
-                th Updated at:
-                td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')
+      .card.bg-light.border-dark.mb-3(style="width: 30rem;")
+        .card-header Profile
+        .card-body
+          h3.card-title.mb-4.text-center= user.fullName
+          .d-flex.justify-content-between
+            .d-block
+              h6.card-subtitle.text-muted Email:
+              .card-text.pt-1= user.email
+            .d-block
+              h6.card-subtitle.text-muted Registration data:
+              .card-text.pt-1= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
+        .card-footer Last connection: #{formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')}
+
+          //- table.table.table-borderless
+          //-   tbody
+          //-     tr
+          //-       th Full Name:
+          //-       td= user.fullName
+          //-       th Created at:
+          //-       td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
+          //-     tr
+          //-       th Email:
+          //-       td= user.email 
+          //-       th Updated at:
+          //-       td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')

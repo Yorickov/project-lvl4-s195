@@ -1,5 +1,10 @@
 export default (router, container) => {
-  const { User, logReq, buildFormObj } = container;
+  const {
+    User,
+    logReq,
+    buildFormObj,
+    reqEntityExists,
+  } = container;
   router
     .get('users#index', '/users', async (ctx) => {
       const users = await User.findAll();
@@ -10,7 +15,7 @@ export default (router, container) => {
       const user = User.build();
       ctx.render('users/new', { formElement: buildFormObj(user) });
     })
-    .get('users#show', '/users/:id', async (ctx) => {
+    .get('users#show', '/users/:id', reqEntityExists(router, User), async (ctx) => {
       const user = await User.findById(ctx.params.id);
       ctx.render('users/show', { user });
     })

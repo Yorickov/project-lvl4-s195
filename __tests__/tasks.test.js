@@ -137,6 +137,17 @@ describe('task-creation', () => {
       .expect(200);
   });
 
+  it('GET 404 /tasks/:id/edit - failed show edit-form-task', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .get('/tasks/4/edit')
+      .set('cookie', cookie)
+      .expect(404);
+  });
+
   it('POST 302 /tasks - failed add task', async () => {
     await request.agent(server)
       .post('/tasks')
@@ -159,11 +170,33 @@ describe('task-creation', () => {
       .expect(422);
   });
 
+  it('PATCH 404 /tasks/:id/edit - failed update no page', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .patch('/tasks/4')
+      .set('cookie', cookie)
+      .expect(404);
+  });
+
   it('GET 200 tasks/:id/destroy_form - show destroy-form', async () => {
     await request.agent(server)
       .get('/tasks/1/destroy_form')
       .set('cookie', cookie)
       .expect(200);
+  });
+
+  it('PATCH 505 tasks/:id/destroy_form - failed show destroy-form no page', async () => {
+    await request.agent(server)
+      .post('/tasks')
+      .set('cookie', cookie)
+      .send({ form: task });
+    await request.agent(server)
+      .get('/tasks/3/destroy_form')
+      .set('cookie', cookie)
+      .expect(404);
   });
 
   it('PATCH 302 /tasks/1 - update task name', async () => {
@@ -173,6 +206,14 @@ describe('task-creation', () => {
       .send({ form: taskUpdated });
     const taskDb = await Task.findById(1);
     expect(taskDb.name).toMatch(taskUpdated.name);
+  });
+
+  it('PATCH 404 /tasks/1 - no update task - no page', async () => {
+    await request.agent(server)
+      .patch('/tasks/11')
+      .set('cookie', cookie)
+      .send({ form: taskUpdated })
+      .expect(404);
   });
 
   it('PATCH 302 /tasks/1 - update tags', async () => {
@@ -207,6 +248,13 @@ describe('task-creation', () => {
       .expect(302);
     const isUserDel = await Task.findById(1);
     expect(isUserDel).not.toBeNull();
+  });
+
+  it('DELETE 404 /tasks/1/destroy - fail delete task - no page', async () => {
+    await request.agent(server)
+      .delete('/tasks/3/destroy')
+      .set('cookie', cookie)
+      .expect(404);
   });
 
   it('GET 200 /tasks/?query - filter task', async () => {

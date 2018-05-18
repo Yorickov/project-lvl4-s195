@@ -23,8 +23,7 @@ describe('basic requests', () => {
   it('GET 404 / = wwrong path', async () => {
     const res = await request.agent(server)
       .get('/wrong-path');
-    expect(res).toHaveHTTPStatus(200);
-    expect(res.headers.location).toBeUndefined();
+    expect(res).toHaveHTTPStatus(404);
   });
 
   afterEach(async () => {
