@@ -3,6 +3,17 @@ const getArrTags = str => str
   .map(item => item.trim().toLowerCase())
   .filter(item => item);
 
+const processTags = async (task, tags, model) => {
+  await Promise.all(tags.map(async (tag) => {
+    const item = await model.findOne({ where: { name: tag } });
+    if (item) {
+      await task.addTag(item);
+    } else {
+      await task.createTag({ name: tag });
+    }
+  }));
+};
+
 const createQueryMapping = models =>
   ({
     creatorId: { model: models.User, as: 'creator' },
@@ -95,14 +106,7 @@ export default (router, container) => {
         await task.save();
         if (form.tags) {
           const tags = getArrTags(form.tags);
-          await Promise.all(tags.map(async (tag) => {
-            const item = await Tag.findOne({ where: { name: tag } });
-            if (item) {
-              await task.addTag(item);
-            } else {
-              await task.createTag({ name: tag });
-            }
-          }));
+          await processTags(task, tags, Tag);
         }
         ctx.flash.set(`Task ${task.name} has been created`);
         ctx.redirect(router.url('tasks#index'));
@@ -145,14 +149,7 @@ export default (router, container) => {
         }
         if (form.tags) {
           const tags = getArrTags(form.tags);
-          await Promise.all(tags.map(async (tag) => {
-            const item = await Tag.findOne({ where: { name: tag } });
-            if (item) {
-              await task.addTag(item);
-            } else {
-              await task.createTag({ name: tag });
-            }
-          }));
+          await processTags(task, tags, Tag);
         }
         ctx.flash.set(`Task ${task.name} updated successfully`);
         ctx.redirect(router.url('tasks#index'));

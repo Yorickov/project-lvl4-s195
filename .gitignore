@@ -3,6 +3,7 @@ public
 dist
 .DS_Store
 *.log
+.vscode
 .tern-port
 flow-typed
 *.sqlite
