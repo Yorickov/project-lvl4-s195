@@ -19,7 +19,6 @@ const errorHandler = () =>
       }
     } catch (err) {
       ctx.status = err.status || 500;
-      // console.error(`consttttt  ${err.status}`); // eslint-disable-line
       switch (ctx.status) {
         case 404:
           ctx.render('errors/404');
