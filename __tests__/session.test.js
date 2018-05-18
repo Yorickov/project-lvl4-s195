@@ -56,22 +56,14 @@ describe('session and create User', () => {
     expect(user.lastName).toMatch(userDb.lastName);
   });
 
-  it('POST /session - good sign-in', async () => {
-    await User.create(user);
-    const res = await request.agent(server)
-      .post('/session')
-      .type('form')
-      .send({ form: user });
-    expect(res.headers.location).toBe('/');
-  });
-
-  it('DELETE /sesssion - sign-out', async () => {
+  it('POST/GET /session - sign-in / sign-out', async () => {
     await User.create(user);
     const res = await request.agent(server)
       .post('/session')
       .type('form')
       .send({ form: user });
     expect(res).toHaveHTTPStatus(302);
+    expect(res.headers.location).toBe('/');
     const cookie = getCookieRequest(res);
     const res1 = await request.agent(server)
       .delete('/session')
