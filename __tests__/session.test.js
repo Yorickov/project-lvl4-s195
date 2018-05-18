@@ -22,10 +22,13 @@ describe('session and create User', () => {
     await User.sync({ force: true });
   });
 
-  it('sign-in form: /session/new - GET 200', async () => {
+  it('sign-in form', async () => {
     const res = await request.agent(server)
       .get('/session/new');
     expect(res).toHaveHTTPStatus(200);
+    const res2 = await request.agent(server)
+      .get('/users/new');
+    expect(res2).toHaveHTTPStatus(200);
   });
 
   it('POST 422 /session - wrong email sign-in', async () => {
@@ -34,20 +37,11 @@ describe('session and create User', () => {
       .type('form')
       .send({ form: { ...user, email: 'email' } });
     expect(res).toHaveHTTPStatus(422);
-  });
-
-  it('POST 422 /session - wrong password sign-in', async () => {
-    const res = await request.agent(server)
+    const res2 = await request.agent(server)
       .post('/session')
       .type('form')
       .send({ form: { ...user, password: 'pass' } });
-    expect(res).toHaveHTTPStatus(422);
-  });
-
-  it('GET /users/new - show sign-up form', async () => {
-    const res = await request.agent(server)
-      .get('/users/new');
-    expect(res).toHaveHTTPStatus(200);
+    expect(res2).toHaveHTTPStatus(422);
   });
 
   it('POST /users - create user', async () => {
@@ -79,7 +73,6 @@ describe('session and create User', () => {
       .send({ form: user });
     expect(res).toHaveHTTPStatus(302);
     const cookie = getCookieRequest(res);
-
     const res1 = await request.agent(server)
       .delete('/session')
       .set('Cookie', cookie);

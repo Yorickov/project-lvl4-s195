@@ -17,49 +17,6 @@ const formAuth = {
 const task = initTask();
 const taskUpdated = initTask();
 
-describe('show forms', () => {
-  let server;
-  let cookie;
-
-  beforeAll(async () => {
-    jasmine.addMatchers(matchers);
-  });
-
-  beforeEach(async () => {
-    server = app().listen();
-    await initModels();
-    await User.create(user);
-    const auth = await request.agent(server)
-      .post('/session')
-      .type('form')
-      .send({ form: formAuth });
-    cookie = getCookieRequest(auth);
-  });
-
-  it('GET 200 /tasks - show all tasks', async () => {
-    await request.agent(server)
-      .get('/tasks')
-      .expect(200);
-  });
-
-  it('GET 200 /tasks/new - failed auth - form-add-task', async () => {
-    await request.agent(server)
-      .get('/tasks/new')
-      .expect(302);
-  });
-
-  it('GET 200 /tasks/new - show form-add-task', async () => {
-    await request.agent(server)
-      .get('/tasks/new')
-      .set('cookie', cookie)
-      .expect(200);
-  });
-
-  afterEach(async () => {
-    await server.close();
-  });
-});
-
 describe('task-creation', () => {
   let server;
   let cookie;
@@ -83,7 +40,20 @@ describe('task-creation', () => {
       .send({ form: task });
   });
 
-  it('GET 200 /tasks:id/ - No-login show task', async () => {
+  it('GET 200 /tasks - show form tasks', async () => {
+    await request.agent(server)
+      .get('/tasks')
+      .expect(200);
+    await request.agent(server)
+      .get('/tasks/new')
+      .expect(302);
+    await request.agent(server)
+      .get('/tasks/new')
+      .set('cookie', cookie)
+      .expect(200);
+  });
+
+  it('GET 200 /tasks:id/ - show task', async () => {
     await request.agent(server)
       .post('/tasks')
       .set('cookie', cookie)
@@ -91,13 +61,6 @@ describe('task-creation', () => {
     await request.agent(server)
       .get('/tasks/1')
       .expect(200);
-  });
-
-  it('GET 200 /tasks - Log-in show task', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
     await request.agent(server)
       .get('/tasks/1')
       .set('cookie', cookie)
@@ -124,30 +87,6 @@ describe('task-creation', () => {
     expect(tags).toHaveLength(1);
   });
 
-
-  it('GET 200 /tasks/:id/edit - show edit-form-task', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task })
-      .expect(302);
-    await request.agent(server)
-      .get('/tasks/1/edit')
-      .set('cookie', cookie)
-      .expect(200);
-  });
-
-  it('GET 404 /tasks/:id/edit - failed show edit-form-task', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
-    await request.agent(server)
-      .get('/tasks/4/edit')
-      .set('cookie', cookie)
-      .expect(404);
-  });
-
   it('POST 302 /tasks - failed add task', async () => {
     await request.agent(server)
       .post('/tasks')
@@ -156,13 +95,23 @@ describe('task-creation', () => {
       .expect(422);
   });
 
-  it('GET 200 /tasks/:id/edit - no sign-in: edit-task-form', async () => {
+  it('GET 200 /tasks/:id/edit - show edit-form-task', async () => {
+    await Task.create(task);
     await request.agent(server)
       .get('/tasks/1/edit')
       .expect(302);
+    await request.agent(server)
+      .get('/tasks/4/edit')
+      .set('cookie', cookie)
+      .expect(404);
+    await request.agent(server)
+      .get('/tasks/1/edit')
+      .set('cookie', cookie)
+      .expect(200);
   });
 
   it('PATCH 302 /tasks/1 - failed update task - validation', async () => {
+    await Task.create(task);
     await request.agent(server)
       .patch('/tasks/1')
       .set('cookie', cookie)
@@ -171,10 +120,7 @@ describe('task-creation', () => {
   });
 
   it('PATCH 404 /tasks/:id/edit - failed update no page', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
+    await Task.create(task);
     await request.agent(server)
       .patch('/tasks/4')
       .set('cookie', cookie)
@@ -183,20 +129,13 @@ describe('task-creation', () => {
 
   it('GET 200 tasks/:id/destroy_form - show destroy-form', async () => {
     await request.agent(server)
-      .get('/tasks/1/destroy_form')
-      .set('cookie', cookie)
-      .expect(200);
-  });
-
-  it('PATCH 505 tasks/:id/destroy_form - failed show destroy-form no page', async () => {
-    await request.agent(server)
-      .post('/tasks')
-      .set('cookie', cookie)
-      .send({ form: task });
-    await request.agent(server)
       .get('/tasks/3/destroy_form')
       .set('cookie', cookie)
       .expect(404);
+    await request.agent(server)
+      .get('/tasks/1/destroy_form')
+      .set('cookie', cookie)
+      .expect(200);
   });
 
   it('PATCH 302 /tasks/1 - update task name', async () => {
@@ -248,13 +187,6 @@ describe('task-creation', () => {
       .expect(302);
     const isUserDel = await Task.findById(1);
     expect(isUserDel).not.toBeNull();
-  });
-
-  it('DELETE 404 /tasks/1/destroy - fail delete task - no page', async () => {
-    await request.agent(server)
-      .delete('/tasks/3/destroy')
-      .set('cookie', cookie)
-      .expect(404);
   });
 
   it('GET 200 /tasks/?query - filter task', async () => {

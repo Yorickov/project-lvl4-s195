@@ -7,9 +7,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: ['./src'],
+  entry: ['./client'],
   output: {
-    path: path.join(__dirname, 'dist', 'assets'),
+    path: path.join(__dirname, 'public', 'assets'),
     filename: '[name].bundle.js',
     publicPath: '/assets/',
   },
@@ -48,11 +48,11 @@ module.exports = {
       Popper: ['popper.js', 'default'],
     }),
     new CopyWebpackPlugin([
-      { from: 'src/images/', to: 'images' },
+      { from: 'client/images/', to: 'images' },
     ]),
     new HtmlWebpackPlugin({
       template: 'template.html',
-      favicon: 'src/images/favicon.ico',
+      favicon: 'client/images/favicon.ico',
     }),
   ],
 };

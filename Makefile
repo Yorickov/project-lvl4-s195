@@ -2,7 +2,7 @@ install:
 	npm install
 
 build:
-	rm -rf dist
+	rm -rf public
 	NODE_ENV=development npm run build
 
 dev:
@@ -27,6 +27,6 @@ lint:
 	npm run eslint .
 
 clean:
-	rm -rf dist
+	rm -rf public
 
 .PHONY: test

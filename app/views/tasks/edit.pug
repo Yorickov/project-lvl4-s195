@@ -6,12 +6,12 @@ block content
       .col-sm-8.mx-auto.bg-secondary.py-3.text-white.rounded
         h3 Edit Task
         +formFor(formElement, { url: urlFor('tasks#update', task.id), method: 'PATCH' })
-          +input(formElement, 'name', 'Name')
+          +input(formElement, 'name', 'Name', 'Enter new task name')
           +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
           +selectStatus(formElement, 'statusId', 'Status', statuses)
-          +textarea(formElement, 'description', 'Description')
-          +input(formElement, 'tags', 'Enter new tags', tags, task)
-          +input(formElement, 'tagsdel', 'Enter tags to delete', tags, task)
+          +textarea(formElement, 'description', 'Description', 'Enter new description')
+          +input(formElement, 'tags', 'Add tags', 'Enter new tags', tags)
+          +input(formElement, 'tagsdel', 'Remove tags', 'Enter tags to delete', tags)
           +button('primary', 'Update task')
           p.d-inline Tags:
             each tag in task.Tags

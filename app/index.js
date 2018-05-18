@@ -16,7 +16,7 @@ import methodOverride from 'koa-methodoverride';
 import format from 'date-fns/format';
 
 import webpackConfig from '../webpack.config';
-import addRoutes from './routes';
+import addRoutes from './controllers';
 import container from './container';
 import { errorHandler } from './lib/middlwares';
 
@@ -60,7 +60,7 @@ export default () => {
     return null;
   }));
 
-  app.use(serve(path.join(__dirname, '..', 'dist')));
+  app.use(serve(path.join(__dirname, '..', 'public')));
 
   if (process.env.NODE_ENV !== 'test') {
     app.use(webpackMiddleware({

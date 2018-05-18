@@ -6,10 +6,10 @@ block content
       .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
         h3.text-center New Task
         +formFor(formElement, { url: urlFor('tasks#create'), method: 'POST' })
-          +input(formElement, 'name', 'Name')
+          +input(formElement, 'name', 'Name', 'Enter task name')
           +selectAssignId(formElement, 'assignedToId', 'Assigned to', users)
-          +textarea(formElement, 'description', 'Description')
-          +input(formElement, 'tags', 'Add tags separated by comma')
+          +textarea(formElement, 'description', 'Description', 'Enter description')
+          +input(formElement, 'tags', 'Add tags', 'Add tags separated by comma')
           p.d-inline All tags:
             if tags
               each tag in tags

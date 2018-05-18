@@ -76,12 +76,11 @@ export default (router, container) => {
         return;
       }
       try {
-        await User.destroy({ where: { id: ctx.session.userId } });
+        await user.destroy();
         ctx.session = {};
         ctx.flash.set(`Buy, ${user.fullName}`);
         ctx.redirect(router.url('root'));
       } catch (e) {
-        logDb(e);
         ctx.render('account/edit', { formElement: buildFormObj(form, e) });
       }
     });

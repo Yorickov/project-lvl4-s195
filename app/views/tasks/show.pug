@@ -2,43 +2,35 @@ extends /layouts/app.pug
 
 block content
   .container
-    .row.pt-5
-      .col-sm-8.mx-auto.bg-light.rounded.p-4
-          .row.py-2
-            .col-sm-12
-              h2.text-center= task.name
-              p.d-inline Added by:
-                a.mx-2(href=urlFor('users#show', task.creator.id))= task.creator.fullName
-          .row.py-2
-            .col-sm-12
-              table.table.border
-                tbody
-                  tr
-                    th Status:
-                    td= task.status.name
-                    th Assign to:
-                    td
-                      a.mr-2(href=urlFor('users#show', task.assignedTo.id))= task.assignedTo.fullName
-                  tr
-                    th Created at:
-                    td= formatDate(task.createdAt, 'DD.MM.YYYY, HH:mm')
-                    th Updated at:
-                    td= formatDate(task.updatedAt, 'DD.MM.YYYY, HH:mm')
+    .row.pt-5.justify-content-center
+      .card.bg-light(style='max-width: 50rem; min-width: 30rem;')
+        h5.card-header ##{task.id}
 
-          .row.py-2
-            .col-sm-12.d-flex
-              h5 Description:
-              p.ml-2= task.description
-          .row.py-2
-            .col-sm-12
-              h5.d-inline-block Tags:
-              each tag in task.Tags
-                .d-inline-block
-                  a(href=urlFor('tasks#index', { query: { 'tag': tag.id } }))= `${tag.name}, `
-                  //- span= `${tag.name}, `
-          if task.creator.id === currentUserId
-            .row.py-2
-              .col-sm-12.pt-2
-                .d-flex.justify-content-around
-                  a.mr-2(href=urlFor('tasks#edit', task.id)) Edit task
-                  a.mr-2(href=urlFor('tasks#destroy_form', task.id)) Delete task
+        .card-body
+          h3.card-title.text-center.mb-3= task.name
+          .d-flex
+            .card-text Added by
+            a.mx-2(href=urlFor('users#show', task.creator.id))= task.creator.fullName
+
+        ul.list-group.list-group-flush
+          li.list-group-item.d-flex.justify-content-between
+            .d-block #[strong Status:] #{task.status.name}
+            .d-block #[strong Created at:] #{formatDate(task.createdAt, 'DD.MM.YYYY, HH:mm')}
+          li.list-group-item.d-flex.justify-content-between
+            .d-block #[strong Assignee:]
+              a.mx-2(href=urlFor('users#show', task.assignedTo.id))= task.assignedTo.fullName
+            .d-block #[strong Updated at:] #{formatDate(task.createdAt, 'DD.MM.YYYY, HH:mm')}
+
+        .card-body
+          h6.card-title Description:
+          .card-text= task.description
+              
+        .card-footer.d-flex
+          strong.card-text.mr-2 Tags:
+          each tag in task.Tags
+            a.card-link.ml-1(href=urlFor('tasks#index', { query: { 'tag': tag.id } }))= `${tag.name}, `
+        
+        if task.creator.id === currentUserId
+          .card-body.d-flex.justify-content-between
+            a.btn.btn-secondary(href=urlFor('tasks#edit', task.id)) Edit task
+            a.btn.btn-secondary(href=urlFor('tasks#destroy_form', task.id)) Delete task							

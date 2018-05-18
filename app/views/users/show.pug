@@ -8,13 +8,13 @@ block content
         .card-body
           h3.card-title.mb-4.text-center= user.fullName
           .d-flex.justify-content-between
-            .d-block
-              h6.card-subtitle.text-muted Email:
-              .card-text.pt-1= user.email
-            .d-block
-              h6.card-subtitle.text-muted Registration data:
-              .card-text.pt-1= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
-        .card-footer Last connection: #{formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')}
+            .d-flex
+              .card-text.mr-2 #[strong Email:]
+              .card-text= user.email
+            .d-flex
+              .card-text.mr-2 #[strong Registration date:]
+              .card-text= formatDate(user.createdAt, 'DD.MM.YYYY')
+        .card-footer #[strong Last connection:] #{formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')}
 
           //- table.table.table-borderless
           //-   tbody

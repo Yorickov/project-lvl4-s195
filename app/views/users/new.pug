@@ -6,9 +6,9 @@ block content
             .col-sm-8.mx-auto.px-4.bg-light.rounded
                 h3.text-center.mb-4.pt-4 Registration form
                 +formFor(formElement, { url: urlFor('users#create'), method: 'POST' })
-                    +input(formElement, 'email', 'Email address')
-                    +input(formElement, 'firstName', 'First Name')
-                    +input(formElement, 'lastName', 'Last Name')
-                    +input(formElement, 'password', 'Password', { as: 'password' })
-                    +input(formElement, 'confirmedPassword', 'Confirm password', { as: 'password' })
+                    +input(formElement, 'email', 'Email address', 'you@example.com')
+                    +input(formElement, 'firstName', 'First Name', 'Enter first name')
+                    +input(formElement, 'lastName', 'Last Name', 'Enter last name')
+                    +input(formElement, 'password', 'Password', 'from 2 to 20 symbols', { as: 'password' })
+                    +input(formElement, 'confirmedPassword', 'Confirm password', 'Repeat your password', { as: 'password' })
                     +button('secondary', 'Confirm')

@@ -6,6 +6,6 @@ block content
             .col-sm-6.mx-auto.px-4.bg-light.rounded
                 h3.text-center.mb-4.pt-4 Login form
                 +formFor(formElement, { url: urlFor('session#create'), method: 'post' })
-                    +input(formElement, 'email', 'Email address')
-                    +input(formElement, 'password', 'Password', { as: 'password' })
+                    +input(formElement, 'email', 'Email address', 'Enter email')
+                    +input(formElement, 'password', 'Password', 'Enter password', { as: 'password' })
                     +button('secondary', 'Log In')

@@ -26,22 +26,34 @@ describe('unauthorized forms', () => {
     await User.create(user);
   });
 
-  it('GET /users/:id - show profile', async () => {
-    const res = await request(server)
-      .get('/users/1');
-    expect(res).toHaveHTTPStatus(200);
+  it('GET /account/edit - no sign-in forms', async () => {
+    await request.agent(server)
+      .get('/account/edit')
+      .expect(302);
+    await request.agent(server)
+      .get('/account/destroy')
+      .expect(302);
+    await request.agent(server)
+      .get('/account/password_edit')
+      .expect(302);
+    await request.agent(server)
+      .get('/account/password_edit')
+      .expect(302);
+  });
+
+  it('GET /users/:id - show users', async () => {
+    await request(server)
+      .get('/users/1')
+      .expect(200);
+    await request(server)
+      .get('/users')
+      .expect(200);
   });
 
   it('GET /users/:id - show wrong profile', async () => {
     const res = await request(server)
       .get('/users/3');
     expect(res).toHaveHTTPStatus(404);
-  });
-
-  it('GET 200 /users - show users', async () => {
-    const res = await request(server)
-      .get('/users');
-    expect(res).toHaveHTTPStatus(200);
   });
 
   afterEach(async () => {
@@ -68,33 +80,26 @@ describe('account manipulations', () => {
     cookie = getCookieRequest(res);
   });
 
-  it('GET /account/edit - show profile-edit form', async () => {
-    const res = await request.agent(server)
+  it('GET /account_ - show account-edit forms', async () => {
+    await request.agent(server)
       .get('/account/edit')
-      .set('cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
-
-  it('GET /account - show destroy form', async () => {
-    const res = await request.agent(server)
+      .set('cookie', cookie)
+      .expect(200);
+    await request.agent(server)
       .get('/account/destroy')
-      .set('cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
-  });
-
-  it('GET /account - show pass-edit forms', async () => {
-    const res = await request(server)
+      .set('cookie', cookie)
+      .expect(200);
+    await request(server)
       .get('/account/password_edit')
-      .set('cookie', cookie);
-    expect(res).toHaveHTTPStatus(200);
+      .set('cookie', cookie)
+      .expect(200);
   });
 
   it('PATCH /account/email - edit email', async () => {
-    const res = await request.agent(server)
+    await request.agent(server)
       .patch('/account/email')
       .set('cookie', cookie)
       .send({ form: userDbEmail });
-    expect(res).toHaveHTTPStatus(302);
     const isUserNewEmail = await User.findOne({
       where: { firstName: user.firstName },
     });
@@ -102,11 +107,10 @@ describe('account manipulations', () => {
   });
 
   it('PATCH /account/profile - edit firstName', async () => {
-    const res = await request.agent(server)
+    await request.agent(server)
       .patch('/account/profile')
       .set('cookie', cookie)
       .send({ form: userDbProfile });
-    expect(res).toHaveHTTPStatus(302);
     const isUserNewProfile = await User.findOne({
       where: { email: user.email },
     });
@@ -114,11 +118,10 @@ describe('account manipulations', () => {
   });
 
   it('DELETE /account - failed delete user', async () => {
-    const res = await request.agent(server)
+    await request.agent(server)
       .delete('/account')
       .set('Cookie', cookie)
       .send({ form: { password: 'wrongPass' } });
-    expect(res).toHaveHTTPStatus(302);
     const isUser = await User.findOne({
       where: { email: user.email },
     });
@@ -126,33 +129,14 @@ describe('account manipulations', () => {
   });
 
   it('DELETE /account - delete user', async () => {
-    const res = await request.agent(server)
+    await request.agent(server)
       .delete('/account')
       .set('Cookie', cookie)
       .send({ form: { password: user.password } });
-    expect(res).toHaveHTTPStatus(302);
     const isUserDel = await User.findOne({
       where: { email: user.email },
     });
     expect(isUserDel).toBeNull();
-  });
-
-  it('GET /account/edit - no sign-in profile-edit form', async () => {
-    const res2 = await request.agent(server)
-      .get('/account/edit');
-    expect(res2).toHaveHTTPStatus(302);
-  });
-
-  it('GET /account - no sign-in destroy form', async () => {
-    const res2 = await request.agent(server)
-      .get('/account/destroy');
-    expect(res2).toHaveHTTPStatus(302);
-  });
-
-  it('GET /account - no sign-in pass-edit form', async () => {
-    const res2 = await request.agent(server)
-      .get('/account/password_edit');
-    expect(res2).toHaveHTTPStatus(302);
   });
 
   afterEach(async () => {

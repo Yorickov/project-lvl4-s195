@@ -6,11 +6,11 @@ block content
       .col-sm-6.mx-auto.bg-light.pb-3.rounded-right
         h4.text-center.py-3 Account
         +formFor(formElement, { url: urlFor('account/profile#update'), method: 'PATCH' })
-          +input(formElement, 'firstName', 'First Name')
-          +input(formElement, 'lastName', 'Last Name')
+          +input(formElement, 'firstName', 'First Name', 'Enter new first name')
+          +input(formElement, 'lastName', 'Last Name', 'Enter new first name')
           +button('secondary', 'Change profile')        
         +formFor(formElement, { url: urlFor('account/email#update'), method: 'PATCH' })
-          +input(formElement, 'email', 'Email address')
+          +input(formElement, 'email', 'Email address', 'Enter new email')
           +button('secondary', 'Change email')
           .d-flex.justify-content-around.align-items-center
             a(href=urlFor('account/password#edit')) Edit password
