@@ -190,8 +190,9 @@ describe('task-creation', () => {
   });
 
   it('GET 200 /tasks/?query - filter task', async () => {
+    await Task.create(task);
     await request.agent(server)
-      .get('/tasks?creatorId=1')
+      .get('/tasks?creatorId=1&assignedToId=&statusId=&tag=')
       .set('cookie', cookie)
       .expect(200);
   });

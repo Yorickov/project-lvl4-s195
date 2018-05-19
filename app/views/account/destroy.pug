@@ -2,8 +2,8 @@ extends /layouts/app.pug
 
 block content
   .container
-    .row.pt-4
-      .col-4.mx-auto
+    .row.pt-5
+      .col-4.mx-auto.shadow
         h5.text-center.pb-3 Delete account
         +formFor(formElement, { url: urlFor('account#destroy'), method: 'DELETE' })
           +input(formElement, 'password', 'Password', 'Enter password', { as: 'password' })

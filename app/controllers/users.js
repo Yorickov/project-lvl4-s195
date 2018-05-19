@@ -39,5 +39,3 @@ export default (router, container) => {
       }
     });
 };
-
-// const err = { errors: [{ path: 'password', message: 'Wrong email or password' }] };

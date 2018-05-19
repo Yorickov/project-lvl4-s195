@@ -9,6 +9,20 @@ const rollbarConfig = {
 
 const rollbar = new Rollbar(rollbarConfig);
 
+const errorRender = (ctx, err) => {
+  ctx.status = err.status || 500;
+  switch (ctx.status) {
+    case 404:
+      ctx.render('errors/404');
+      break;
+    case 500:
+      ctx.render('errors/500');
+      break;
+    default:
+      rollbar.error(err, ctx.request);
+  }
+};
+
 const errorHandler = () =>
   async (ctx, next) => {
     try {
@@ -18,17 +32,7 @@ const errorHandler = () =>
         ctx.throw(404);
       }
     } catch (err) {
-      ctx.status = err.status || 500;
-      switch (ctx.status) {
-        case 404:
-          ctx.render('errors/404');
-          break;
-        case 500:
-          ctx.render('errors/500');
-          break;
-        default:
-          rollbar.error(err, ctx.request);
-      }
+      errorRender(ctx, err);
     }
   };
 

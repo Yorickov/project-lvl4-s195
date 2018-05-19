@@ -3,7 +3,7 @@ extends /layouts/app.pug
 block content
   .container
     .row.pt-5
-      .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded
+      .col-sm-10.mx-auto.bg-secondary.py-3.text-white.rounded.shadow
         h3.text-center New Task
         +formFor(formElement, { url: urlFor('tasks#create'), method: 'POST' })
           +input(formElement, 'name', 'Name', 'Enter task name')

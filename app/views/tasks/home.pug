@@ -2,9 +2,9 @@ extends /layouts/app.pug
 
 block content
   .container-fluid
-    .row.pt-5.mx-5
-      .col-lg-6.bg-light
-        h3.text-center.mb-4.pt-4 Tasks created by me
+    .row.pt-3
+      .col-lg-6.bg-white
+        h5.text-center.mb-4.pt-4 Tasks created by me
         table.table.table-striped.table-hover.table-bordered.text-center
           thead.bg-secondary.text-white
             tr
@@ -26,8 +26,8 @@ block content
                   a(href=urlFor('users#show', task.assignedTo.id))= task.assignedTo.fullName
                 td= formatDate(task.createdAt, 'DD.MM.YYYY')
 
-      .col-lg-6.bg-light
-        h3.text-center.mb-4.pt-4 Tasks assigned to me
+      .col-lg-6.bg-white
+        h5.text-center.mb-4.pt-4 Tasks assigned to me
         table.table.table-striped.table-hover.table-bordered.text-center
           thead.bg-secondary.text-white
             tr

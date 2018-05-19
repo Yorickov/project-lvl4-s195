@@ -20,8 +20,8 @@ mixin input(formElement, property, label, plcholder, options = { as: 'text' })
       .form-control-feedback= formElement.errors[property].map(({ message }) => message).join('. ')
 
 mixin button(color, message, type = 'submit')
-  .form-group
-    button(class=`btn btn-${color} btn-block` type= `${type}` value='Save')= message
+  .form-group.pt-2
+    button.btn.btn-block(class=`btn-${color}` type= `${type}` value='Save')= message
 
 mixin textarea(formElement, property, label, plcholder, options = { as: 'text' })
   - const value = formElement.object[property] === undefined ? '' : formElement.object[property];

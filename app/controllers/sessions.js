@@ -22,7 +22,6 @@ export default (router, container) => {
         ctx.session.userId = user.id;
         ctx.session.userProfileName = user.fullName;
         logReq(`user sign-in: ${user.id}: ${user.fullName}`);
-
         ctx.redirect(router.url('root'));
         return;
       }

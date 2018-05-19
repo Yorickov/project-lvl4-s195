@@ -9,4 +9,3 @@ flow-typed
 *.sqlite
 coverage
 .env
-__tests__/temp

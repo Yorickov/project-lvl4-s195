@@ -3,7 +3,7 @@ extends /layouts/app.pug
 block content
     .container
         .form-row.pt-5
-            .col-sm-6.mx-auto.px-4.bg-light.rounded
+            .col-sm-6.mx-auto.px-4.py-2.bg-light.rounded.shadow
                 h3.text-center.mb-4.pt-4 Login form
                 +formFor(formElement, { url: urlFor('session#create'), method: 'post' })
                     +input(formElement, 'email', 'Email address', 'Enter email')
