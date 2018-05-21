@@ -3,5 +3,5 @@ public
 dist
 coverage
 app/models/index.js
-app/migrations
-__tests__/temp
+__tests__
+temp

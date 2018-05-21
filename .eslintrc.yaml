@@ -1,7 +1,5 @@
 ---
 
-# plugins: [flowtype]
-
 plugins:
   - jest
 
@@ -15,4 +13,3 @@ parser: babel-eslint
 extends:
     - 'airbnb-base'
     - 'plugin:jest/recommended'
-

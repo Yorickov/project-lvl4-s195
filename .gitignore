@@ -5,7 +5,7 @@ dist
 *.log
 .vscode
 .tern-port
-flow-typed
 *.sqlite
 coverage
 .env
+temp

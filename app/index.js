@@ -37,7 +37,7 @@ export default () => {
       flash: ctx.flash,
       isSignedIn: () => ctx.session.userId !== undefined,
       currentUserId: ctx.session.userId,
-      getUserProfileName: () => ctx.session.userProfileName,
+      currentUserProfileName: ctx.session.userProfileName,
       formatDate: (dateString, dateFormat) => format(dateString, dateFormat),
     };
     logReq(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
@@ -47,6 +47,7 @@ export default () => {
   app.use(bodyParser());
 
   app.use(methodOverride((req) => {
+    // return req?.body?._method;
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
       return req.body._method; // eslint-disable-line
     }
@@ -55,7 +56,7 @@ export default () => {
 
   app.use(serve(path.join(__dirname, '..', 'public')));
 
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'development') {
     app.use(webpackMiddleware({
       config: webpackConfig,
     }));
