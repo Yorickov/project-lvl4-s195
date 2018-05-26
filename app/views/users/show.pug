@@ -16,15 +16,3 @@ block content
               .card-text= formatDate(user.createdAt, 'DD.MM.YYYY')
         .card-footer #[strong Last connection:] #{formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')}
 
-          //- table.table.table-borderless
-          //-   tbody
-          //-     tr
-          //-       th Full Name:
-          //-       td= user.fullName
-          //-       th Created at:
-          //-       td= formatDate(user.createdAt, 'DD.MM.YYYY, HH:mm')
-          //-     tr
-          //-       th Email:
-          //-       td= user.email 
-          //-       th Updated at:
-          //-       td= formatDate(user.updatedAt, 'DD.MM.YYYY, HH:mm')

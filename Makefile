@@ -9,7 +9,7 @@ dev:
 	npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- development
 
 dev-debug:
-	DEBUG=sequelize:* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- development
+	DEBUG=app* npm run nodemon -- --watch .  --ext '.js' --exec npm run gulp -- development
 
 prod:
 	npm start

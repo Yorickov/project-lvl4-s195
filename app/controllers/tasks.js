@@ -1,3 +1,6 @@
+import buildFormObj from '../lib/formObjectBuilder';
+import { reqAuth, reqModify, reqEntityExists } from '../lib/middlwares';
+
 const getArrTags = str => str
   .split(',')
   .map(item => item.trim().toLowerCase())
@@ -36,20 +39,24 @@ export default (router, container) => {
     Task,
     Status,
     Tag,
-    logDb,
-    logReq,
-    buildFormObj,
-    reqAuth,
-    reqModify,
-    reqEntityExists,
+    log,
   } = container;
+
   router
     .get('tasks#index', '/tasks', async (ctx) => {
       const statuses = await Status.findAll();
-      const tags = await Tag.findAll({
+      const users = await User.findAll();
+      const tags = [];
+      const allTags = await Tag.findAll({
         include: [Task],
       });
-      const users = await User.findAll();
+      await Promise.all(allTags.map(async (tag) => {
+        if (tag.Tasks.length < 1) {
+          await tag.destroy();
+        } else {
+          Promise.resolve(tags.push(tag));
+        }
+      }));
       const { query: propertyObject } = ctx.request;
       const queryMapping = createQueryMapping({
         User,
@@ -73,7 +80,7 @@ export default (router, container) => {
       const task = await Task.build();
       const users = await User.findAll();
       const tags = await Tag.findAll();
-      logReq(`task id ${task.id} created`);
+      log(`task id ${task.id} created`);
       ctx.render('tasks/new', {
         formElement: buildFormObj(task),
         users,
@@ -111,7 +118,7 @@ export default (router, container) => {
         ctx.flash.set(`Task ${task.name} has been created`);
         ctx.redirect(router.url('tasks#index'));
       } catch (e) {
-        logDb(`failure on create ${task.name}, err: ${e}`);
+        log(`failure on create ${task.name}, err: ${e}`);
         const users = await User.findAll();
         ctx.status = 422;
         ctx.render('tasks/new', {
@@ -154,7 +161,7 @@ export default (router, container) => {
         ctx.flash.set(`Task ${task.name} updated successfully`);
         ctx.redirect(router.url('tasks#index'));
       } catch (e) {
-        logDb(`failure on update ${task.name}, err: ${e}`);
+        log(`failure on update ${task.name}, err: ${e}`);
         const users = await User.findAll();
         const statuses = await Status.findAll();
         ctx.status = 422;
@@ -175,7 +182,7 @@ export default (router, container) => {
       try {
         await task.destroy();
       } catch (e) {
-        logDb(`failure on delete ${task.name}, err: ${e}`);
+        log(`failure on delete ${task.name}, err: ${e}`);
         ctx.flash.set(`Task ${task.name} has not deleted, try again`);
         ctx.redirect(router.url('tasks#index'));
       }

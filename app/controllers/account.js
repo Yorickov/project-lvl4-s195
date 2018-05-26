@@ -1,11 +1,10 @@
+import buildFormObj from '../lib/formObjectBuilder';
+import { encrypt } from '../lib/secure';
+import { reqAuth } from '../lib/middlwares';
+
 export default (router, container) => {
-  const {
-    User,
-    logDb,
-    buildFormObj,
-    encrypt,
-    reqAuth,
-  } = container;
+  const { User, log } = container;
+
   router
     .get('account#edit', '/account/edit', reqAuth(router), async (ctx) => {
       const user = await User.findById(ctx.session.userId);
@@ -24,7 +23,7 @@ export default (router, container) => {
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
-        logDb(`user ${user.userId} edit email to ${form.firstName}`);
+        log(`user ${user.userId} edit email to ${form.firstName}`);
         ctx.flash.set('Profile has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
@@ -36,7 +35,7 @@ export default (router, container) => {
       const user = await User.findById(ctx.session.userId);
       try {
         await user.update(form);
-        logDb(`user ${user.userId} edit email to ${form.email}`);
+        log(`user ${user.userId} edit email to ${form.email}`);
         ctx.flash.set('Email has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {
@@ -60,7 +59,7 @@ export default (router, container) => {
       }
       try {
         await user.update({ password });
-        logDb(`user ${user.userId} update password from ${oldPassword} to ${password}`);
+        log(`user ${user.userId} update password from ${oldPassword} to ${password}`);
         ctx.flash.set('Password has been changed');
         ctx.redirect(router.url('account#edit'));
       } catch (e) {

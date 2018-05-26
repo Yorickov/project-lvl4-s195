@@ -20,7 +20,7 @@ import addRoutes from './controllers';
 import container from './container';
 import { errorHandler } from './lib/middlwares';
 
-const { logReq } = container;
+const { log } = container;
 
 export default () => {
   const app = new Koa();
@@ -40,7 +40,7 @@ export default () => {
       currentUserProfileName: ctx.session.userProfileName,
       formatDate: (dateString, dateFormat) => format(dateString, dateFormat),
     };
-    logReq(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
+    log(`session id: ${ctx.session.userId}/user: ${ctx.session.userProfileName}`);
     await next();
   });
 

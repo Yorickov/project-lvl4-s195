@@ -1,6 +1,5 @@
 import debug from 'debug';
 
-const logDb = debug('sequelize:db');
-const logReq = debug('sequelize:http');
+const log = debug('app');
 
-export default { logDb, logReq };
+export default log;
