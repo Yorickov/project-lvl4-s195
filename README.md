@@ -1,8 +1,8 @@
 # task-manager
 
-[![Build Status](https://travis-ci.org/Yorickov/project-lvl4-s195.svg?branch=master)](https://travis-ci.org/Yorickov/project-lvl4-s195)
-[![Maintainability](https://api.codeclimate.com/v1/badges/96bd2cc9f4437bdd633e/maintainability)](https://codeclimate.com/github/Yorickov/project-lvl4-s195/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/96bd2cc9f4437bdd633e/test_coverage)](https://codeclimate.com/github/Yorickov/project-lvl4-s195/test_coverage)
+[![Build Status](https://travis-ci.org/Yorickov/task-manager.svg?branch=master)](https://travis-ci.org/Yorickov/task-manager)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2b5bb937503c4237d16c/maintainability)](https://codeclimate.com/github/Yorickov/task-manager/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/2b5bb937503c4237d16c/test_coverage)](https://codeclimate.com/github/Yorickov/task-manager/test_coverage)
 
 Website Task-Manager
 
